@@ -27,7 +27,6 @@ const materialSchema = z.object({
   name: z.string().min(1, 'Informe o nome do material'),
   description: z.string().optional(),
   unit: z.string().min(1, 'Informe a unidade'),
-  stockQuantity: z.coerce.number().min(0, 'Estoque deve ser maior ou igual a 0'),
 });
 
 type MaterialFormValues = z.infer<typeof materialSchema>;
@@ -44,7 +43,7 @@ export default function MaterialFormPage() {
 
   const form = useForm<MaterialFormValues>({
     resolver: zodResolver(materialSchema),
-    defaultValues: { name: '', description: '', unit: '', stockQuantity: 0 },
+    defaultValues: { name: '', description: '', unit: '' },
   });
 
   useEffect(() => {
@@ -53,7 +52,6 @@ export default function MaterialFormPage() {
         name: material.name,
         description: material.description ?? '',
         unit: material.unit,
-        stockQuantity: material.stockQuantity,
       });
     }
   }, [material, form]);
@@ -63,7 +61,6 @@ export default function MaterialFormPage() {
       name: values.name,
       description: values.description || undefined,
       unit: values.unit,
-      stockQuantity: values.stockQuantity,
     };
     if (isEdit && materialId) {
       updateMaterial(materialId, payload, () => setLocation('/materiais'));
@@ -125,7 +122,7 @@ export default function MaterialFormPage() {
           {/* Dados Básicos */}
           <div className="rounded-xl border bg-card p-5">
             <h2 className="text-base font-semibold text-primary mb-1">Dados Básicos</h2>
-            <p className="text-sm text-muted-foreground mb-4">Identificação do material no estoque.</p>
+            <p className="text-sm text-muted-foreground mb-4">Identificação do material.</p>
             <div className="space-y-4">
               <FormField control={form.control} name="name" render={({ field }) => (
                 <FormItem>
@@ -153,37 +150,19 @@ export default function MaterialFormPage() {
             </div>
           </div>
 
-          {/* Estoque */}
+          {/* Unidade */}
           <div className="rounded-xl border bg-card p-5">
-            <h2 className="text-base font-semibold text-primary mb-1">Estoque</h2>
-            <p className="text-sm text-muted-foreground mb-4">Unidade de medida e quantidade disponível em estoque.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField control={form.control} name="unit" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Unidade *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: m, kg, un" {...field} data-testid="input-material-unit" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="stockQuantity" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qtd. em estoque</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="0"
-                      {...field}
-                      data-testid="input-material-stock"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-            </div>
+            <h2 className="text-base font-semibold text-primary mb-1">Cobrança</h2>
+            <p className="text-sm text-muted-foreground mb-4">Unidade de medida usada ao lançar o material numa ordem.</p>
+            <FormField control={form.control} name="unit" render={({ field }) => (
+              <FormItem className="max-w-xs">
+                <FormLabel>Unidade *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: m, kg, un, peça" {...field} data-testid="input-material-unit" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
 
         </form>

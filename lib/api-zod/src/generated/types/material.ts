@@ -12,6 +12,5 @@ export interface Material {
   /** @nullable */
   description?: string | null;
   unit: string;
-  stockQuantity: number;
   createdAt: Date;
 }

@@ -897,7 +897,7 @@ components:
     # Material
     Material:
       type: object
-      required: [id, name, unit, stockQuantity, createdAt]
+      required: [id, name, unit, createdAt]
       properties:
         id:
           type: integer
@@ -907,8 +907,6 @@ components:
           type: ["string", "null"]
         unit:
           type: string
-        stockQuantity:
-          type: number
         createdAt:
           type: string
           format: date-time
@@ -925,9 +923,6 @@ components:
         unit:
           type: string
           minLength: 1
-        stockQuantity:
-          type: number
-          minimum: 0
 
     MaterialUpdate:
       type: object
@@ -940,9 +935,6 @@ components:
         unit:
           type: string
           minLength: 1
-        stockQuantity:
-          type: number
-          minimum: 0
 
     # Order
     Order:

@@ -118,7 +118,6 @@ export interface Material {
   /** @nullable */
   description?: string | null;
   unit: string;
-  stockQuantity: number;
   createdAt: string;
 }
 
@@ -128,8 +127,6 @@ export interface MaterialInput {
   description?: string;
   /** @minLength 1 */
   unit: string;
-  /** @minimum 0 */
-  stockQuantity?: number;
 }
 
 export interface MaterialUpdate {
@@ -138,8 +135,6 @@ export interface MaterialUpdate {
   description?: string;
   /** @minLength 1 */
   unit?: string;
-  /** @minimum 0 */
-  stockQuantity?: number;
 }
 
 export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];

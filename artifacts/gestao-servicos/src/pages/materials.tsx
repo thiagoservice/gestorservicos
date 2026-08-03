@@ -5,7 +5,6 @@ import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
 import {
   Table,
   TableBody,
@@ -28,8 +27,6 @@ import {
 } from '@/hooks/use-materials';
 import { Plus, Pencil, Trash2, Package, AlertTriangle } from 'lucide-react';
 
-const LOW_STOCK_THRESHOLD = 5;
-
 export default function MaterialsPage() {
   const [, setLocation] = useLocation();
   const { data: materials, isLoading, isError, refetch } = useMaterials();
@@ -38,8 +35,8 @@ export default function MaterialsPage() {
   return (
     <AppShell>
       <PageHeader
-        title="Materiais e estoque"
-        description="Controle de materiais usados nas ordens de serviço."
+        title="Materiais"
+        description="Produtos e materiais usados nas ordens de serviço."
         actions={
           <Button onClick={() => setLocation('/materiais/novo')} data-testid="button-new-material">
             <Plus className="h-4 w-4" />
@@ -72,7 +69,7 @@ export default function MaterialsPage() {
             <EmptyMedia variant="icon"><Package /></EmptyMedia>
             <EmptyTitle>Nenhum material cadastrado</EmptyTitle>
             <EmptyDescription>
-              Cadastre os materiais que sua empresa utiliza para acompanhar o estoque.
+              Cadastre os produtos e materiais que sua empresa utiliza nas ordens de serviço.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -90,69 +87,57 @@ export default function MaterialsPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead className="hidden md:table-cell">Descrição</TableHead>
                 <TableHead>Unidade</TableHead>
-                <TableHead className="text-right">Estoque</TableHead>
                 <TableHead className="w-[96px] text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {materials.map((material) => {
-                const lowStock = material.stockQuantity <= LOW_STOCK_THRESHOLD;
-                return (
-                  <TableRow
-                    key={material.id}
-                    className="cursor-pointer hover:bg-muted/40"
-                    onClick={() => setLocation(`/materiais/${material.id}`)}
-                    data-testid={`row-material-${material.id}`}
-                  >
-                    <TableCell className="font-medium">{material.name}</TableCell>
-                    <TableCell className="hidden md:table-cell text-muted-foreground text-sm max-w-xs truncate">
-                      {material.description || '—'}
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
-                        {material.unit}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span
-                        className={cn('font-mono font-medium', lowStock && 'text-destructive')}
-                        data-testid={`text-stock-${material.id}`}
+              {materials.map((material) => (
+                <TableRow
+                  key={material.id}
+                  className="cursor-pointer hover:bg-muted/40"
+                  onClick={() => setLocation(`/materiais/${material.id}`)}
+                  data-testid={`row-material-${material.id}`}
+                >
+                  <TableCell className="font-medium">{material.name}</TableCell>
+                  <TableCell className="hidden md:table-cell text-muted-foreground text-sm max-w-xs truncate">
+                    {material.description || '—'}
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
+                      {material.unit}
+                    </span>
+                  </TableCell>
+                  <TableCell onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setLocation(`/materiais/${material.id}`)}
+                        data-testid={`button-edit-material-${material.id}`}
                       >
-                        {material.stockQuantity}
-                      </span>
-                    </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7"
-                          onClick={() => setLocation(`/materiais/${material.id}`)}
-                          data-testid={`button-edit-material-${material.id}`}
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <ConfirmDeleteDialog
-                          trigger={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-destructive hover:text-destructive"
-                              data-testid={`button-delete-material-${material.id}`}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          }
-                          title="Excluir material"
-                          description={`Tem certeza que deseja excluir "${material.name}" do estoque?`}
-                          onConfirm={() => deleteMaterial(material.id)}
-                          isPending={isDeleting}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <ConfirmDeleteDialog
+                        trigger={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-destructive hover:text-destructive"
+                            data-testid={`button-delete-material-${material.id}`}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        }
+                        title="Excluir material"
+                        description={`Tem certeza que deseja excluir "${material.name}"?`}
+                        onConfirm={() => deleteMaterial(material.id)}
+                        isPending={isDeleting}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Card>

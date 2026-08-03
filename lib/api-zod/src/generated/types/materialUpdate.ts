@@ -12,6 +12,4 @@ export interface MaterialUpdate {
   description?: string;
   /** @minLength 1 */
   unit?: string;
-  /** @minimum 0 */
-  stockQuantity?: number;
 }

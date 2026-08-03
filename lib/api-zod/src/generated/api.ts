@@ -316,7 +316,6 @@ export const ListMaterialsResponseItem = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "unit": zod.string(),
-  "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
 })
 export const ListMaterialsResponse = zod.array(ListMaterialsResponseItem)
@@ -327,15 +326,12 @@ export const ListMaterialsResponse = zod.array(ListMaterialsResponseItem)
  */
 
 
-export const createMaterialBodyStockQuantityMin = 0;
-
 
 
 export const CreateMaterialBody = zod.object({
   "name": zod.string().min(1),
   "description": zod.string().optional(),
-  "unit": zod.string().min(1),
-  "stockQuantity": zod.number().min(createMaterialBodyStockQuantityMin).optional()
+  "unit": zod.string().min(1)
 })
 
 export const CreateMaterialResponse = zod.object({
@@ -343,7 +339,6 @@ export const CreateMaterialResponse = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "unit": zod.string(),
-  "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
 })
 
@@ -360,7 +355,6 @@ export const GetMaterialResponse = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "unit": zod.string(),
-  "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
 })
 
@@ -374,15 +368,12 @@ export const UpdateMaterialParams = zod.object({
 
 
 
-export const updateMaterialBodyStockQuantityMin = 0;
-
 
 
 export const UpdateMaterialBody = zod.object({
   "name": zod.string().min(1).optional(),
   "description": zod.string().optional(),
-  "unit": zod.string().min(1).optional(),
-  "stockQuantity": zod.number().min(updateMaterialBodyStockQuantityMin).optional()
+  "unit": zod.string().min(1).optional()
 })
 
 export const UpdateMaterialResponse = zod.object({
@@ -390,7 +381,6 @@ export const UpdateMaterialResponse = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "unit": zod.string(),
-  "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
 })
 
