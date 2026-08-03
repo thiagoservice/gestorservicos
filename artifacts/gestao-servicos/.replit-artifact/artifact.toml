@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Gestão de Serviços"
+description = "Sistema web para gerenciar clientes, serviços prestados e materiais utilizados. Permite cadastrar clientes, criar ordens de serviço vinculadas a clientes, cadastrar materiais com preço e estoque, e associar materiais e serviços às ordens."
+version = "1.0.0"
+id = "artifacts/gestao-servicos"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22699
+
+[services.development]
+run = "pnpm --filter @workspace/gestao-servicos run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/gestao-servicos", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/gestao-servicos/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22699"
+BASE_PATH = "/"
