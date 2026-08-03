@@ -23,6 +23,9 @@ import type {
   Client,
   ClientInput,
   ClientUpdate,
+  Equipment,
+  EquipmentInput,
+  EquipmentUpdate,
   ErrorResponse,
   HealthStatus,
   Material,
@@ -512,6 +515,302 @@ export const useDeleteClient = <TError = ErrorType<ErrorResponse>,
         TContext
       > => {
       return useMutation(getDeleteClientMutationOptions(options));
+    }
+
+export const getListEquipmentsUrl = (id: number,) => {
+
+
+
+
+  return `/api/clients/${id}/equipments`
+}
+
+/**
+ * @summary List equipments for a client
+ */
+export const listEquipments = async (id: number, options?: Parameters<typeof customFetch>[1]): Promise<Equipment[]> => {
+
+  return customFetch<Equipment[]>(getListEquipmentsUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListEquipmentsQueryKey = (id: number,) => {
+    return [
+    `/api/clients/${id}/equipments`
+    ] as const;
+    }
+
+
+export const getListEquipmentsQueryOptions = <TData = Awaited<ReturnType<typeof listEquipments>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEquipments>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListEquipmentsQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listEquipments>>> = ({ signal }) => listEquipments(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listEquipments>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListEquipmentsQueryResult = NonNullable<Awaited<ReturnType<typeof listEquipments>>>
+export type ListEquipmentsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List equipments for a client
+ */
+
+export function useListEquipments<TData = Awaited<ReturnType<typeof listEquipments>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listEquipments>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListEquipmentsQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateEquipmentUrl = (id: number,) => {
+
+
+
+
+  return `/api/clients/${id}/equipments`
+}
+
+/**
+ * @summary Add equipment to a client
+ */
+export const createEquipment = async (id: number,
+    equipmentInput: EquipmentInput, options?: Parameters<typeof customFetch>[1]): Promise<Equipment> => {
+
+  return customFetch<Equipment>(getCreateEquipmentUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(equipmentInput)
+  }
+);}
+
+
+
+
+
+export const getCreateEquipmentMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEquipment>>, TError,{id: number;data: BodyType<EquipmentInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createEquipment>>, TError,{id: number;data: BodyType<EquipmentInput>}, TContext> => {
+
+const mutationKey = ['createEquipment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createEquipment>>, {id: number;data: BodyType<EquipmentInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  createEquipment(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateEquipmentMutationResult = NonNullable<Awaited<ReturnType<typeof createEquipment>>>
+    export type CreateEquipmentMutationBody = BodyType<EquipmentInput>
+    export type CreateEquipmentMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Add equipment to a client
+ */
+export const useCreateEquipment = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEquipment>>, TError,{id: number;data: BodyType<EquipmentInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createEquipment>>,
+        TError,
+        {id: number;data: BodyType<EquipmentInput>},
+        TContext
+      > => {
+      return useMutation(getCreateEquipmentMutationOptions(options));
+    }
+
+export const getUpdateEquipmentUrl = (id: number,
+    equipId: number,) => {
+
+
+
+
+  return `/api/clients/${id}/equipments/${equipId}`
+}
+
+/**
+ * @summary Update an equipment
+ */
+export const updateEquipment = async (id: number,
+    equipId: number,
+    equipmentUpdate: EquipmentUpdate, options?: Parameters<typeof customFetch>[1]): Promise<Equipment> => {
+
+  return customFetch<Equipment>(getUpdateEquipmentUrl(id,equipId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(equipmentUpdate)
+  }
+);}
+
+
+
+
+
+export const getUpdateEquipmentMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEquipment>>, TError,{id: number;equipId: number;data: BodyType<EquipmentUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateEquipment>>, TError,{id: number;equipId: number;data: BodyType<EquipmentUpdate>}, TContext> => {
+
+const mutationKey = ['updateEquipment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateEquipment>>, {id: number;equipId: number;data: BodyType<EquipmentUpdate>}> = (props) => {
+          const {id,equipId,data} = props ?? {};
+
+          return  updateEquipment(id,equipId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateEquipmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateEquipment>>>
+    export type UpdateEquipmentMutationBody = BodyType<EquipmentUpdate>
+    export type UpdateEquipmentMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Update an equipment
+ */
+export const useUpdateEquipment = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEquipment>>, TError,{id: number;equipId: number;data: BodyType<EquipmentUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateEquipment>>,
+        TError,
+        {id: number;equipId: number;data: BodyType<EquipmentUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateEquipmentMutationOptions(options));
+    }
+
+export const getDeleteEquipmentUrl = (id: number,
+    equipId: number,) => {
+
+
+
+
+  return `/api/clients/${id}/equipments/${equipId}`
+}
+
+/**
+ * @summary Delete an equipment
+ */
+export const deleteEquipment = async (id: number,
+    equipId: number, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeleteEquipmentUrl(id,equipId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeleteEquipmentMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEquipment>>, TError,{id: number;equipId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEquipment>>, TError,{id: number;equipId: number}, TContext> => {
+
+const mutationKey = ['deleteEquipment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteEquipment>>, {id: number;equipId: number}> = (props) => {
+          const {id,equipId} = props ?? {};
+
+          return  deleteEquipment(id,equipId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteEquipmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEquipment>>>
+
+    export type DeleteEquipmentMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Delete an equipment
+ */
+export const useDeleteEquipment = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEquipment>>, TError,{id: number;equipId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteEquipment>>,
+        TError,
+        {id: number;equipId: number},
+        TContext
+      > => {
+      return useMutation(getDeleteEquipmentMutationOptions(options));
     }
 
 export const getListServicesUrl = () => {

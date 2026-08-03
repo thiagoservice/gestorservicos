@@ -6,20 +6,16 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface Client {
+export interface Equipment {
   id: number;
-  code: string;
+  clientId: number;
   name: string;
   /** @nullable */
-  email?: string | null;
+  brand?: string | null;
   /** @nullable */
-  phone?: string | null;
+  model?: string | null;
   /** @nullable */
-  city?: string | null;
-  /** @nullable */
-  state?: string | null;
-  /** @nullable */
-  address?: string | null;
+  serialNumber?: string | null;
   /** @nullable */
   notes?: string | null;
   createdAt: Date;

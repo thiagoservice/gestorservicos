@@ -21,9 +21,12 @@ export const HealthCheckResponse = zod.object({
  */
 export const ListClientsResponseItem = zod.object({
   "id": zod.number().int(),
+  "code": zod.string(),
   "name": zod.string(),
   "email": zod.string().nullish(),
   "phone": zod.string().nullish(),
+  "city": zod.string().nullish(),
+  "state": zod.string().nullish(),
   "address": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.coerce.date()
@@ -41,15 +44,20 @@ export const CreateClientBody = zod.object({
   "name": zod.string().min(1),
   "email": zod.string().optional(),
   "phone": zod.string().optional(),
+  "city": zod.string().optional(),
+  "state": zod.string().optional(),
   "address": zod.string().optional(),
   "notes": zod.string().optional()
 })
 
 export const CreateClientResponse = zod.object({
   "id": zod.number().int(),
+  "code": zod.string(),
   "name": zod.string(),
   "email": zod.string().nullish(),
   "phone": zod.string().nullish(),
+  "city": zod.string().nullish(),
+  "state": zod.string().nullish(),
   "address": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.coerce.date()
@@ -65,9 +73,12 @@ export const GetClientParams = zod.object({
 
 export const GetClientResponse = zod.object({
   "id": zod.number().int(),
+  "code": zod.string(),
   "name": zod.string(),
   "email": zod.string().nullish(),
   "phone": zod.string().nullish(),
+  "city": zod.string().nullish(),
+  "state": zod.string().nullish(),
   "address": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.coerce.date()
@@ -88,15 +99,20 @@ export const UpdateClientBody = zod.object({
   "name": zod.string().min(1).optional(),
   "email": zod.string().optional(),
   "phone": zod.string().optional(),
+  "city": zod.string().optional(),
+  "state": zod.string().optional(),
   "address": zod.string().optional(),
   "notes": zod.string().optional()
 })
 
 export const UpdateClientResponse = zod.object({
   "id": zod.number().int(),
+  "code": zod.string(),
   "name": zod.string(),
   "email": zod.string().nullish(),
   "phone": zod.string().nullish(),
+  "city": zod.string().nullish(),
+  "state": zod.string().nullish(),
   "address": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.coerce.date()
@@ -111,6 +127,98 @@ export const DeleteClientParams = zod.object({
 })
 
 export const DeleteClientResponse = zod.void()
+
+
+/**
+ * @summary List equipments for a client
+ */
+export const ListEquipmentsParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+export const ListEquipmentsResponseItem = zod.object({
+  "id": zod.number().int(),
+  "clientId": zod.number().int(),
+  "name": zod.string(),
+  "brand": zod.string().nullish(),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+export const ListEquipmentsResponse = zod.array(ListEquipmentsResponseItem)
+
+
+/**
+ * @summary Add equipment to a client
+ */
+export const CreateEquipmentParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+
+
+
+export const CreateEquipmentBody = zod.object({
+  "name": zod.string().min(1),
+  "brand": zod.string().optional(),
+  "model": zod.string().optional(),
+  "serialNumber": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const CreateEquipmentResponse = zod.object({
+  "id": zod.number().int(),
+  "clientId": zod.number().int(),
+  "name": zod.string(),
+  "brand": zod.string().nullish(),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Update an equipment
+ */
+export const UpdateEquipmentParams = zod.object({
+  "id": zod.coerce.number().int(),
+  "equipId": zod.coerce.number().int()
+})
+
+
+
+
+export const UpdateEquipmentBody = zod.object({
+  "name": zod.string().min(1).optional(),
+  "brand": zod.string().optional(),
+  "model": zod.string().optional(),
+  "serialNumber": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const UpdateEquipmentResponse = zod.object({
+  "id": zod.number().int(),
+  "clientId": zod.number().int(),
+  "name": zod.string(),
+  "brand": zod.string().nullish(),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Delete an equipment
+ */
+export const DeleteEquipmentParams = zod.object({
+  "id": zod.coerce.number().int(),
+  "equipId": zod.coerce.number().int()
+})
+
+export const DeleteEquipmentResponse = zod.void()
 
 
 /**

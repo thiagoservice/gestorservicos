@@ -11,6 +11,8 @@ export interface ClientInput {
   name: string;
   email?: string;
   phone?: string;
+  city?: string;
+  state?: string;
   address?: string;
   notes?: string;
 }

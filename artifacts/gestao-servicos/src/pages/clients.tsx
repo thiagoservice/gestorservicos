@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
+import { useLocation } from 'wouter';
 import { AppShell } from '@/components/app-shell';
 import { PageHeader } from '@/components/page-header';
-import { ClientFormDialog, type ClientFormValues } from '@/components/client-form-dialog';
 import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,11 +17,8 @@ import {
 } from '@/components/ui/empty';
 import {
   useClients,
-  useCreateClientMutation,
-  useUpdateClientMutation,
   useDeleteClientMutation,
 } from '@/hooks/use-clients';
-import type { Client } from '@workspace/api-client-react';
 import {
   Plus,
   Search,
@@ -35,14 +32,10 @@ import {
 } from 'lucide-react';
 
 export default function ClientsPage() {
+  const [, setLocation] = useLocation();
   const { data: clients, isLoading, isError, refetch } = useClients();
-  const { createClient, isPending: isCreating } = useCreateClientMutation();
-  const { updateClient, isPending: isUpdating } = useUpdateClientMutation();
   const { deleteClient, isPending: isDeleting } = useDeleteClientMutation();
-
   const [search, setSearch] = useState('');
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingClient, setEditingClient] = useState<Client | null>(null);
 
   const filtered = useMemo(() => {
     if (!clients) return [];
@@ -52,34 +45,11 @@ export default function ClientsPage() {
       (c) =>
         c.name.toLowerCase().includes(q) ||
         c.email?.toLowerCase().includes(q) ||
-        c.phone?.toLowerCase().includes(q),
+        c.phone?.toLowerCase().includes(q) ||
+        c.city?.toLowerCase().includes(q) ||
+        (c.code && c.code.includes(q)),
     );
   }, [clients, search]);
-
-  const handleOpenCreate = () => {
-    setEditingClient(null);
-    setDialogOpen(true);
-  };
-
-  const handleOpenEdit = (client: Client) => {
-    setEditingClient(client);
-    setDialogOpen(true);
-  };
-
-  const handleSubmit = (values: ClientFormValues) => {
-    const payload = {
-      name: values.name,
-      email: values.email || undefined,
-      phone: values.phone || undefined,
-      address: values.address || undefined,
-      notes: values.notes || undefined,
-    };
-    if (editingClient) {
-      updateClient(editingClient.id, payload, () => setDialogOpen(false));
-    } else {
-      createClient(payload, () => setDialogOpen(false));
-    }
-  };
 
   return (
     <AppShell>
@@ -87,7 +57,7 @@ export default function ClientsPage() {
         title="Clientes"
         description="Cadastro de todos os clientes atendidos pela sua operação."
         actions={
-          <Button onClick={handleOpenCreate} data-testid="button-new-client">
+          <Button onClick={() => setLocation('/clientes/novo')} data-testid="button-new-client">
             <Plus className="h-4 w-4" />
             Novo cliente
           </Button>
@@ -99,7 +69,7 @@ export default function ClientsPage() {
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar por nome, e-mail ou telefone..."
+          placeholder="Buscar por código, nome, e-mail, cidade..."
           className="pl-9"
           data-testid="input-search-clients"
         />
@@ -110,6 +80,7 @@ export default function ClientsPage() {
           <CardContent className="p-0">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="flex items-center gap-4 px-5 py-4 border-b last:border-b-0">
+                <Skeleton className="h-4 w-16" />
                 <Skeleton className="h-4 w-40" />
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-4 w-28" />
@@ -124,12 +95,7 @@ export default function ClientsPage() {
             <p className="text-sm text-muted-foreground mb-4">
               Não foi possível carregar os clientes.
             </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              data-testid="button-retry-clients"
-            >
+            <Button variant="outline" size="sm" onClick={() => refetch()} data-testid="button-retry-clients">
               Tentar novamente
             </Button>
           </CardContent>
@@ -137,9 +103,7 @@ export default function ClientsPage() {
       ) : filtered.length === 0 ? (
         <Empty className="border rounded-xl bg-card">
           <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Users />
-            </EmptyMedia>
+            <EmptyMedia variant="icon"><Users /></EmptyMedia>
             <EmptyTitle>
               {search ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado'}
             </EmptyTitle>
@@ -150,7 +114,7 @@ export default function ClientsPage() {
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button onClick={handleOpenCreate} data-testid="button-empty-new-client">
+            <Button onClick={() => setLocation('/clientes/novo')} data-testid="button-empty-new-client">
               <Plus className="h-4 w-4" />
               Cadastrar cliente
             </Button>
@@ -162,10 +126,11 @@ export default function ClientsPage() {
             <table className="w-full text-sm" data-testid="table-clients">
               <thead>
                 <tr className="border-b text-muted-foreground">
+                  <th className="text-left font-medium px-5 py-3 w-24">Código</th>
                   <th className="text-left font-medium px-5 py-3">Nome</th>
                   <th className="text-left font-medium px-5 py-3 hidden sm:table-cell">E-mail</th>
                   <th className="text-left font-medium px-5 py-3 hidden md:table-cell">Telefone</th>
-                  <th className="text-left font-medium px-5 py-3 hidden lg:table-cell">Endereço</th>
+                  <th className="text-left font-medium px-5 py-3 hidden lg:table-cell">Cidade / UF</th>
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -173,9 +138,13 @@ export default function ClientsPage() {
                 {filtered.map((client) => (
                   <tr
                     key={client.id}
-                    className="border-b last:border-b-0 hover:bg-muted/40 transition-colors group"
+                    className="border-b last:border-b-0 hover:bg-muted/40 transition-colors group cursor-pointer"
                     data-testid={`row-client-${client.id}`}
+                    onClick={() => setLocation(`/clientes/${client.id}`)}
                   >
+                    <td className="px-5 py-3 font-mono text-xs text-muted-foreground">
+                      {client.code}
+                    </td>
                     <td className="px-5 py-3 font-medium" data-testid={`text-client-name-${client.id}`}>
                       {client.name}
                     </td>
@@ -195,21 +164,24 @@ export default function ClientsPage() {
                         </span>
                       ) : '—'}
                     </td>
-                    <td className="px-5 py-3 text-muted-foreground hidden lg:table-cell truncate max-w-xs">
-                      {client.address ? (
-                        <span className="flex items-center gap-1.5 truncate">
+                    <td className="px-5 py-3 text-muted-foreground hidden lg:table-cell">
+                      {client.city || client.state ? (
+                        <span className="flex items-center gap-1.5">
                           <MapPin className="h-3.5 w-3.5 shrink-0" />
-                          <span className="truncate">{client.address}</span>
+                          {[client.city, client.state].filter(Boolean).join(' / ')}
                         </span>
                       ) : '—'}
                     </td>
-                    <td className="px-5 py-3">
+                    <td
+                      className="px-5 py-3"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7"
-                          onClick={() => handleOpenEdit(client)}
+                          onClick={() => setLocation(`/clientes/${client.id}`)}
                           data-testid={`button-edit-client-${client.id}`}
                         >
                           <Pencil className="h-3.5 w-3.5" />
@@ -239,14 +211,6 @@ export default function ClientsPage() {
           </CardContent>
         </Card>
       )}
-
-      <ClientFormDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        client={editingClient}
-        onSubmit={handleSubmit}
-        isPending={isCreating || isUpdating}
-      />
     </AppShell>
   );
 }

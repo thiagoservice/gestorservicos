@@ -15,11 +15,16 @@ export interface ErrorResponse {
 
 export interface Client {
   id: number;
+  code: string;
   name: string;
   /** @nullable */
   email?: string | null;
   /** @nullable */
   phone?: string | null;
+  /** @nullable */
+  city?: string | null;
+  /** @nullable */
+  state?: string | null;
   /** @nullable */
   address?: string | null;
   /** @nullable */
@@ -32,6 +37,8 @@ export interface ClientInput {
   name: string;
   email?: string;
   phone?: string;
+  city?: string;
+  state?: string;
   address?: string;
   notes?: string;
 }
@@ -41,7 +48,42 @@ export interface ClientUpdate {
   name?: string;
   email?: string;
   phone?: string;
+  city?: string;
+  state?: string;
   address?: string;
+  notes?: string;
+}
+
+export interface Equipment {
+  id: number;
+  clientId: number;
+  name: string;
+  /** @nullable */
+  brand?: string | null;
+  /** @nullable */
+  model?: string | null;
+  /** @nullable */
+  serialNumber?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface EquipmentInput {
+  /** @minLength 1 */
+  name: string;
+  brand?: string;
+  model?: string;
+  serialNumber?: string;
+  notes?: string;
+}
+
+export interface EquipmentUpdate {
+  /** @minLength 1 */
+  name?: string;
+  brand?: string;
+  model?: string;
+  serialNumber?: string;
   notes?: string;
 }
 

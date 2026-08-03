@@ -6,13 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ClientUpdate {
+export interface EquipmentInput {
   /** @minLength 1 */
-  name?: string;
-  email?: string;
-  phone?: string;
-  city?: string;
-  state?: string;
-  address?: string;
+  name: string;
+  brand?: string;
+  model?: string;
+  serialNumber?: string;
   notes?: string;
 }

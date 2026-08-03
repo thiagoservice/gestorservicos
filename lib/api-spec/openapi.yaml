@@ -9,17 +9,12 @@ servers:
     description: Base API path
 tags:
   - name: health
-    description: Health operations
   - name: clients
-    description: Client management
+  - name: equipments
   - name: services
-    description: Service catalog
   - name: materials
-    description: Material catalog
   - name: orders
-    description: Service orders
   - name: summary
-    description: Dashboard summary
 paths:
   /healthz:
     get:
@@ -132,6 +127,117 @@ paths:
       summary: Delete a client
       parameters:
         - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # Equipments
+  /clients/{id}/equipments:
+    get:
+      operationId: listEquipments
+      tags: [equipments]
+      summary: List equipments for a client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of equipments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Equipment"
+    post:
+      operationId: createEquipment
+      tags: [equipments]
+      summary: Add equipment to a client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EquipmentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /clients/{id}/equipments/{equipId}:
+    patch:
+      operationId: updateEquipment
+      tags: [equipments]
+      summary: Update an equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: equipId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EquipmentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteEquipment
+      tags: [equipments]
+      summary: Delete an equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: equipId
           in: path
           required: true
           schema:
@@ -629,15 +735,21 @@ components:
     # Client
     Client:
       type: object
-      required: [id, name, createdAt]
+      required: [id, code, name, createdAt]
       properties:
         id:
           type: integer
+        code:
+          type: string
         name:
           type: string
         email:
           type: ["string", "null"]
         phone:
+          type: ["string", "null"]
+        city:
+          type: ["string", "null"]
+        state:
           type: ["string", "null"]
         address:
           type: ["string", "null"]
@@ -658,6 +770,10 @@ components:
           type: string
         phone:
           type: string
+        city:
+          type: string
+        state:
+          type: string
         address:
           type: string
         notes:
@@ -673,7 +789,65 @@ components:
           type: string
         phone:
           type: string
+        city:
+          type: string
+        state:
+          type: string
         address:
+          type: string
+        notes:
+          type: string
+
+    # Equipment
+    Equipment:
+      type: object
+      required: [id, clientId, name, createdAt]
+      properties:
+        id:
+          type: integer
+        clientId:
+          type: integer
+        name:
+          type: string
+        brand:
+          type: ["string", "null"]
+        model:
+          type: ["string", "null"]
+        serialNumber:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    EquipmentInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        brand:
+          type: string
+        model:
+          type: string
+        serialNumber:
+          type: string
+        notes:
+          type: string
+
+    EquipmentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        brand:
+          type: string
+        model:
+          type: string
+        serialNumber:
           type: string
         notes:
           type: string
