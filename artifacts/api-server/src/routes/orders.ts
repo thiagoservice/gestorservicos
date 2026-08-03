@@ -271,7 +271,7 @@ router.post("/orders/:id/material-items", async (req, res): Promise<void> => {
     res.status(404).json({ error: "Material não encontrado" });
     return;
   }
-  const unitPrice = parsed.data.unitPrice !== undefined ? parsed.data.unitPrice : Number(material.unitPrice);
+  const unitPrice = parsed.data.unitPrice;
   const totalPrice = unitPrice * parsed.data.quantity;
   const [item] = await db.insert(orderMaterialItemsTable).values({
     orderId: params.data.id,
