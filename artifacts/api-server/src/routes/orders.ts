@@ -213,7 +213,7 @@ router.post("/orders/:id/service-items", async (req, res): Promise<void> => {
     res.status(404).json({ error: "Serviço não encontrado" });
     return;
   }
-  const unitPrice = parsed.data.unitPrice !== undefined ? parsed.data.unitPrice : Number(service.unitPrice);
+  const unitPrice = parsed.data.unitPrice;
   const totalPrice = unitPrice * parsed.data.quantity;
   const [item] = await db.insert(orderServiceItemsTable).values({
     orderId: params.data.id,

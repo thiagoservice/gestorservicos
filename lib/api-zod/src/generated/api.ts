@@ -228,7 +228,6 @@ export const ListServicesResponseItem = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "createdAt": zod.coerce.date()
 })
@@ -239,15 +238,12 @@ export const ListServicesResponse = zod.array(ListServicesResponseItem)
  * @summary Create a service
  */
 
-export const createServiceBodyUnitPriceMin = 0;
-
 
 
 
 export const CreateServiceBody = zod.object({
   "name": zod.string().min(1),
   "description": zod.string().optional(),
-  "unitPrice": zod.number().min(createServiceBodyUnitPriceMin),
   "unit": zod.string().min(1)
 })
 
@@ -255,7 +251,6 @@ export const CreateServiceResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "createdAt": zod.coerce.date()
 })
@@ -272,7 +267,6 @@ export const GetServiceResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "createdAt": zod.coerce.date()
 })
@@ -286,15 +280,12 @@ export const UpdateServiceParams = zod.object({
 })
 
 
-export const updateServiceBodyUnitPriceMin = 0;
-
 
 
 
 export const UpdateServiceBody = zod.object({
   "name": zod.string().min(1).optional(),
   "description": zod.string().optional(),
-  "unitPrice": zod.number().min(updateServiceBodyUnitPriceMin).optional(),
   "unit": zod.string().min(1).optional()
 })
 
@@ -302,7 +293,6 @@ export const UpdateServiceResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "createdAt": zod.coerce.date()
 })
@@ -325,7 +315,6 @@ export const ListMaterialsResponseItem = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
@@ -337,8 +326,6 @@ export const ListMaterialsResponse = zod.array(ListMaterialsResponseItem)
  * @summary Create a material
  */
 
-export const createMaterialBodyUnitPriceMin = 0;
-
 
 export const createMaterialBodyStockQuantityMin = 0;
 
@@ -347,7 +334,6 @@ export const createMaterialBodyStockQuantityMin = 0;
 export const CreateMaterialBody = zod.object({
   "name": zod.string().min(1),
   "description": zod.string().optional(),
-  "unitPrice": zod.number().min(createMaterialBodyUnitPriceMin),
   "unit": zod.string().min(1),
   "stockQuantity": zod.number().min(createMaterialBodyStockQuantityMin).optional()
 })
@@ -356,7 +342,6 @@ export const CreateMaterialResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
@@ -374,7 +359,6 @@ export const GetMaterialResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
@@ -389,8 +373,6 @@ export const UpdateMaterialParams = zod.object({
 })
 
 
-export const updateMaterialBodyUnitPriceMin = 0;
-
 
 export const updateMaterialBodyStockQuantityMin = 0;
 
@@ -399,7 +381,6 @@ export const updateMaterialBodyStockQuantityMin = 0;
 export const UpdateMaterialBody = zod.object({
   "name": zod.string().min(1).optional(),
   "description": zod.string().optional(),
-  "unitPrice": zod.number().min(updateMaterialBodyUnitPriceMin).optional(),
   "unit": zod.string().min(1).optional(),
   "stockQuantity": zod.number().min(updateMaterialBodyStockQuantityMin).optional()
 })
@@ -408,7 +389,6 @@ export const UpdateMaterialResponse = zod.object({
   "id": zod.number().int(),
   "name": zod.string(),
   "description": zod.string().nullish(),
-  "unitPrice": zod.number(),
   "unit": zod.string(),
   "stockQuantity": zod.number(),
   "createdAt": zod.coerce.date()
@@ -561,7 +541,7 @@ export const addOrderServiceItemBodyUnitPriceMin = 0;
 export const AddOrderServiceItemBody = zod.object({
   "serviceId": zod.number().int(),
   "quantity": zod.number().min(addOrderServiceItemBodyQuantityMin),
-  "unitPrice": zod.number().min(addOrderServiceItemBodyUnitPriceMin).optional()
+  "unitPrice": zod.number().min(addOrderServiceItemBodyUnitPriceMin)
 })
 
 export const AddOrderServiceItemResponse = zod.object({
@@ -602,7 +582,7 @@ export const addOrderMaterialItemBodyUnitPriceMin = 0;
 export const AddOrderMaterialItemBody = zod.object({
   "materialId": zod.number().int(),
   "quantity": zod.number().min(addOrderMaterialItemBodyQuantityMin),
-  "unitPrice": zod.number().min(addOrderMaterialItemBodyUnitPriceMin).optional()
+  "unitPrice": zod.number().min(addOrderMaterialItemBodyUnitPriceMin)
 })
 
 export const AddOrderMaterialItemResponse = zod.object({

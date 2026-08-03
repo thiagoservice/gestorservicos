@@ -11,7 +11,6 @@ export interface Service {
   name: string;
   /** @nullable */
   description?: string | null;
-  unitPrice: number;
   unit: string;
   createdAt: Date;
 }

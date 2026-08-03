@@ -26,7 +26,6 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 const serviceSchema = z.object({
   name: z.string().min(1, 'Informe o nome do serviço'),
   description: z.string().optional(),
-  unitPrice: z.coerce.number().min(0, 'Preço deve ser maior ou igual a 0'),
   unit: z.string().min(1, 'Informe a unidade de cobrança'),
 });
 
@@ -44,7 +43,7 @@ export default function ServiceFormPage() {
 
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
-    defaultValues: { name: '', description: '', unitPrice: 0, unit: '' },
+    defaultValues: { name: '', description: '', unit: '' },
   });
 
   useEffect(() => {
@@ -52,7 +51,6 @@ export default function ServiceFormPage() {
       form.reset({
         name: service.name,
         description: service.description ?? '',
-        unitPrice: service.unitPrice,
         unit: service.unit,
       });
     }
@@ -62,7 +60,6 @@ export default function ServiceFormPage() {
     const payload = {
       name: values.name,
       description: values.description || undefined,
-      unitPrice: values.unitPrice,
       unit: values.unit,
     };
     if (isEdit && serviceId) {
@@ -153,37 +150,19 @@ export default function ServiceFormPage() {
             </div>
           </div>
 
-          {/* Precificação */}
+          {/* Unidade */}
           <div className="rounded-xl border bg-card p-5">
-            <h2 className="text-base font-semibold text-primary mb-1">Precificação</h2>
-            <p className="text-sm text-muted-foreground mb-4">Preço e unidade de cobrança para cálculo nas ordens.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField control={form.control} name="unitPrice" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Preço unitário (R$) *</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="0,00"
-                      {...field}
-                      data-testid="input-service-price"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="unit" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Unidade *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: hora, m², serviço" {...field} data-testid="input-service-unit" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-            </div>
+            <h2 className="text-base font-semibold text-primary mb-1">Cobrança</h2>
+            <p className="text-sm text-muted-foreground mb-4">Unidade de medida usada ao lançar o serviço numa ordem.</p>
+            <FormField control={form.control} name="unit" render={({ field }) => (
+              <FormItem className="max-w-xs">
+                <FormLabel>Unidade *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: hora, m², serviço" {...field} data-testid="input-service-unit" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
 
         </form>

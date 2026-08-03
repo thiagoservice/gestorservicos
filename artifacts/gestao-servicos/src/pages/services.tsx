@@ -25,7 +25,6 @@ import {
   useServices,
   useDeleteServiceMutation,
 } from '@/hooks/use-services';
-import { formatCurrencyBRL } from '@/lib/format';
 import { Plus, Pencil, Trash2, Wrench, AlertTriangle } from 'lucide-react';
 
 export default function ServicesPage() {
@@ -88,7 +87,6 @@ export default function ServicesPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead className="hidden md:table-cell">Descrição</TableHead>
                 <TableHead>Unidade</TableHead>
-                <TableHead className="text-right">Preço</TableHead>
                 <TableHead className="w-[96px] text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -108,9 +106,6 @@ export default function ServicesPage() {
                     <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
                       {service.unit}
                     </span>
-                  </TableCell>
-                  <TableCell className="text-right font-mono font-medium">
-                    {formatCurrencyBRL(service.unitPrice)}
                   </TableCell>
                   <TableCell onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-end gap-1">

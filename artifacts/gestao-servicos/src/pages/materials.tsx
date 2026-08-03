@@ -26,7 +26,6 @@ import {
   useMaterials,
   useDeleteMaterialMutation,
 } from '@/hooks/use-materials';
-import { formatCurrencyBRL } from '@/lib/format';
 import { Plus, Pencil, Trash2, Package, AlertTriangle } from 'lucide-react';
 
 const LOW_STOCK_THRESHOLD = 5;
@@ -92,7 +91,6 @@ export default function MaterialsPage() {
                 <TableHead className="hidden md:table-cell">Descrição</TableHead>
                 <TableHead>Unidade</TableHead>
                 <TableHead className="text-right">Estoque</TableHead>
-                <TableHead className="text-right">Preço</TableHead>
                 <TableHead className="w-[96px] text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -122,9 +120,6 @@ export default function MaterialsPage() {
                       >
                         {material.stockQuantity}
                       </span>
-                    </TableCell>
-                    <TableCell className="text-right font-mono font-medium">
-                      {formatCurrencyBRL(material.unitPrice)}
                     </TableCell>
                     <TableCell onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1">

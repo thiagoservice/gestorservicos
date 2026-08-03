@@ -6,7 +6,6 @@ export const materialsTable = pgTable("materials", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
-  unitPrice: numeric("unit_price", { precision: 10, scale: 2 }).notNull(),
   unit: text("unit").notNull(),
   stockQuantity: numeric("stock_quantity", { precision: 10, scale: 3 }).notNull().default("0"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

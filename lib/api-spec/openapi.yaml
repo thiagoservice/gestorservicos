@@ -855,7 +855,7 @@ components:
     # Service
     Service:
       type: object
-      required: [id, name, unitPrice, unit, createdAt]
+      required: [id, name, unit, createdAt]
       properties:
         id:
           type: integer
@@ -863,8 +863,6 @@ components:
           type: string
         description:
           type: ["string", "null"]
-        unitPrice:
-          type: number
         unit:
           type: string
         createdAt:
@@ -873,16 +871,13 @@ components:
 
     ServiceInput:
       type: object
-      required: [name, unitPrice, unit]
+      required: [name, unit]
       properties:
         name:
           type: string
           minLength: 1
         description:
           type: string
-        unitPrice:
-          type: number
-          minimum: 0
         unit:
           type: string
           minLength: 1
@@ -895,9 +890,6 @@ components:
           minLength: 1
         description:
           type: string
-        unitPrice:
-          type: number
-          minimum: 0
         unit:
           type: string
           minLength: 1
@@ -905,7 +897,7 @@ components:
     # Material
     Material:
       type: object
-      required: [id, name, unitPrice, unit, stockQuantity, createdAt]
+      required: [id, name, unit, stockQuantity, createdAt]
       properties:
         id:
           type: integer
@@ -913,8 +905,6 @@ components:
           type: string
         description:
           type: ["string", "null"]
-        unitPrice:
-          type: number
         unit:
           type: string
         stockQuantity:
@@ -925,16 +915,13 @@ components:
 
     MaterialInput:
       type: object
-      required: [name, unitPrice, unit]
+      required: [name, unit]
       properties:
         name:
           type: string
           minLength: 1
         description:
           type: string
-        unitPrice:
-          type: number
-          minimum: 0
         unit:
           type: string
           minLength: 1
@@ -950,9 +937,6 @@ components:
           minLength: 1
         description:
           type: string
-        unitPrice:
-          type: number
-          minimum: 0
         unit:
           type: string
           minLength: 1
@@ -1069,7 +1053,7 @@ components:
 
     OrderServiceItemInput:
       type: object
-      required: [serviceId, quantity]
+      required: [serviceId, quantity, unitPrice]
       properties:
         serviceId:
           type: integer
@@ -1101,7 +1085,7 @@ components:
 
     OrderMaterialItemInput:
       type: object
-      required: [materialId, quantity]
+      required: [materialId, quantity, unitPrice]
       properties:
         materialId:
           type: integer

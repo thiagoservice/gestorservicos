@@ -344,8 +344,8 @@ export default function OrderDetailPage() {
         items={services ?? []}
         emptyLabel="Cadastre um serviço no catálogo primeiro"
         isPending={isAddingService}
-        onSubmit={(serviceId, quantity) =>
-          addServiceItem(order.id, { serviceId, quantity }, () =>
+        onSubmit={(serviceId, quantity, unitPrice) =>
+          addServiceItem(order.id, { serviceId, quantity, unitPrice }, () =>
             setServiceDialogOpen(false),
           )
         }
@@ -359,8 +359,8 @@ export default function OrderDetailPage() {
         items={materials ?? []}
         emptyLabel="Cadastre um material no estoque primeiro"
         isPending={isAddingMaterial}
-        onSubmit={(materialId, quantity) =>
-          addMaterialItem(order.id, { materialId, quantity }, () =>
+        onSubmit={(materialId, quantity, unitPrice) =>
+          addMaterialItem(order.id, { materialId, quantity, unitPrice }, () =>
             setMaterialDialogOpen(false),
           )
         }

@@ -11,5 +11,5 @@ export interface OrderServiceItemInput {
   /** @minimum 0.01 */
   quantity: number;
   /** @minimum 0 */
-  unitPrice?: number;
+  unitPrice: number;
 }

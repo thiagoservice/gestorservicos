@@ -23,7 +23,6 @@ import { formatCurrencyBRL } from '@/lib/format';
 type CatalogItem = {
   id: number;
   name: string;
-  unitPrice: number;
   unit: string;
 };
 
@@ -43,26 +42,30 @@ export function AddOrderItemDialog({
   description: string;
   items: CatalogItem[];
   emptyLabel: string;
-  onSubmit: (itemId: number, quantity: number) => void;
+  onSubmit: (itemId: number, quantity: number, unitPrice: number) => void;
   isPending?: boolean;
 }) {
   const [selectedId, setSelectedId] = useState('');
   const [quantity, setQuantity] = useState('1');
+  const [unitPrice, setUnitPrice] = useState('');
 
   useEffect(() => {
     if (open) {
       setSelectedId('');
       setQuantity('1');
+      setUnitPrice('');
     }
   }, [open]);
 
   const selected = items.find((i) => String(i.id) === selectedId);
   const qtyNum = Number(quantity) || 0;
-  const total = selected ? selected.unitPrice * qtyNum : 0;
+  const priceNum = Number(unitPrice) || 0;
+  const total = priceNum * qtyNum;
+  const canSubmit = !!selectedId && qtyNum > 0 && priceNum >= 0 && unitPrice !== '';
 
   const handleSubmit = () => {
-    if (!selectedId || qtyNum <= 0) return;
-    onSubmit(Number(selectedId), qtyNum);
+    if (!canSubmit) return;
+    onSubmit(Number(selectedId), qtyNum, priceNum);
   };
 
   return (
@@ -91,34 +94,44 @@ export function AddOrderItemDialog({
                       value={String(item.id)}
                       data-testid={`option-order-item-${item.id}`}
                     >
-                      {item.name} — {formatCurrencyBRL(item.unitPrice)}/
-                      {item.unit}
+                      {item.name} — {item.unit}
                     </SelectItem>
                   ))
                 )}
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label>Quantidade{selected ? ` (${selected.unit})` : ''}</Label>
-            <Input
-              type="number"
-              min="0.01"
-              step="0.01"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              data-testid="input-order-item-quantity"
-            />
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label>Preço unitário (R$)</Label>
+              <Input
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0,00"
+                value={unitPrice}
+                onChange={(e) => setUnitPrice(e.target.value)}
+                data-testid="input-order-item-price"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Quantidade{selected ? ` (${selected.unit})` : ''}</Label>
+              <Input
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                data-testid="input-order-item-quantity"
+              />
+            </div>
           </div>
-          {selected && (
+
+          {selected && unitPrice !== '' && (
             <div className="rounded-lg bg-muted px-4 py-3 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                Subtotal
-              </span>
-              <span
-                className="font-mono font-semibold"
-                data-testid="text-order-item-subtotal"
-              >
+              <span className="text-sm text-muted-foreground">Subtotal</span>
+              <span className="font-mono font-semibold" data-testid="text-order-item-subtotal">
                 {formatCurrencyBRL(total)}
               </span>
             </div>
@@ -135,7 +148,7 @@ export function AddOrderItemDialog({
           </Button>
           <Button
             type="button"
-            disabled={isPending || !selectedId || qtyNum <= 0}
+            disabled={isPending || !canSubmit}
             onClick={handleSubmit}
             data-testid="button-save-order-item"
           >

@@ -92,7 +92,6 @@ export interface Service {
   name: string;
   /** @nullable */
   description?: string | null;
-  unitPrice: number;
   unit: string;
   createdAt: string;
 }
@@ -101,8 +100,6 @@ export interface ServiceInput {
   /** @minLength 1 */
   name: string;
   description?: string;
-  /** @minimum 0 */
-  unitPrice: number;
   /** @minLength 1 */
   unit: string;
 }
@@ -111,8 +108,6 @@ export interface ServiceUpdate {
   /** @minLength 1 */
   name?: string;
   description?: string;
-  /** @minimum 0 */
-  unitPrice?: number;
   /** @minLength 1 */
   unit?: string;
 }
@@ -122,7 +117,6 @@ export interface Material {
   name: string;
   /** @nullable */
   description?: string | null;
-  unitPrice: number;
   unit: string;
   stockQuantity: number;
   createdAt: string;
@@ -132,8 +126,6 @@ export interface MaterialInput {
   /** @minLength 1 */
   name: string;
   description?: string;
-  /** @minimum 0 */
-  unitPrice: number;
   /** @minLength 1 */
   unit: string;
   /** @minimum 0 */
@@ -144,8 +136,6 @@ export interface MaterialUpdate {
   /** @minLength 1 */
   name?: string;
   description?: string;
-  /** @minimum 0 */
-  unitPrice?: number;
   /** @minLength 1 */
   unit?: string;
   /** @minimum 0 */
@@ -260,7 +250,7 @@ export interface OrderServiceItemInput {
   /** @minimum 0.01 */
   quantity: number;
   /** @minimum 0 */
-  unitPrice?: number;
+  unitPrice: number;
 }
 
 export interface OrderMaterialItemInput {
@@ -268,7 +258,7 @@ export interface OrderMaterialItemInput {
   /** @minimum 0.01 */
   quantity: number;
   /** @minimum 0 */
-  unitPrice?: number;
+  unitPrice: number;
 }
 
 export interface Summary {

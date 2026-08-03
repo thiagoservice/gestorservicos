@@ -10,8 +10,6 @@ export interface MaterialUpdate {
   /** @minLength 1 */
   name?: string;
   description?: string;
-  /** @minimum 0 */
-  unitPrice?: number;
   /** @minLength 1 */
   unit?: string;
   /** @minimum 0 */

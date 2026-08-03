@@ -26,7 +26,6 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 const materialSchema = z.object({
   name: z.string().min(1, 'Informe o nome do material'),
   description: z.string().optional(),
-  unitPrice: z.coerce.number().min(0, 'Preço deve ser maior ou igual a 0'),
   unit: z.string().min(1, 'Informe a unidade'),
   stockQuantity: z.coerce.number().min(0, 'Estoque deve ser maior ou igual a 0'),
 });
@@ -45,7 +44,7 @@ export default function MaterialFormPage() {
 
   const form = useForm<MaterialFormValues>({
     resolver: zodResolver(materialSchema),
-    defaultValues: { name: '', description: '', unitPrice: 0, unit: '', stockQuantity: 0 },
+    defaultValues: { name: '', description: '', unit: '', stockQuantity: 0 },
   });
 
   useEffect(() => {
@@ -53,7 +52,6 @@ export default function MaterialFormPage() {
       form.reset({
         name: material.name,
         description: material.description ?? '',
-        unitPrice: material.unitPrice,
         unit: material.unit,
         stockQuantity: material.stockQuantity,
       });
@@ -64,7 +62,6 @@ export default function MaterialFormPage() {
     const payload = {
       name: values.name,
       description: values.description || undefined,
-      unitPrice: values.unitPrice,
       unit: values.unit,
       stockQuantity: values.stockQuantity,
     };
@@ -156,27 +153,11 @@ export default function MaterialFormPage() {
             </div>
           </div>
 
-          {/* Estoque e Precificação */}
+          {/* Estoque */}
           <div className="rounded-xl border bg-card p-5">
-            <h2 className="text-base font-semibold text-primary mb-1">Estoque e Precificação</h2>
-            <p className="text-sm text-muted-foreground mb-4">Controle de quantidade e custo do material.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <FormField control={form.control} name="unitPrice" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Preço unitário (R$) *</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="0,00"
-                      {...field}
-                      data-testid="input-material-price"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
+            <h2 className="text-base font-semibold text-primary mb-1">Estoque</h2>
+            <p className="text-sm text-muted-foreground mb-4">Unidade de medida e quantidade disponível em estoque.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField control={form.control} name="unit" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unidade *</FormLabel>
