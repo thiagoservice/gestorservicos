@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import {
   useListMaterials,
+  useGetMaterial,
   useCreateMaterial,
   useUpdateMaterial,
   useDeleteMaterial,
@@ -15,6 +16,12 @@ import { useToast } from '@/hooks/use-toast';
 
 export function useMaterials() {
   return useListMaterials();
+}
+
+export function useMaterial(id: number | undefined) {
+  return useGetMaterial(id as number, {
+    query: { enabled: !!id, queryKey: getGetMaterialQueryKey(id as number) },
+  });
 }
 
 export function useCreateMaterialMutation() {

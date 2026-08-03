@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
-import { useLocation, Link } from 'wouter';
+import { useLocation } from 'wouter';
 import { AppShell } from '@/components/app-shell';
 import { PageHeader } from '@/components/page-header';
 import { StatusBadge } from '@/components/status-badge';
-import { OrderFormDialog, type OrderFormValues } from '@/components/order-form-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -31,8 +30,7 @@ import {
   EmptyMedia,
   EmptyContent,
 } from '@/components/ui/empty';
-import { useOrders, useCreateOrderMutation } from '@/hooks/use-orders';
-import { useClients } from '@/hooks/use-clients';
+import { useOrders } from '@/hooks/use-orders';
 import { formatCurrencyBRL, formatDateBR } from '@/lib/format';
 import {
   Plus,
@@ -43,14 +41,11 @@ import {
 } from 'lucide-react';
 
 export default function OrdersPage() {
-  const { data: orders, isLoading, isError, refetch } = useOrders();
-  const { data: clients } = useClients();
-  const { createOrder, isPending: isCreating } = useCreateOrderMutation();
   const [, setLocation] = useLocation();
+  const { data: orders, isLoading, isError, refetch } = useOrders();
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const filtered = useMemo(() => {
     if (!orders) return [];
@@ -71,27 +66,13 @@ export default function OrdersPage() {
     return list;
   }, [orders, search, statusFilter]);
 
-  const handleSubmit = (values: OrderFormValues) => {
-    createOrder(
-      {
-        clientId: Number(values.clientId),
-        title: values.title,
-        description: values.description || undefined,
-      },
-      (order) => {
-        setDialogOpen(false);
-        setLocation(`/ordens/${order.id}`);
-      },
-    );
-  };
-
   return (
     <AppShell>
       <PageHeader
         title="Ordens de serviço"
         description="Acompanhe o andamento de cada atendimento, do pedido à conclusão."
         actions={
-          <Button onClick={() => setDialogOpen(true)} data-testid="button-new-order">
+          <Button onClick={() => setLocation('/ordens/novo')} data-testid="button-new-order">
             <Plus className="h-4 w-4" />
             Nova ordem
           </Button>
@@ -136,12 +117,7 @@ export default function OrdersPage() {
             <p className="text-sm text-muted-foreground mb-4">
               Não foi possível carregar as ordens de serviço.
             </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              data-testid="button-retry-orders"
-            >
+            <Button variant="outline" size="sm" onClick={() => refetch()} data-testid="button-retry-orders">
               Tentar novamente
             </Button>
           </CardContent>
@@ -149,9 +125,7 @@ export default function OrdersPage() {
       ) : filtered.length === 0 ? (
         <Empty className="border rounded-xl bg-card">
           <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ClipboardList />
-            </EmptyMedia>
+            <EmptyMedia variant="icon"><ClipboardList /></EmptyMedia>
             <EmptyTitle>
               {orders && orders.length > 0
                 ? 'Nenhuma ordem encontrada'
@@ -165,7 +139,7 @@ export default function OrdersPage() {
           </EmptyHeader>
           {(!orders || orders.length === 0) && (
             <EmptyContent>
-              <Button onClick={() => setDialogOpen(true)} data-testid="button-empty-new-order">
+              <Button onClick={() => setLocation('/ordens/novo')} data-testid="button-empty-new-order">
                 <Plus className="h-4 w-4" />
                 Criar ordem de serviço
               </Button>
@@ -209,14 +183,13 @@ export default function OrdersPage() {
                     {formatCurrencyBRL(order.totalPrice)}
                   </TableCell>
                   <TableCell>
-                    <Link
-                      href={`/ordens/${order.id}`}
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setLocation(`/ordens/${order.id}`); }}
                       data-testid={`link-open-order-${order.id}`}
                       className="inline-flex h-7 w-7 items-center justify-center rounded-md hover-elevate"
                     >
                       <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-                    </Link>
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -224,14 +197,6 @@ export default function OrdersPage() {
           </Table>
         </Card>
       )}
-
-      <OrderFormDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        clients={clients ?? []}
-        onSubmit={handleSubmit}
-        isPending={isCreating}
-      />
     </AppShell>
   );
 }

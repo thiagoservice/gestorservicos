@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import {
   useListServices,
+  useGetService,
   useCreateService,
   useUpdateService,
   useDeleteService,
@@ -12,6 +13,12 @@ import { useToast } from '@/hooks/use-toast';
 
 export function useServices() {
   return useListServices();
+}
+
+export function useService(id: number | undefined) {
+  return useGetService(id as number, {
+    query: { enabled: !!id, queryKey: getGetServiceQueryKey(id as number) },
+  });
 }
 
 export function useCreateServiceMutation() {
