@@ -400,6 +400,7 @@ export const DeleteMaterialResponse = zod.void()
  */
 export const ListOrdersResponseItem = zod.object({
   "id": zod.number().int(),
+  "number": zod.string(),
   "clientId": zod.number().int(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -427,6 +428,7 @@ export const CreateOrderBody = zod.object({
 
 export const CreateOrderResponse = zod.object({
   "id": zod.number().int(),
+  "number": zod.string(),
   "clientId": zod.number().int(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -447,6 +449,7 @@ export const GetOrderParams = zod.object({
 
 export const GetOrderResponse = zod.object({
   "id": zod.number().int(),
+  "number": zod.string(),
   "clientId": zod.number().int(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -494,6 +497,7 @@ export const UpdateOrderBody = zod.object({
 
 export const UpdateOrderResponse = zod.object({
   "id": zod.number().int(),
+  "number": zod.string(),
   "clientId": zod.number().int(),
   "clientName": zod.string(),
   "title": zod.string(),

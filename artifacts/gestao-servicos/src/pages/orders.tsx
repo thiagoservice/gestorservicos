@@ -151,6 +151,7 @@ export default function OrdersPage() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[80px]">Nº</TableHead>
                 <TableHead>Título</TableHead>
                 <TableHead>Cliente</TableHead>
                 <TableHead className="hidden md:table-cell">Criada em</TableHead>
@@ -167,6 +168,9 @@ export default function OrdersPage() {
                   onClick={() => setLocation(`/ordens/${order.id}`)}
                   data-testid={`row-order-${order.id}`}
                 >
+                  <TableCell className="font-mono text-sm text-muted-foreground">
+                    {order.number}
+                  </TableCell>
                   <TableCell className="font-medium max-w-[220px] truncate">
                     {order.title}
                   </TableCell>

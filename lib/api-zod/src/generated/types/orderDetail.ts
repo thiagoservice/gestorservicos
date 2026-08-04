@@ -11,6 +11,7 @@ import type { OrderServiceItem } from './orderServiceItem';
 
 export interface OrderDetail {
   id: number;
+  number: string;
   clientId: number;
   clientName: string;
   title: string;

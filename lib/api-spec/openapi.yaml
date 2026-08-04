@@ -939,10 +939,12 @@ components:
     # Order
     Order:
       type: object
-      required: [id, clientId, clientName, title, status, totalPrice, createdAt]
+      required: [id, number, clientId, clientName, title, status, totalPrice, createdAt]
       properties:
         id:
           type: integer
+        number:
+          type: string
         clientId:
           type: integer
         clientName:
@@ -965,10 +967,12 @@ components:
 
     OrderDetail:
       type: object
-      required: [id, clientId, clientName, title, status, totalPrice, createdAt, serviceItems, materialItems]
+      required: [id, number, clientId, clientName, title, status, totalPrice, createdAt, serviceItems, materialItems]
       properties:
         id:
           type: integer
+        number:
+          type: string
         clientId:
           type: integer
         clientName:

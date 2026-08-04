@@ -149,6 +149,7 @@ export const OrderStatus = {
 
 export interface Order {
   id: number;
+  number: string;
   clientId: number;
   clientName: string;
   title: string;
@@ -192,6 +193,7 @@ export interface OrderMaterialItem {
 
 export interface OrderDetail {
   id: number;
+  number: string;
   clientId: number;
   clientName: string;
   title: string;

@@ -9,6 +9,7 @@ import type { OrderStatus } from './orderStatus';
 
 export interface Order {
   id: number;
+  number: string;
   clientId: number;
   clientName: string;
   title: string;

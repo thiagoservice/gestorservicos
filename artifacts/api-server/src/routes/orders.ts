@@ -23,6 +23,14 @@ import {
 
 const router: IRouter = Router();
 
+async function generateOrderNumber(): Promise<string> {
+  const [row] = await db
+    .select({ max: sql<string | null>`max(cast(number as integer))` })
+    .from(ordersTable);
+  const next = (Number(row?.max ?? 0) + 1);
+  return String(next).padStart(5, "0");
+}
+
 async function recalcOrderTotal(orderId: number): Promise<void> {
   const serviceTotal = await db
     .select({ total: sql<string>`coalesce(sum(total_price), 0)` })
@@ -44,6 +52,7 @@ router.get("/orders", async (_req, res): Promise<void> => {
   const orders = await db
     .select({
       id: ordersTable.id,
+      number: ordersTable.number,
       clientId: ordersTable.clientId,
       clientName: clientsTable.name,
       title: ordersTable.title,
@@ -70,7 +79,9 @@ router.post("/orders", async (req, res): Promise<void> => {
     res.status(404).json({ error: "Cliente não encontrado" });
     return;
   }
+  const number = await generateOrderNumber();
   const [order] = await db.insert(ordersTable).values({
+    number,
     clientId: parsed.data.clientId,
     title: parsed.data.title,
     description: parsed.data.description ?? null,
@@ -88,6 +99,7 @@ router.get("/orders/:id", async (req, res): Promise<void> => {
   const [order] = await db
     .select({
       id: ordersTable.id,
+      number: ordersTable.number,
       clientId: ordersTable.clientId,
       clientName: clientsTable.name,
       title: ordersTable.title,
