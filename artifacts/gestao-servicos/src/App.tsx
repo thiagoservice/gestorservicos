@@ -10,7 +10,6 @@ import ServiceFormPage from '@/pages/service-form';
 import MaterialsPage from '@/pages/materials';
 import MaterialFormPage from '@/pages/material-form';
 import OrdersPage from '@/pages/orders';
-import OrderFormPage from '@/pages/order-form';
 import OrderDetailPage from '@/pages/order-detail';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
 
@@ -34,7 +33,6 @@ function Router() {
       <Route path="/materiais/:id" component={MaterialFormPage} />
 
       <Route path="/ordens" component={OrdersPage} />
-      <Route path="/ordens/novo" component={OrderFormPage} />
       <Route path="/ordens/:id" component={OrderDetailPage} />
 
       <Route component={NotFound} />
