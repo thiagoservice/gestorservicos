@@ -1,1 +1,3 @@
 - [Railway pnpm dependency builds](railway-pnpm-builds.md) — Docker deploys use pnpm 11, so trusted install scripts must be approved with allowBuilds.
+- [Auth system](auth-system.md) — Replit OIDC removed; simple email+password login via LOGIN_EMAIL / LOGIN_PASSWORD secrets, DB-backed sessions (7-day TTL).
+- [Dockerfile workspace packages](dockerfile-workspace.md) — Every lib/*/package.json must be listed explicitly in deps and runner stages or pnpm fails to resolve the workspace graph.
