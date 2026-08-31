@@ -1,7 +1,7 @@
 # ─── Stage 1: Install dependencies ─────────────────────────────────────────
 FROM node:24-slim AS deps
 
-RUN npm install -g pnpm@latest
+RUN npm install -g pnpm@11.24.0
 
 WORKDIR /app
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
@@ -39,7 +39,7 @@ RUN pnpm --filter @workspace/api-server run build
 # ─── Stage 4: Production image ──────────────────────────────────────────────
 FROM node:24-slim AS runner
 
-RUN npm install -g pnpm@latest
+RUN npm install -g pnpm@11.24.0
 
 WORKDIR /app
 
