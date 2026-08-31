@@ -9,6 +9,10 @@
   display: none;
 }
 
+.print-document {
+  display: none;
+}
+
 .order-print-page {
   display: flex;
   flex-direction: column;
@@ -29,21 +33,21 @@
 @media print {
   @page {
     size: A4;
-    margin: 12mm;
+    margin: 14mm 12mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   body {
     background: white !important;
-    color: #111827 !important;
-    font-size: 10pt;
+    font-size: 9pt;
   }
 
   aside,
-  body > div > div > div.md\:hidden,
-  .print-hide,
-  .order-print-page button,
-  .order-print-page input,
-  .order-print-page select {
+  body > div > div > div.md\:hidden {
     display: none !important;
   }
 
@@ -57,70 +61,22 @@
     padding: 0 !important;
   }
 
-  .order-print-page {
-    width: 100%;
+  /* hide the screen editing UI; show only the print document */
+  .order-print-page > *:not(.print-document) {
+    display: none !important;
   }
 
-  .order-print-page .animate-fade-up {
-    animation: none !important;
-  }
-
-  .order-print-page [class*="shadow"] {
-    box-shadow: none !important;
-  }
-
-  .order-print-page .rounded-xl,
-  .order-print-page .rounded-lg {
-    border-radius: 4px !important;
-  }
-
-  .order-print-page .grid {
-    break-inside: avoid;
-  }
-
-  .order-print-page table,
-  .order-print-page .border {
-    border-color: #cbd5e1 !important;
-  }
-
-  .print-company-header {
-    break-inside: avoid;
-    border-width: 2px !important;
-  }
-
-  .print-only {
+  .print-document {
     display: block !important;
   }
 
-  .checklist-print-status {
-    margin-top: 4px;
-    font-weight: 700;
-  }
-
-  .checklist-print-photo {
-    width: 160px;
-    max-height: 110px;
-    object-fit: cover;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
-  }
-
-  .order-photos-section {
+  .pd-section {
     break-inside: avoid;
+    margin-bottom: 10px;
   }
 
-  .order-photos-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-
-  .order-photo-card {
+  .pd-photos-grid img {
     break-inside: avoid;
-    border-color: #cbd5e1 !important;
-  }
-
-  .order-photo-image {
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
   }
 }
 

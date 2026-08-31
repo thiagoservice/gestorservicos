@@ -143,7 +143,7 @@ export default function OrderDetailPage() {
     setIsPrinting(true);
     const imgs = Array.from(
       document.querySelectorAll<HTMLImageElement>(
-        '.order-print-page img[src^="/api/storage/objects/"], .order-print-page img[src^="/api/storage/public-objects/"]',
+        '.print-document img[src^="/api/storage/objects/"], .print-document img[src^="/api/storage/public-objects/"]',
       ),
     );
     const originals = new Map<HTMLImageElement, string>();
@@ -517,9 +517,188 @@ export default function OrderDetailPage() {
   /* ══════════════════════════════════════════════════════
      EXISTING ORDER MODE
   ══════════════════════════════════════════════════════ */
+  /* ─── print document (hidden on screen, shown only when printing) ─── */
+  const PrintDocument = () => {
+    const navy = '#1a3a52';
+    const gray = '#64748b';
+    const border = '#e2e8f0';
+    const altRow = '#f8fafc';
+    const sectionHead: React.CSSProperties = {
+      backgroundColor: '#eef2f7', padding: '5px 10px',
+      fontWeight: 700, fontSize: '7.5pt', textTransform: 'uppercase',
+      color: navy, letterSpacing: '0.06em', borderBottom: `1px solid ${border}`,
+    };
+
+    const templateToChecklistId = new Map<number, number>();
+    for (const cl of checklists ?? []) {
+      for (const tmpl of cl.items) templateToChecklistId.set(tmpl.id, cl.id);
+    }
+    const checklistMap = new Map((checklists ?? []).map((c) => [c.id, c.name]));
+    const groups = new Map<number, NonNullable<typeof checklistItems>>();
+    for (const item of checklistItems ?? []) {
+      const key = item.checklistId ?? (item.templateId != null ? (templateToChecklistId.get(item.templateId) ?? 0) : 0);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(item);
+    }
+
+    const statusLabel: Record<string, string> = { conforme: 'Conforme', nao_conforme: 'Não conforme', nao_se_aplica: 'N/A' };
+    const statusColor: Record<string, string> = { conforme: '#15803d', nao_conforme: '#b91c1c', nao_se_aplica: '#64748b' };
+    const orderStatusLabel = ORDER_STATUS_OPTIONS.find((o) => o.value === order!.status)?.label ?? order!.status;
+
+    return (
+      <div className="print-document" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '9pt', color: '#111827', lineHeight: 1.4 }}>
+
+        {/* ── CABEÇALHO ── */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2.5px solid ${navy}`, paddingBottom: '10px', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {company?.logoUrl && (
+              <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '52px', maxWidth: '90px', objectFit: 'contain' }} />
+            )}
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '13pt', color: navy }}>{company?.name || 'Empresa'}</div>
+              {company?.cnpj && <div style={{ fontSize: '8pt', color: gray }}>CNPJ: {company.cnpj}</div>}
+              {company?.address && <div style={{ fontSize: '8pt', color: gray }}>{company.address}</div>}
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontWeight: 700, fontSize: '11pt', color: navy }}>ORDEM DE SERVIÇO</div>
+            <div style={{ fontSize: '10pt', fontWeight: 600, color: '#374151' }}>#{order!.number}</div>
+            <div style={{ fontSize: '8pt', color: gray }}>{formatDateTimeBR(order!.createdAt)}</div>
+          </div>
+        </div>
+
+        {/* ── TÍTULO + STATUS ── */}
+        <div style={{ backgroundColor: navy, color: 'white', padding: '7px 12px', borderRadius: '4px', marginBottom: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontWeight: 700, fontSize: '10.5pt' }}>{order!.title}</span>
+          <span style={{ fontSize: '8pt', backgroundColor: 'rgba(255,255,255,0.18)', padding: '2px 10px', borderRadius: '3px', whiteSpace: 'nowrap' }}>{orderStatusLabel}</span>
+        </div>
+
+        {/* ── CLIENTE + LOCAL ── */}
+        <div className="pd-section" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Cliente</div>
+            <div style={{ padding: '6px 10px', fontWeight: 600 }}>{order!.clientName}</div>
+          </div>
+          <div style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Local do atendimento</div>
+            <div style={{ padding: '6px 10px', color: order!.address ? '#111827' : '#94a3b8' }}>{order!.address || 'Não informado'}</div>
+          </div>
+        </div>
+
+        {/* ── DESCRIÇÃO ── */}
+        {order!.description && (
+          <div className="pd-section" style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Descrição do serviço</div>
+            <div style={{ padding: '6px 10px' }}>{order!.description}</div>
+          </div>
+        )}
+
+        {/* ── SERVIÇOS E MATERIAIS ── */}
+        {(order!.serviceItems.length > 0 || order!.materialItems.length > 0) && (
+          <div className="pd-section" style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Serviços e materiais executados</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '9pt' }}>
+              <thead>
+                <tr style={{ backgroundColor: altRow }}>
+                  <th style={{ textAlign: 'left', padding: '4px 10px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt' }}>Descrição</th>
+                  <th style={{ textAlign: 'center', padding: '4px 8px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt', width: '44px' }}>Qtd.</th>
+                  <th style={{ textAlign: 'right', padding: '4px 10px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt', width: '90px' }}>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order!.serviceItems.map((item, i) => (
+                  <tr key={`s-${item.id}`} style={{ backgroundColor: i % 2 === 1 ? altRow : 'white' }}>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}` }}>{item.serviceName}</td>
+                    <td style={{ padding: '4px 8px', borderBottom: `1px solid ${border}`, textAlign: 'center', fontFamily: 'monospace' }}>{item.quantity}</td>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}`, textAlign: 'right', fontFamily: 'monospace' }}>{formatCurrencyBRL(item.totalPrice)}</td>
+                  </tr>
+                ))}
+                {order!.materialItems.map((item, i) => (
+                  <tr key={`m-${item.id}`} style={{ backgroundColor: (order!.serviceItems.length + i) % 2 === 1 ? altRow : 'white' }}>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}` }}>{item.materialName}</td>
+                    <td style={{ padding: '4px 8px', borderBottom: `1px solid ${border}`, textAlign: 'center', fontFamily: 'monospace' }}>{item.quantity}</td>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}`, textAlign: 'right', fontFamily: 'monospace' }}>{formatCurrencyBRL(item.totalPrice)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr style={{ backgroundColor: '#eef2f7' }}>
+                  <td colSpan={2} style={{ padding: '5px 10px', fontWeight: 700, textAlign: 'right', borderTop: `2px solid ${border}`, color: navy }}>TOTAL</td>
+                  <td style={{ padding: '5px 10px', fontWeight: 700, textAlign: 'right', borderTop: `2px solid ${border}`, fontFamily: 'monospace', color: navy, fontSize: '10pt' }}>{formatCurrencyBRL(order!.totalPrice)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
+
+        {/* ── CHECKLISTS ── */}
+        {groups.size > 0 && Array.from(groups.entries()).map(([gid, items]) => (
+          <div key={gid} className="pd-section" style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Checklist — {gid ? (checklistMap.get(gid) ?? 'Checklist') : 'Itens avulsos'}</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '9pt' }}>
+              <thead>
+                <tr style={{ backgroundColor: altRow }}>
+                  <th style={{ width: '28px', padding: '3px 8px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt', textAlign: 'center' }}>#</th>
+                  <th style={{ padding: '3px 10px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt', textAlign: 'left' }}>Item de verificação</th>
+                  <th style={{ width: '100px', padding: '3px 10px', borderBottom: `1px solid ${border}`, color: gray, fontWeight: 600, fontSize: '8pt', textAlign: 'center' }}>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item, index) => (
+                  <tr key={item.id} style={{ backgroundColor: index % 2 === 1 ? altRow : 'white' }}>
+                    <td style={{ padding: '4px 8px', borderBottom: `1px solid ${border}`, textAlign: 'center', color: '#94a3b8', fontSize: '8pt', fontFamily: 'monospace' }}>{index + 1}</td>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}` }}>{item.name}</td>
+                    <td style={{ padding: '4px 10px', borderBottom: `1px solid ${border}`, textAlign: 'center', fontWeight: 700, fontSize: '8pt', color: statusColor[item.status ?? ''] ?? '#94a3b8' }}>
+                      {statusLabel[item.status ?? ''] ?? '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+
+        {/* ── FOTOS ── */}
+        {orderPhotos && orderPhotos.length > 0 && (
+          <div className="pd-section" style={{ border: `1px solid ${border}`, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={sectionHead}>Registro fotográfico</div>
+            <div className="pd-photos-grid" style={{ padding: '10px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+              {orderPhotos.map((photo) => (
+                <div key={photo.id}>
+                  <img src={getStoredImageUrl(photo.photoUrl)} alt={photo.caption || ''} style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', borderRadius: '3px', border: `1px solid ${border}`, display: 'block' }} />
+                  {photo.caption && <p style={{ margin: '3px 0 0', fontSize: '7pt', color: gray, textAlign: 'center' }}>{photo.caption}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── ASSINATURAS ── */}
+        <div style={{ marginTop: '20px', borderTop: `1px solid ${border}`, paddingTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+          <div>
+            <div style={{ borderBottom: `1px solid #111827`, height: '36px', marginBottom: '5px' }} />
+            <div style={{ fontSize: '8pt', color: gray }}>Assinatura e carimbo do técnico responsável</div>
+          </div>
+          <div>
+            <div style={{ borderBottom: `1px solid #111827`, height: '36px', marginBottom: '5px' }} />
+            <div style={{ fontSize: '8pt', color: gray }}>Assinatura do cliente / responsável</div>
+          </div>
+        </div>
+
+        {/* ── RODAPÉ ── */}
+        <div style={{ marginTop: '10px', paddingTop: '6px', borderTop: `1px solid ${border}`, display: 'flex', justifyContent: 'space-between', fontSize: '7pt', color: '#94a3b8' }}>
+          <span>{company?.name}</span>
+          <span>Ordem #{order!.number} · Emitido em {formatDateTimeBR(order!.createdAt)}</span>
+        </div>
+
+      </div>
+    );
+  };
+
   return (
     <AppShell>
       <div className="order-print-page">
+      <PrintDocument />
       {(company?.name || company?.address || company?.cnpj || company?.logoUrl) && (
         <Card className="mb-5 overflow-hidden print-company-header" data-testid="card-company-header">
           <CardContent className="p-4 flex items-center gap-4">
