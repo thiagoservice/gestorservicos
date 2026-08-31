@@ -604,7 +604,7 @@ export default function OrderDetailPage() {
         {/* ─────────────────────────────────────
             1. INFORMAÇÕES GERAIS
         ───────────────────────────────────── */}
-        {sectionTitle(nextSec(), 'INFORMAÇÕES GERAIS')}
+        {sectionTitle(nextSec(), 'DADOS DO CLIENTE')}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 24px', marginBottom: '4px' }}>
           <Field label="Status" value={orderStatusLabel} />
           <Field label="Data de criação" value={formatDateTimeBR(order!.createdAt)} />
