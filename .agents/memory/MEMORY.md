@@ -1,0 +1,1 @@
+- [Railway pnpm dependency builds](railway-pnpm-builds.md) — Docker deploys use pnpm 11, so trusted install scripts must be approved with allowBuilds.
