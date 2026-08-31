@@ -6,6 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './applyChecklistInput';
+export * from './checklist';
+export * from './checklistInput';
+export * from './checklistItem';
 export * from './checklistTemplate';
 export * from './checklistTemplateInput';
 export * from './client';

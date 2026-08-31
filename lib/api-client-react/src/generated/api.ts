@@ -20,6 +20,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ApplyChecklistInput,
+  Checklist,
+  ChecklistInput,
   ChecklistTemplate,
   ChecklistTemplateInput,
   Client,
@@ -1852,6 +1855,297 @@ export const useUpdateCompany = <TError = ErrorType<unknown>,
       return useMutation(getUpdateCompanyMutationOptions(options));
     }
 
+export const getListChecklistsUrl = () => {
+
+
+
+
+  return `/api/checklists`
+}
+
+/**
+ * @summary List named checklists with their items
+ */
+export const listChecklists = async ( options?: Parameters<typeof customFetch>[1]): Promise<Checklist[]> => {
+
+  return customFetch<Checklist[]>(getListChecklistsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListChecklistsQueryKey = () => {
+    return [
+    `/api/checklists`
+    ] as const;
+    }
+
+
+export const getListChecklistsQueryOptions = <TData = Awaited<ReturnType<typeof listChecklists>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChecklists>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListChecklistsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listChecklists>>> = ({ signal }) => listChecklists({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listChecklists>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListChecklistsQueryResult = NonNullable<Awaited<ReturnType<typeof listChecklists>>>
+export type ListChecklistsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List named checklists with their items
+ */
+
+export function useListChecklists<TData = Awaited<ReturnType<typeof listChecklists>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChecklists>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListChecklistsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateChecklistUrl = () => {
+
+
+
+
+  return `/api/checklists`
+}
+
+/**
+ * @summary Create a named checklist with items
+ */
+export const createChecklist = async (checklistInput: ChecklistInput, options?: Parameters<typeof customFetch>[1]): Promise<Checklist> => {
+
+  return customFetch<Checklist>(getCreateChecklistUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(checklistInput)
+  }
+);}
+
+
+
+
+
+export const getCreateChecklistMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createChecklist>>, TError,{data: BodyType<ChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createChecklist>>, TError,{data: BodyType<ChecklistInput>}, TContext> => {
+
+const mutationKey = ['createChecklist'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createChecklist>>, {data: BodyType<ChecklistInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createChecklist(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateChecklistMutationResult = NonNullable<Awaited<ReturnType<typeof createChecklist>>>
+    export type CreateChecklistMutationBody = BodyType<ChecklistInput>
+    export type CreateChecklistMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a named checklist with items
+ */
+export const useCreateChecklist = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createChecklist>>, TError,{data: BodyType<ChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createChecklist>>,
+        TError,
+        {data: BodyType<ChecklistInput>},
+        TContext
+      > => {
+      return useMutation(getCreateChecklistMutationOptions(options));
+    }
+
+export const getUpdateChecklistUrl = (id: number,) => {
+
+
+
+
+  return `/api/checklists/${id}`
+}
+
+/**
+ * @summary Update a named checklist and its items
+ */
+export const updateChecklist = async (id: number,
+    checklistInput: ChecklistInput, options?: Parameters<typeof customFetch>[1]): Promise<Checklist> => {
+
+  return customFetch<Checklist>(getUpdateChecklistUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(checklistInput)
+  }
+);}
+
+
+
+
+
+export const getUpdateChecklistMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateChecklist>>, TError,{id: number;data: BodyType<ChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateChecklist>>, TError,{id: number;data: BodyType<ChecklistInput>}, TContext> => {
+
+const mutationKey = ['updateChecklist'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateChecklist>>, {id: number;data: BodyType<ChecklistInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateChecklist(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateChecklistMutationResult = NonNullable<Awaited<ReturnType<typeof updateChecklist>>>
+    export type UpdateChecklistMutationBody = BodyType<ChecklistInput>
+    export type UpdateChecklistMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Update a named checklist and its items
+ */
+export const useUpdateChecklist = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateChecklist>>, TError,{id: number;data: BodyType<ChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateChecklist>>,
+        TError,
+        {id: number;data: BodyType<ChecklistInput>},
+        TContext
+      > => {
+      return useMutation(getUpdateChecklistMutationOptions(options));
+    }
+
+export const getDeleteChecklistUrl = (id: number,) => {
+
+
+
+
+  return `/api/checklists/${id}`
+}
+
+/**
+ * @summary Delete a named checklist
+ */
+export const deleteChecklist = async (id: number, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeleteChecklistUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeleteChecklistMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteChecklist>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteChecklist>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteChecklist'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteChecklist>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteChecklist(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteChecklistMutationResult = NonNullable<Awaited<ReturnType<typeof deleteChecklist>>>
+
+    export type DeleteChecklistMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a named checklist
+ */
+export const useDeleteChecklist = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteChecklist>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteChecklist>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteChecklistMutationOptions(options));
+    }
+
 export const getListChecklistTemplatesUrl = () => {
 
 
@@ -2290,6 +2584,78 @@ export const useCreateOrderChecklistItem = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getCreateOrderChecklistItemMutationOptions(options));
+    }
+
+export const getApplyChecklistToOrderUrl = (id: number,) => {
+
+
+
+
+  return `/api/orders/${id}/checklist/apply`
+}
+
+/**
+ * @summary Apply every item from a named checklist to an order
+ */
+export const applyChecklistToOrder = async (id: number,
+    applyChecklistInput: ApplyChecklistInput, options?: Parameters<typeof customFetch>[1]): Promise<OrderChecklistItem[]> => {
+
+  return customFetch<OrderChecklistItem[]>(getApplyChecklistToOrderUrl(id),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(applyChecklistInput)
+  }
+);}
+
+
+
+
+
+export const getApplyChecklistToOrderMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applyChecklistToOrder>>, TError,{id: number;data: BodyType<ApplyChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof applyChecklistToOrder>>, TError,{id: number;data: BodyType<ApplyChecklistInput>}, TContext> => {
+
+const mutationKey = ['applyChecklistToOrder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applyChecklistToOrder>>, {id: number;data: BodyType<ApplyChecklistInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  applyChecklistToOrder(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplyChecklistToOrderMutationResult = NonNullable<Awaited<ReturnType<typeof applyChecklistToOrder>>>
+    export type ApplyChecklistToOrderMutationBody = BodyType<ApplyChecklistInput>
+    export type ApplyChecklistToOrderMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Apply every item from a named checklist to an order
+ */
+export const useApplyChecklistToOrder = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applyChecklistToOrder>>, TError,{id: number;data: BodyType<ApplyChecklistInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof applyChecklistToOrder>>,
+        TError,
+        {id: number;data: BodyType<ApplyChecklistInput>},
+        TContext
+      > => {
+      return useMutation(getApplyChecklistToOrderMutationOptions(options));
     }
 
 export const getUpdateOrderChecklistItemUrl = (id: number,

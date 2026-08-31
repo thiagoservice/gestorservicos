@@ -29,8 +29,38 @@ export interface CompanyInput {
 export interface ChecklistTemplate {
   id: number;
   name: string;
+}
+
+export interface ChecklistItem {
+  id: number;
+  checklistId: number;
+  name: string;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface Checklist {
+  id: number;
+  name: string;
+  items: ChecklistItem[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ChecklistInput {
+  /** @minLength 1 */
+  name: string;
+  /**
+     * @minItems 1
+     * @items.minLength 1
+     */
+  items: string[];
+}
+
+export interface ApplyChecklistInput {
+  checklistId: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ChecklistTemplateInput {
@@ -229,6 +259,8 @@ export interface Order {
   number: string;
   clientId: number;
   /** @nullable */
+  checklistId?: number | null;
+  /** @nullable */
   address?: string | null;
   clientName: string;
   title: string;
@@ -274,6 +306,8 @@ export interface OrderDetail {
   id: number;
   number: string;
   clientId: number;
+  /** @nullable */
+  checklistId?: number | null;
   /** @nullable */
   address?: string | null;
   clientName: string;

@@ -5,8 +5,12 @@
  * API para sistema de gestão de serviços
  * OpenAPI spec version: 0.1.0
  */
+import type { ChecklistItem } from './checklistItem';
 
-export interface ChecklistTemplate {
+export interface Checklist {
   id: number;
   name: string;
+  items: ChecklistItem[];
+  createdAt: Date;
+  updatedAt: Date;
 }

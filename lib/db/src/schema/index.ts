@@ -7,3 +7,4 @@ export * from "./orderItems";
 export * from "./company";
 export * from "./checklistTemplates";
 export * from "./orderChecklistItems";
+export * from "./checklists";

@@ -12,6 +12,8 @@ export interface Order {
   number: string;
   clientId: number;
   /** @nullable */
+  checklistId?: number | null;
+  /** @nullable */
   address?: string | null;
   clientName: string;
   title: string;

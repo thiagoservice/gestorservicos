@@ -402,6 +402,7 @@ export const ListOrdersResponseItem = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "checklistId": zod.number().int().nullish(),
   "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -432,6 +433,7 @@ export const CreateOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "checklistId": zod.number().int().nullish(),
   "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -482,13 +484,100 @@ export const UpdateCompanyResponse = zod.object({
 
 
 /**
+ * @summary List named checklists with their items
+ */
+export const ListChecklistsResponseItem = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "items": zod.array(zod.object({
+  "id": zod.number().int(),
+  "checklistId": zod.number().int(),
+  "name": zod.string(),
+  "sortOrder": zod.number().int(),
+  "createdAt": zod.coerce.date()
+})),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const ListChecklistsResponse = zod.array(ListChecklistsResponseItem)
+
+
+/**
+ * @summary Create a named checklist with items
+ */
+
+
+
+
+
+export const CreateChecklistBody = zod.object({
+  "name": zod.string().min(1),
+  "items": zod.array(zod.string().min(1)).min(1)
+})
+
+export const CreateChecklistResponse = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "items": zod.array(zod.object({
+  "id": zod.number().int(),
+  "checklistId": zod.number().int(),
+  "name": zod.string(),
+  "sortOrder": zod.number().int(),
+  "createdAt": zod.coerce.date()
+})),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Update a named checklist and its items
+ */
+export const UpdateChecklistParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+
+
+
+
+
+export const UpdateChecklistBody = zod.object({
+  "name": zod.string().min(1),
+  "items": zod.array(zod.string().min(1)).min(1)
+})
+
+export const UpdateChecklistResponse = zod.object({
+  "id": zod.number().int(),
+  "name": zod.string(),
+  "items": zod.array(zod.object({
+  "id": zod.number().int(),
+  "checklistId": zod.number().int(),
+  "name": zod.string(),
+  "sortOrder": zod.number().int(),
+  "createdAt": zod.coerce.date()
+})),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Delete a named checklist
+ */
+export const DeleteChecklistParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+export const DeleteChecklistResponse = zod.void()
+
+
+/**
  * @summary List checklist templates
  */
 export const ListChecklistTemplatesResponseItem = zod.object({
   "id": zod.number().int(),
-  "name": zod.string(),
-  "createdAt": zod.coerce.date(),
-  "updatedAt": zod.coerce.date()
+  "name": zod.string()
 })
 export const ListChecklistTemplatesResponse = zod.array(ListChecklistTemplatesResponseItem)
 
@@ -505,9 +594,7 @@ export const CreateChecklistTemplateBody = zod.object({
 
 export const CreateChecklistTemplateResponse = zod.object({
   "id": zod.number().int(),
-  "name": zod.string(),
-  "createdAt": zod.coerce.date(),
-  "updatedAt": zod.coerce.date()
+  "name": zod.string()
 })
 
 
@@ -527,9 +614,7 @@ export const UpdateChecklistTemplateBody = zod.object({
 
 export const UpdateChecklistTemplateResponse = zod.object({
   "id": zod.number().int(),
-  "name": zod.string(),
-  "createdAt": zod.coerce.date(),
-  "updatedAt": zod.coerce.date()
+  "name": zod.string()
 })
 
 
@@ -587,6 +672,32 @@ export const CreateOrderChecklistItemResponse = zod.object({
 
 
 /**
+ * @summary Apply every item from a named checklist to an order
+ */
+export const ApplyChecklistToOrderParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+export const ApplyChecklistToOrderBody = zod.object({
+  "checklistId": zod.number().int(),
+  "createdAt": zod.coerce.date().optional(),
+  "updatedAt": zod.coerce.date().optional()
+})
+
+export const ApplyChecklistToOrderResponseItem = zod.object({
+  "id": zod.number().int(),
+  "orderId": zod.number().int(),
+  "templateId": zod.number().int().nullish(),
+  "name": zod.string(),
+  "status": zod.union([zod.literal('conforme'),zod.literal('nao_conforme'),zod.literal('nao_se_aplica'),zod.literal(null)]).nullish(),
+  "photoUrl": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const ApplyChecklistToOrderResponse = zod.array(ApplyChecklistToOrderResponseItem)
+
+
+/**
  * @summary Update an order checklist item
  */
 export const UpdateOrderChecklistItemParams = zod.object({
@@ -633,6 +744,7 @@ export const GetOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "checklistId": zod.number().int().nullish(),
   "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
@@ -683,6 +795,7 @@ export const UpdateOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "checklistId": zod.number().int().nullish(),
   "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),

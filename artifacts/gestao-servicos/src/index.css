@@ -5,6 +5,90 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: white !important;
+    color: #111827 !important;
+    font-size: 10pt;
+  }
+
+  aside,
+  body > div > div > div.md\:hidden,
+  .print-hide,
+  .order-print-page button,
+  .order-print-page input,
+  .order-print-page select {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  main > div {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .order-print-page {
+    width: 100%;
+  }
+
+  .order-print-page .animate-fade-up {
+    animation: none !important;
+  }
+
+  .order-print-page [class*="shadow"] {
+    box-shadow: none !important;
+  }
+
+  .order-print-page .rounded-xl,
+  .order-print-page .rounded-lg {
+    border-radius: 4px !important;
+  }
+
+  .order-print-page .grid {
+    break-inside: avoid;
+  }
+
+  .order-print-page table,
+  .order-print-page .border {
+    border-color: #cbd5e1 !important;
+  }
+
+  .print-company-header {
+    break-inside: avoid;
+    border-width: 2px !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .checklist-print-status {
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  .checklist-print-photo {
+    width: 160px;
+    max-height: 110px;
+    object-fit: cover;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+  }
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));

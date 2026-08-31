@@ -6,7 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ChecklistTemplate {
-  id: number;
+export interface ChecklistInput {
+  /** @minLength 1 */
   name: string;
+  /**
+     * @minItems 1
+     * @items.minLength 1
+     */
+  items: string[];
 }

@@ -6,7 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ChecklistTemplate {
+export interface ChecklistItem {
   id: number;
+  checklistId: number;
   name: string;
+  sortOrder: number;
+  createdAt: Date;
 }

@@ -1,28 +1,26 @@
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  getListChecklistTemplatesQueryKey,
+  getGetOrderQueryKey,
+  getListChecklistsQueryKey,
   getListOrderChecklistItemsQueryKey,
-  useCreateChecklistTemplate,
-  useCreateOrderChecklistItem,
-  useDeleteChecklistTemplate,
+  useApplyChecklistToOrder,
+  useCreateChecklist,
+  useDeleteChecklist,
   useDeleteOrderChecklistItem,
-  useListChecklistTemplates,
+  useListChecklists,
   useListOrderChecklistItems,
-  useUpdateChecklistTemplate,
+  useUpdateChecklist,
   useUpdateOrderChecklistItem,
 } from '@workspace/api-client-react';
-import type {
-  ChecklistTemplateInput,
-  OrderChecklistItemUpdate,
-} from '@workspace/api-client-react';
+import type { ChecklistInput, OrderChecklistItemUpdate } from '@workspace/api-client-react';
 import { useToast } from '@/hooks/use-toast';
 
 function errorMessage(error: any) {
   return error?.message ?? 'Tente novamente.';
 }
 
-export function useChecklistTemplates() {
-  return useListChecklistTemplates();
+export function useChecklists() {
+  return useListChecklists();
 }
 
 export function useOrderChecklist(orderId: number | undefined) {
@@ -31,34 +29,34 @@ export function useOrderChecklist(orderId: number | undefined) {
   });
 }
 
-export function useChecklistTemplateMutations() {
+export function useChecklistMutations() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const create = useCreateChecklistTemplate();
-  const update = useUpdateChecklistTemplate();
-  const remove = useDeleteChecklistTemplate();
-  const refresh = () => queryClient.invalidateQueries({ queryKey: getListChecklistTemplatesQueryKey() });
+  const create = useCreateChecklist();
+  const update = useUpdateChecklist();
+  const remove = useDeleteChecklist();
+  const refresh = () => queryClient.invalidateQueries({ queryKey: getListChecklistsQueryKey() });
 
   return {
-    createTemplate: (data: ChecklistTemplateInput, onSuccess?: () => void) => create.mutate(
+    createChecklist: (data: ChecklistInput, onSuccess?: () => void) => create.mutate(
       { data },
       {
-        onSuccess: () => { refresh(); toast({ title: 'Item cadastrado' }); onSuccess?.(); },
-        onError: (error: any) => toast({ title: 'Erro ao cadastrar item', description: errorMessage(error), variant: 'destructive' }),
+        onSuccess: () => { refresh(); toast({ title: 'Checklist cadastrado' }); onSuccess?.(); },
+        onError: (error: any) => toast({ title: 'Erro ao cadastrar checklist', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
-    updateTemplate: (id: number, data: ChecklistTemplateInput, onSuccess?: () => void) => update.mutate(
+    updateChecklist: (id: number, data: ChecklistInput, onSuccess?: () => void) => update.mutate(
       { id, data },
       {
-        onSuccess: () => { refresh(); toast({ title: 'Item atualizado' }); onSuccess?.(); },
-        onError: (error: any) => toast({ title: 'Erro ao atualizar item', description: errorMessage(error), variant: 'destructive' }),
+        onSuccess: () => { refresh(); toast({ title: 'Checklist atualizado' }); onSuccess?.(); },
+        onError: (error: any) => toast({ title: 'Erro ao atualizar checklist', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
-    deleteTemplate: (id: number) => remove.mutate(
+    deleteChecklist: (id: number) => remove.mutate(
       { id },
       {
-        onSuccess: () => { refresh(); toast({ title: 'Item removido do catálogo' }); },
-        onError: (error: any) => toast({ title: 'Erro ao remover item', description: errorMessage(error), variant: 'destructive' }),
+        onSuccess: () => { refresh(); toast({ title: 'Checklist removido' }); },
+        onError: (error: any) => toast({ title: 'Erro ao remover checklist', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
     isPending: create.isPending || update.isPending || remove.isPending,
@@ -68,17 +66,22 @@ export function useChecklistTemplateMutations() {
 export function useOrderChecklistMutations() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const create = useCreateOrderChecklistItem();
+  const apply = useApplyChecklistToOrder();
   const update = useUpdateOrderChecklistItem();
   const remove = useDeleteOrderChecklistItem();
   const refresh = (orderId: number) => queryClient.invalidateQueries({ queryKey: getListOrderChecklistItemsQueryKey(orderId) });
 
   return {
-    addItem: (orderId: number, templateId: number, onSuccess?: () => void) => create.mutate(
-      { id: orderId, data: { templateId } },
+    applyChecklist: (orderId: number, checklistId: number, onSuccess?: () => void) => apply.mutate(
+      { id: orderId, data: { checklistId } },
       {
-        onSuccess: () => { refresh(orderId); toast({ title: 'Item adicionado ao laudo' }); onSuccess?.(); },
-        onError: (error: any) => toast({ title: 'Erro ao adicionar item', description: errorMessage(error), variant: 'destructive' }),
+        onSuccess: () => {
+          refresh(orderId);
+          queryClient.invalidateQueries({ queryKey: getGetOrderQueryKey(orderId) });
+          toast({ title: 'Checklist aplicado à ordem' });
+          onSuccess?.();
+        },
+        onError: (error: any) => toast({ title: 'Erro ao aplicar checklist', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
     updateItem: (orderId: number, itemId: number, data: OrderChecklistItemUpdate) => update.mutate(
@@ -95,6 +98,6 @@ export function useOrderChecklistMutations() {
         onError: (error: any) => toast({ title: 'Erro ao remover item', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
-    isPending: create.isPending || update.isPending || remove.isPending,
+    isPending: apply.isPending || update.isPending || remove.isPending,
   };
 }

@@ -6,7 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ChecklistTemplate {
-  id: number;
-  name: string;
+export interface ApplyChecklistInput {
+  checklistId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

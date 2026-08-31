@@ -51,7 +51,7 @@ import { useServices } from '@/hooks/use-services';
 import { useMaterials } from '@/hooks/use-materials';
 import { useCompany } from '@/hooks/use-company';
 import {
-  useChecklistTemplates,
+  useChecklists,
   useOrderChecklist,
   useOrderChecklistMutations,
 } from '@/hooks/use-checklists';
@@ -72,7 +72,14 @@ import {
   Building2,
   Camera,
   ClipboardCheck,
+  FileDown,
 } from 'lucide-react';
+
+const CHECKLIST_STATUS_LABELS: Record<string, string> = {
+  conforme: 'Conforme',
+  nao_conforme: 'Não conforme',
+  nao_se_aplica: 'Não se aplica',
+};
 
 /* ─── form schema ─── */
 const orderSchema = z.object({
@@ -99,7 +106,7 @@ export default function OrderDetailPage() {
   const { data: services } = useServices();
   const { data: materials } = useMaterials();
   const { data: company } = useCompany();
-  const { data: checklistTemplates } = useChecklistTemplates();
+  const { data: checklists } = useChecklists();
   const { data: checklistItems } = useOrderChecklist(orderId);
 
   /* ─── mutations ─── */
@@ -110,14 +117,14 @@ export default function OrderDetailPage() {
   const { deleteServiceItem } = useDeleteOrderServiceItemMutation();
   const { addMaterialItem, isPending: isAddingMaterial } = useAddOrderMaterialItemMutation();
   const { deleteMaterialItem } = useDeleteOrderMaterialItemMutation();
-  const { addItem: addChecklistItem, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
+  const { applyChecklist, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
 
   /* ─── dialogs ─── */
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
-  const [selectedTemplateId, setSelectedTemplateId] = useState('');
+  const [selectedChecklistId, setSelectedChecklistId] = useState('');
   const [photoDrafts, setPhotoDrafts] = useState<Record<number, string>>({});
 
   /* ─── draft items (novo mode only) ─── */
@@ -134,6 +141,7 @@ export default function OrderDetailPage() {
   useEffect(() => {
     if (order) {
       setAddressDraft(order.address ?? '');
+      setSelectedChecklistId(order.checklistId ? String(order.checklistId) : '');
       form.reset({
         clientId: String(order.clientId),
         address: order.address ?? '',
@@ -473,8 +481,9 @@ export default function OrderDetailPage() {
   ══════════════════════════════════════════════════════ */
   return (
     <AppShell>
+      <div className="order-print-page">
       {(company?.name || company?.address || company?.cnpj || company?.logoUrl) && (
-        <Card className="mb-5 overflow-hidden" data-testid="card-company-header">
+        <Card className="mb-5 overflow-hidden print-company-header" data-testid="card-company-header">
           <CardContent className="p-4 flex items-center gap-4">
             {company.logoUrl ? (
               <img src={company.logoUrl} alt={`Logo ${company.name}`} className="h-16 w-20 rounded-md border bg-white object-contain p-1 shrink-0" />
@@ -494,7 +503,7 @@ export default function OrderDetailPage() {
       <div className="mb-5 animate-fade-up">
         <Link
           href="/ordens"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+          className="print-hide inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Ordens de serviço
@@ -518,6 +527,10 @@ export default function OrderDetailPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <Button variant="outline" onClick={() => window.print()} data-testid="button-export-pdf">
+              <FileDown className="h-4 w-4" />
+              Exportar PDF
+            </Button>
             <Select
               value={order!.status}
               onValueChange={(value) => updateOrder(order!.id, { status: value as any })}
@@ -643,24 +656,24 @@ export default function OrderDetailPage() {
               </h2>
               <p className="text-sm text-muted-foreground mt-1">Registre a situação e uma foto pública para cada verificação.</p>
             </div>
-            <div className="flex items-center gap-2 w-full md:w-auto">
+            <div className="print-hide flex items-center gap-2 w-full md:w-auto">
               <select
-                value={selectedTemplateId}
-                onChange={(event) => setSelectedTemplateId(event.target.value)}
+                value={selectedChecklistId}
+                onChange={(event) => setSelectedChecklistId(event.target.value)}
                 className="flex h-9 min-w-0 md:w-72 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
                 data-testid="select-checklist-template"
               >
-                <option value="">Selecione um item do catálogo</option>
-                {(checklistTemplates ?? []).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+                <option value="">Selecione o checklist a realizar</option>
+                {(checklists ?? []).map((checklist) => <option key={checklist.id} value={checklist.id}>{checklist.name} ({checklist.items.length} itens)</option>)}
               </select>
               <Button
                 size="sm"
                 variant="outline"
-                disabled={!selectedTemplateId || isChecklistPending}
-                onClick={() => addChecklistItem(order!.id, Number(selectedTemplateId), () => setSelectedTemplateId(''))}
+                disabled={!selectedChecklistId || isChecklistPending}
+                onClick={() => applyChecklist(order!.id, Number(selectedChecklistId))}
                 data-testid="button-add-checklist-item"
               >
-                <Plus className="h-3.5 w-3.5" /> Adicionar
+                <ClipboardCheck className="h-3.5 w-3.5" /> Aplicar checklist
               </Button>
             </div>
           </div>
@@ -669,7 +682,7 @@ export default function OrderDetailPage() {
             <div className="py-8 text-center border border-dashed rounded-lg">
               <ClipboardCheck className="h-7 w-7 text-muted-foreground/40 mx-auto mb-2" />
               <p className="text-sm text-muted-foreground">Nenhum item de checklist aplicado a esta ordem.</p>
-              {!checklistTemplates?.length && <Link href="/checklist" className="text-sm text-primary hover:underline mt-2 inline-block">Cadastrar modelos de checklist</Link>}
+              {!checklists?.length && <Link href="/checklist" className="text-sm text-primary hover:underline mt-2 inline-block">Cadastrar um checklist</Link>}
             </div>
           ) : (
             <div className="space-y-3">
@@ -691,6 +704,7 @@ export default function OrderDetailPage() {
                   <div className="grid md:grid-cols-[220px_1fr_auto] gap-2 items-end">
                     <div>
                       <label className="text-xs font-medium text-muted-foreground">Situação</label>
+                      <span className="print-only checklist-print-status">{CHECKLIST_STATUS_LABELS[item.status ?? ''] ?? 'Não informado'}</span>
                       <Select
                         value={item.status ?? ''}
                         onValueChange={(status) => updateChecklistItem(order!.id, item.id, { status: status as any })}
@@ -724,9 +738,12 @@ export default function OrderDetailPage() {
                     </Button>
                   </div>
                   {item.photoUrl && (
-                    <a href={item.photoUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm text-primary hover:underline">
-                      <Camera className="h-4 w-4" /> Visualizar foto
-                    </a>
+                    <div className="mt-3">
+                      <a href={item.photoUrl} target="_blank" rel="noreferrer" className="print-hide inline-flex items-center gap-2 text-sm text-primary hover:underline">
+                        <Camera className="h-4 w-4" /> Visualizar foto
+                      </a>
+                      <img src={item.photoUrl} alt={`Foto de ${item.name}`} className="print-only checklist-print-photo" />
+                    </div>
                   )}
                 </div>
               ))}
@@ -857,6 +874,7 @@ export default function OrderDetailPage() {
           addMaterialItem(order!.id, { materialId, quantity, unitPrice }, () => setMaterialDialogOpen(false))
         }
       />
+      </div>
     </AppShell>
   );
 }
