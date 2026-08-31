@@ -577,7 +577,18 @@ export default function OrderDetailPage() {
     return (
       <div className="print-document" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '9.5pt', color: labelColor, lineHeight: 1.45 }}>
 
-        {/* ── CABEÇALHO: logo + dados da empresa ── */}
+        {/* ── TÍTULO CENTRALIZADO ── */}
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+          <div style={{ fontWeight: 700, fontSize: '16pt', letterSpacing: '0.03em' }}>ORDEM DE SERVIÇO</div>
+          <div style={{ fontSize: '11pt', marginTop: '3px' }}>Nº {numPadded}</div>
+          <div style={{ fontSize: '8.5pt', color: mutedColor, marginTop: '3px' }}>
+            Gerado em {formatDateLong(order!.createdAt)}
+          </div>
+        </div>
+
+        <hr style={{ border: 'none', borderTop: `1px solid ${border}`, margin: '10px 0 12px' }} />
+
+        {/* ── DADOS DA EMPRESA ── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', borderBottom: `1.5px solid ${border}`, paddingBottom: '10px', marginBottom: '14px' }}>
           {company?.logoUrl
             ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '48px', maxWidth: '80px', objectFit: 'contain', flexShrink: 0 }} />
@@ -589,17 +600,6 @@ export default function OrderDetailPage() {
             {company?.address && <div style={{ fontSize: '8.5pt', color: mutedColor }}>{company.address}</div>}
           </div>
         </div>
-
-        {/* ── TÍTULO CENTRALIZADO ── */}
-        <div style={{ textAlign: 'center', marginBottom: '6px' }}>
-          <div style={{ fontWeight: 700, fontSize: '16pt', letterSpacing: '0.03em' }}>ORDEM DE SERVIÇO</div>
-          <div style={{ fontSize: '11pt', marginTop: '3px' }}>Nº {numPadded}</div>
-          <div style={{ fontSize: '8.5pt', color: mutedColor, marginTop: '3px' }}>
-            Gerado em {formatDateLong(order!.createdAt)}
-          </div>
-        </div>
-
-        <hr style={{ border: 'none', borderTop: `1px solid ${border}`, margin: '10px 0 14px' }} />
 
         {/* ─────────────────────────────────────
             1. INFORMAÇÕES GERAIS
