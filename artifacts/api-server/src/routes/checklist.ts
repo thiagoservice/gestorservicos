@@ -50,6 +50,34 @@ function isPublicUrl(value: string | null | undefined): boolean {
   }
 }
 
+/** Fills in checklistId for order_checklist_items that were applied before the column existed */
+async function backfillOrderChecklistIds(): Promise<void> {
+  const orphans = await db
+    .select({
+      itemId: orderChecklistItemsTable.id,
+      checklistId: checklistTemplatesTable.checklistId,
+    })
+    .from(orderChecklistItemsTable)
+    .innerJoin(checklistTemplatesTable, eq(orderChecklistItemsTable.templateId, checklistTemplatesTable.id))
+    .where(
+      and(
+        isNull(orderChecklistItemsTable.checklistId),
+        eq(orderChecklistItemsTable.templateId, checklistTemplatesTable.id),
+      ),
+    );
+  if (orphans.length === 0) return;
+  await Promise.all(
+    orphans.map(({ itemId, checklistId }) =>
+      checklistId
+        ? db
+            .update(orderChecklistItemsTable)
+            .set({ checklistId })
+            .where(eq(orderChecklistItemsTable.id, itemId))
+        : Promise.resolve(),
+    ),
+  );
+}
+
 async function migrateLegacyTemplates(): Promise<void> {
   const legacyItems = await db.select().from(checklistTemplatesTable)
     .where(isNull(checklistTemplatesTable.checklistId));
@@ -203,6 +231,7 @@ router.get("/orders/:id/checklist", async (req, res): Promise<void> => {
     res.status(400).json({ error: params.error.message });
     return;
   }
+  await backfillOrderChecklistIds();
   const items = await db.select().from(orderChecklistItemsTable)
     .where(eq(orderChecklistItemsTable.orderId, params.data.id))
     .orderBy(orderChecklistItemsTable.createdAt);

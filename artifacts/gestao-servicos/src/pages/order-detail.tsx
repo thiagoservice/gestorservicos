@@ -735,11 +735,16 @@ export default function OrderDetailPage() {
               {!checklists?.length && <Link href="/checklist" className="text-sm text-primary hover:underline mt-2 inline-block">Cadastrar um checklist</Link>}
             </div>
           ) : (() => {
-            // Group items by checklistId; null/undefined items go to key 0 (avulsos)
+            // Build templateId → checklistId lookup for pre-migration items (checklistId may be null)
+            const templateToChecklistId = new Map<number, number>();
+            for (const cl of checklists ?? []) {
+              for (const tmpl of cl.items) templateToChecklistId.set(tmpl.id, cl.id);
+            }
             const checklistMap = new Map((checklists ?? []).map((c) => [c.id, c.name]));
             const groups = new Map<number, typeof checklistItems>();
             for (const item of checklistItems) {
-              const key = item.checklistId ?? 0;
+              const key = item.checklistId
+                ?? (item.templateId != null ? (templateToChecklistId.get(item.templateId) ?? 0) : 0);
               if (!groups.has(key)) groups.set(key, []);
               groups.get(key)!.push(item);
             }
