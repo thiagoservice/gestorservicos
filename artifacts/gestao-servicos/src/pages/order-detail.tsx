@@ -520,8 +520,8 @@ export default function OrderDetailPage() {
   /* ─── print document (hidden on screen, shown only when printing) ─── */
   const PrintDocument = () => {
     const border = '#cccccc';
-    const thBg = '#f2f2f2';
-    const altRow = '#f9f9f9';
+    const thBg = 'white';
+    const altRow = 'white';
     const labelColor = '#111827';
     const mutedColor = '#555555';
 
@@ -683,7 +683,7 @@ export default function OrderDetailPage() {
                 ))}
               </tbody>
               <tfoot>
-                <tr style={{ backgroundColor: thBg }}>
+                <tr>
                   <td colSpan={4} style={{ ...tdStyle, fontWeight: 700, textAlign: 'right' }}>TOTAL GERAL</td>
                   <td style={{ ...tdStyle, fontWeight: 700, textAlign: 'right' }}>{formatCurrencyBRL(order!.totalPrice)}</td>
                 </tr>
