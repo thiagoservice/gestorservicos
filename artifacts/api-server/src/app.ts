@@ -38,10 +38,10 @@ app.use("/api", router);
 // In production, serve the compiled frontend from the same process.
 // The Dockerfile copies the Vite build output to /app/public.
 if (process.env.NODE_ENV === "production") {
-  const staticDir = path.resolve(__dirname, "../../public");
+  const staticDir = path.resolve(__dirname, "../../../public");
   app.use(express.static(staticDir));
   // SPA fallback – return index.html for any route not matched above.
-  app.get("*", (_req, res) => {
+  app.get("/{*splat}", (_req, res) => {
     res.sendFile(path.join(staticDir, "index.html"));
   });
 }

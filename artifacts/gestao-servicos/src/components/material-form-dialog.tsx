@@ -27,9 +27,7 @@ import type { Material } from '@workspace/api-client-react';
 const materialSchema = z.object({
   name: z.string().min(1, 'Informe o nome do material'),
   description: z.string().optional(),
-  unitPrice: z.coerce.number().min(0, 'Preço deve ser positivo'),
   unit: z.string().min(1, 'Informe a unidade'),
-  stockQuantity: z.coerce.number().min(0, 'Estoque deve ser positivo'),
 });
 
 export type MaterialFormValues = z.infer<typeof materialSchema>;
@@ -52,9 +50,7 @@ export function MaterialFormDialog({
     defaultValues: {
       name: '',
       description: '',
-      unitPrice: 0,
       unit: 'unidade',
-      stockQuantity: 0,
     },
   });
 
@@ -63,9 +59,7 @@ export function MaterialFormDialog({
       form.reset({
         name: material?.name ?? '',
         description: material?.description ?? '',
-        unitPrice: material?.unitPrice ?? 0,
         unit: material?.unit ?? 'unidade',
-        stockQuantity: material?.stockQuantity ?? 0,
       });
     }
   }, [open, material, form]);
@@ -124,27 +118,7 @@ export function MaterialFormDialog({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-3 gap-3">
-              <FormField
-                control={form.control}
-                name="unitPrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Preço (R$)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0,00"
-                        data-testid="input-material-price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div>
               <FormField
                 control={form.control}
                 name="unit"
@@ -155,26 +129,6 @@ export function MaterialFormDialog({
                       <Input
                         placeholder="m, kg, unidade..."
                         data-testid="input-material-unit"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="stockQuantity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estoque</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="1"
-                        min="0"
-                        placeholder="0"
-                        data-testid="input-material-stock"
                         {...field}
                       />
                     </FormControl>

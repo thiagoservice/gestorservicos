@@ -27,7 +27,6 @@ import type { Service } from '@workspace/api-client-react';
 const serviceSchema = z.object({
   name: z.string().min(1, 'Informe o nome do serviço'),
   description: z.string().optional(),
-  unitPrice: z.coerce.number().min(0, 'Preço deve ser positivo'),
   unit: z.string().min(1, 'Informe a unidade'),
 });
 
@@ -48,7 +47,7 @@ export function ServiceFormDialog({
 }) {
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
-    defaultValues: { name: '', description: '', unitPrice: 0, unit: 'hora' },
+    defaultValues: { name: '', description: '', unit: 'hora' },
   });
 
   useEffect(() => {
@@ -56,7 +55,6 @@ export function ServiceFormDialog({
       form.reset({
         name: service?.name ?? '',
         description: service?.description ?? '',
-        unitPrice: service?.unitPrice ?? 0,
         unit: service?.unit ?? 'hora',
       });
     }
@@ -116,27 +114,7 @@ export function ServiceFormDialog({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="unitPrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Preço unitário (R$)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0,00"
-                        data-testid="input-service-price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div>
               <FormField
                 control={form.control}
                 name="unit"
