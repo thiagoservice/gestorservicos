@@ -335,6 +335,8 @@ export interface Order {
   title: string;
   /** @nullable */
   description?: string | null;
+  /** @nullable */
+  serviceDate?: string | null;
   status: OrderStatus;
   totalPrice: number;
   createdAt: string;
@@ -383,6 +385,8 @@ export interface OrderDetail {
   title: string;
   /** @nullable */
   description?: string | null;
+  /** @nullable */
+  serviceDate?: string | null;
   status: OrderDetailStatus;
   totalPrice: number;
   createdAt: string;
@@ -425,6 +429,7 @@ export interface OrderUpdate {
   /** @minLength 1 */
   title?: string;
   description?: string;
+  serviceDate?: string;
   status?: OrderUpdateStatus;
 }
 

@@ -59,7 +59,7 @@ import {
   useOrderChecklist,
   useOrderChecklistMutations,
 } from '@/hooks/use-checklists';
-import { formatCurrencyBRL, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
+import { formatCurrencyBRL, formatDateBR, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
 import {
   ArrowLeft,
   Trash2,
@@ -132,6 +132,7 @@ export default function OrderDetailPage() {
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
+  const [serviceDateDraft, setServiceDateDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoInputKey, setPhotoInputKey] = useState(0);
@@ -185,6 +186,7 @@ export default function OrderDetailPage() {
   useEffect(() => {
     if (order) {
       setAddressDraft(order.address ?? '');
+      setServiceDateDraft(order.serviceDate ?? '');
       setSelectedChecklistId(order.checklistId ? String(order.checklistId) : '');
       form.reset({
         clientId: String(order.clientId),
@@ -612,6 +614,7 @@ export default function OrderDetailPage() {
           <Field label="Data de criação" value={formatDateTimeBR(order!.createdAt)} />
           <Field label="Cliente" value={order!.clientName} />
           <Field label="Local do atendimento" value={order!.address} />
+          {order!.serviceDate && <Field label="Data do serviço realizado" value={formatDateBR(order!.serviceDate)} />}
         </div>
 
         {/* ─────────────────────────────────────
@@ -872,6 +875,31 @@ export default function OrderDetailPage() {
             <p className="text-sm leading-relaxed" data-testid="text-order-description">
               {order!.description || 'Nenhuma descrição informada para esta ordem.'}
             </p>
+            <div className="mt-5 pt-4 border-t">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Data do serviço realizado</h2>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="date"
+                  value={serviceDateDraft}
+                  onChange={(e) => setServiceDateDraft(e.target.value)}
+                  onBlur={() => {
+                    if (serviceDateDraft !== (order!.serviceDate ?? '')) {
+                      updateOrder(order!.id, { serviceDate: serviceDateDraft || undefined });
+                    }
+                  }}
+                  className="w-44 text-sm"
+                  data-testid="input-service-date"
+                />
+                {serviceDateDraft && (
+                  <Button
+                    type="button" variant="ghost" size="sm" className="h-7 px-2 text-muted-foreground"
+                    onClick={() => { setServiceDateDraft(''); updateOrder(order!.id, { serviceDate: '' }); }}
+                  >
+                    Limpar
+                  </Button>
+                )}
+              </div>
+            </div>
             <div className="mt-5 pt-4 border-t">
               <div className="flex items-center justify-between gap-3 mb-2">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Endereço do atendimento</h2>

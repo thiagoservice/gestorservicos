@@ -521,6 +521,7 @@ export const ListOrdersResponseItem = zod.object({
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
+  "serviceDate": zod.string().nullish(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']),
   "totalPrice": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -552,6 +553,7 @@ export const CreateOrderResponse = zod.object({
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
+  "serviceDate": zod.string().nullish(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']),
   "totalPrice": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -878,6 +880,7 @@ export const GetOrderResponse = zod.object({
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
+  "serviceDate": zod.string().nullish(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']),
   "totalPrice": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -917,6 +920,7 @@ export const UpdateOrderBody = zod.object({
   "address": zod.string().optional(),
   "title": zod.string().min(1).optional(),
   "description": zod.string().optional(),
+  "serviceDate": zod.string().optional(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']).optional()
 })
 
@@ -929,6 +933,7 @@ export const UpdateOrderResponse = zod.object({
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
+  "serviceDate": zod.string().nullish(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']),
   "totalPrice": zod.number(),
   "createdAt": zod.coerce.date(),

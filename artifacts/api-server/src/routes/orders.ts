@@ -59,6 +59,7 @@ router.get("/orders", async (_req, res): Promise<void> => {
       clientName: clientsTable.name,
       title: ordersTable.title,
       description: ordersTable.description,
+      serviceDate: ordersTable.serviceDate,
       status: ordersTable.status,
       totalPrice: ordersTable.totalPrice,
       createdAt: ordersTable.createdAt,
@@ -109,6 +110,7 @@ router.get("/orders/:id", async (req, res): Promise<void> => {
       clientName: clientsTable.name,
       title: ordersTable.title,
       description: ordersTable.description,
+      serviceDate: ordersTable.serviceDate,
       status: ordersTable.status,
       totalPrice: ordersTable.totalPrice,
       createdAt: ordersTable.createdAt,
@@ -184,6 +186,7 @@ router.patch("/orders/:id", async (req, res): Promise<void> => {
   if (parsed.data.address !== undefined) updateData.address = parsed.data.address || null;
   if (parsed.data.title !== undefined) updateData.title = parsed.data.title;
   if (parsed.data.description !== undefined) updateData.description = parsed.data.description;
+  if (parsed.data.serviceDate !== undefined) updateData.serviceDate = parsed.data.serviceDate || null;
   if (parsed.data.status !== undefined) updateData.status = parsed.data.status;
 
   const [order] = await db.update(ordersTable).set(updateData).where(eq(ordersTable.id, params.data.id)).returning();

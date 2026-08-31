@@ -1798,6 +1798,9 @@ components:
           type: string
         description:
           type: ["string", "null"]
+        serviceDate:
+          type: ["string", "null"]
+          format: date
         status:
           type: string
           enum: [pending, in_progress, completed, cancelled]
@@ -1830,6 +1833,9 @@ components:
           type: string
         description:
           type: ["string", "null"]
+        serviceDate:
+          type: ["string", "null"]
+          format: date
         status:
           type: string
           enum: [pending, in_progress, completed, cancelled]
@@ -1877,6 +1883,9 @@ components:
           minLength: 1
         description:
           type: string
+        serviceDate:
+          type: string
+          format: date
         status:
           type: string
           enum: [pending, in_progress, completed, cancelled]
