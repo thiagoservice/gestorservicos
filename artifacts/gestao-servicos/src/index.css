@@ -41,8 +41,19 @@
     print-color-adjust: exact !important;
   }
 
+  html,
+  body,
+  main,
+  main > div,
+  .order-print-page,
+  .print-document,
+  .print-document * {
+    background-color: white !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
   body {
-    background: white !important;
     font-size: 9pt;
   }
 
