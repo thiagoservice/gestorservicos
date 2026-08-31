@@ -112,6 +112,21 @@ export interface OrderChecklistItemUpdate {
   photoUrl?: string;
 }
 
+export interface OrderPhoto {
+  id: number;
+  orderId: number;
+  photoUrl: string;
+  /** @nullable */
+  caption?: string | null;
+  createdAt: string;
+}
+
+export interface OrderPhotoInput {
+  /** @minLength 1 */
+  photoUrl: string;
+  caption?: string;
+}
+
 export interface HealthStatus {
   status: string;
 }

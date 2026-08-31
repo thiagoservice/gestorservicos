@@ -936,6 +936,82 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /orders/{id}/photos:
+    get:
+      operationId: listOrderPhotos
+      tags: [orders]
+      summary: List photos attached to an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Order photos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderPhoto"
+    post:
+      operationId: addOrderPhoto
+      tags: [orders]
+      summary: Add a public photo reference to an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderPhotoInput"
+      responses:
+        "201":
+          description: Photo added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderPhoto"
+        "400":
+          description: Invalid public photo URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /orders/{id}/photos/{photoId}:
+    delete:
+      operationId: deleteOrderPhoto
+      tags: [orders]
+      summary: Remove a photo from an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: photoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Photo removed
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /orders/{id}/service-items/{itemId}:
     delete:
       operationId: deleteOrderServiceItem
@@ -1187,6 +1263,31 @@ components:
           type: string
           enum: [conforme, nao_conforme, nao_se_aplica]
         photoUrl:
+          type: string
+    OrderPhoto:
+      type: object
+      required: [id, orderId, photoUrl, createdAt]
+      properties:
+        id:
+          type: integer
+        orderId:
+          type: integer
+        photoUrl:
+          type: string
+        caption:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    OrderPhotoInput:
+      type: object
+      required: [photoUrl]
+      properties:
+        photoUrl:
+          type: string
+          minLength: 1
+        caption:
           type: string
     HealthStatus:
       type: object

@@ -45,6 +45,8 @@ import {
   useDeleteOrderServiceItemMutation,
   useAddOrderMaterialItemMutation,
   useDeleteOrderMaterialItemMutation,
+  useOrderPhotos,
+  useOrderPhotoMutations,
 } from '@/hooks/use-orders';
 import { useClients } from '@/hooks/use-clients';
 import { useServices } from '@/hooks/use-services';
@@ -70,9 +72,9 @@ import {
   Save,
   Loader2,
   Building2,
-  Camera,
   ClipboardCheck,
   FileDown,
+  ImagePlus,
 } from 'lucide-react';
 
 const CHECKLIST_STATUS_LABELS: Record<string, string> = {
@@ -108,6 +110,7 @@ export default function OrderDetailPage() {
   const { data: company } = useCompany();
   const { data: checklists } = useChecklists();
   const { data: checklistItems } = useOrderChecklist(orderId);
+  const { data: orderPhotos } = useOrderPhotos(orderId);
 
   /* ─── mutations ─── */
   const { createOrder, isPending: isCreating } = useCreateOrderMutation();
@@ -117,6 +120,7 @@ export default function OrderDetailPage() {
   const { deleteServiceItem } = useDeleteOrderServiceItemMutation();
   const { addMaterialItem, isPending: isAddingMaterial } = useAddOrderMaterialItemMutation();
   const { deleteMaterialItem } = useDeleteOrderMaterialItemMutation();
+  const { addPhoto, deletePhoto, isPending: isPhotoPending } = useOrderPhotoMutations();
   const { applyChecklist, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
 
   /* ─── dialogs ─── */
@@ -125,7 +129,8 @@ export default function OrderDetailPage() {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
-  const [photoDrafts, setPhotoDrafts] = useState<Record<number, string>>({});
+  const [photoUrlDraft, setPhotoUrlDraft] = useState('');
+  const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
 
   /* ─── draft items (novo mode only) ─── */
   const [draftServices, setDraftServices] = useState<DraftServiceItem[]>([]);
@@ -150,12 +155,6 @@ export default function OrderDetailPage() {
       });
     }
   }, [order, form]);
-
-  useEffect(() => {
-    if (checklistItems) {
-      setPhotoDrafts(Object.fromEntries(checklistItems.map((item) => [item.id, item.photoUrl ?? ''])));
-    }
-  }, [checklistItems]);
 
   /* ─── create handler ─── */
   const handleCreate = async (values: OrderFormValues) => {
@@ -718,33 +717,7 @@ export default function OrderDetailPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">URL pública da foto</label>
-                      <Input
-                        className="mt-1"
-                        value={photoDrafts[item.id] ?? ''}
-                        onChange={(event) => setPhotoDrafts((current) => ({ ...current, [item.id]: event.target.value }))}
-                        placeholder="https://exemplo.com/foto.jpg"
-                        data-testid={`input-checklist-photo-${item.id}`}
-                      />
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={isChecklistPending || (photoDrafts[item.id] ?? '') === (item.photoUrl ?? '')}
-                      onClick={() => updateChecklistItem(order!.id, item.id, { photoUrl: photoDrafts[item.id] ?? '' })}
-                    >
-                      <Save className="h-3.5 w-3.5" /> Salvar foto
-                    </Button>
                   </div>
-                  {item.photoUrl && (
-                    <div className="mt-3">
-                      <a href={item.photoUrl} target="_blank" rel="noreferrer" className="print-hide inline-flex items-center gap-2 text-sm text-primary hover:underline">
-                        <Camera className="h-4 w-4" /> Visualizar foto
-                      </a>
-                      <img src={item.photoUrl} alt={`Foto de ${item.name}`} className="print-only checklist-print-photo" />
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -848,6 +821,87 @@ export default function OrderDetailPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Fotos anexadas à ordem */}
+      <Card className="mt-4 mb-6 animate-fade-up order-photos-section" style={{ animationDelay: '160ms' }}>
+        <CardContent className="p-5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+            <div>
+              <h2 className="font-display font-semibold flex items-center gap-2">
+                <ImagePlus className="h-4 w-4 text-primary" />
+                Fotos do serviço
+                <Badge variant="secondary" className="font-mono text-[10px]">{orderPhotos?.length ?? 0}</Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">Adicione fotos gerais da execução. Elas aparecerão no final do laudo.</p>
+            </div>
+          </div>
+
+          <div className="print-hide grid md:grid-cols-[1fr_1fr_auto] gap-2 items-end mb-5">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">URL pública da foto</label>
+              <Input
+                className="mt-1"
+                value={photoUrlDraft}
+                onChange={(event) => setPhotoUrlDraft(event.target.value)}
+                placeholder="https://exemplo.com/foto.jpg"
+                type="url"
+                data-testid="input-order-photo-url"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Legenda (opcional)</label>
+              <Input
+                className="mt-1"
+                value={photoCaptionDraft}
+                onChange={(event) => setPhotoCaptionDraft(event.target.value)}
+                placeholder="Ex: Equipamento após a manutenção"
+                data-testid="input-order-photo-caption"
+              />
+            </div>
+            <Button
+              variant="outline"
+              disabled={!photoUrlDraft.trim() || isPhotoPending}
+              onClick={() => addPhoto(order!.id, { photoUrl: photoUrlDraft.trim(), caption: photoCaptionDraft.trim() || undefined }, () => {
+                setPhotoUrlDraft('');
+                setPhotoCaptionDraft('');
+              })}
+              data-testid="button-add-order-photo"
+            >
+              <Plus className="h-3.5 w-3.5" /> Adicionar foto
+            </Button>
+          </div>
+
+          {!orderPhotos?.length ? (
+            <div className="py-8 text-center border border-dashed rounded-lg">
+              <ImagePlus className="h-7 w-7 text-muted-foreground/40 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Nenhuma foto adicionada a esta ordem.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 order-photos-grid">
+              {orderPhotos.map((photo) => (
+                <div key={photo.id} className="relative rounded-lg border overflow-hidden bg-muted/20 group order-photo-card" data-testid={`order-photo-${photo.id}`}>
+                  <a href={photo.photoUrl} target="_blank" rel="noreferrer">
+                    <img src={photo.photoUrl} alt={photo.caption || 'Foto do serviço'} className="w-full aspect-[4/3] object-cover order-photo-image" />
+                  </a>
+                  <div className="p-2 flex items-start justify-between gap-2">
+                    <p className="text-xs text-muted-foreground truncate">{photo.caption || 'Foto do serviço'}</p>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="print-hide h-6 w-6 shrink-0 text-destructive hover:text-destructive"
+                      onClick={() => deletePhoto(order!.id, photo.id)}
+                      disabled={isPhotoPending}
+                      data-testid={`button-delete-order-photo-${photo.id}`}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Dialogs */}
       <AddOrderItemDialog

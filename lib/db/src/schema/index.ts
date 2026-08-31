@@ -3,6 +3,7 @@ export * from "./equipments";
 export * from "./services";
 export * from "./materials";
 export * from "./orders";
+export * from "./orderPhotos";
 export * from "./orderItems";
 export * from "./company";
 export * from "./checklistTemplates";

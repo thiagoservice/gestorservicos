@@ -87,6 +87,24 @@
     border: 1px solid #cbd5e1;
     border-radius: 4px;
   }
+
+  .order-photos-section {
+    break-inside: avoid;
+  }
+
+  .order-photos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .order-photo-card {
+    break-inside: avoid;
+    border-color: #cbd5e1 !important;
+  }
+
+  .order-photo-image {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
 }
 
 @theme inline {

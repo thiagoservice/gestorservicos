@@ -848,6 +848,58 @@ export const AddOrderServiceItemResponse = zod.object({
 
 
 /**
+ * @summary List photos attached to an order
+ */
+export const ListOrderPhotosParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+export const ListOrderPhotosResponseItem = zod.object({
+  "id": zod.number().int(),
+  "orderId": zod.number().int(),
+  "photoUrl": zod.string(),
+  "caption": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+export const ListOrderPhotosResponse = zod.array(ListOrderPhotosResponseItem)
+
+
+/**
+ * @summary Add a public photo reference to an order
+ */
+export const AddOrderPhotoParams = zod.object({
+  "id": zod.coerce.number().int()
+})
+
+
+
+
+export const AddOrderPhotoBody = zod.object({
+  "photoUrl": zod.string().min(1),
+  "caption": zod.string().optional()
+})
+
+export const AddOrderPhotoResponse = zod.object({
+  "id": zod.number().int(),
+  "orderId": zod.number().int(),
+  "photoUrl": zod.string(),
+  "caption": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Remove a photo from an order
+ */
+export const DeleteOrderPhotoParams = zod.object({
+  "id": zod.coerce.number().int(),
+  "photoId": zod.coerce.number().int()
+})
+
+export const DeleteOrderPhotoResponse = zod.void()
+
+
+/**
  * @summary Remove a service item from an order
  */
 export const DeleteOrderServiceItemParams = zod.object({

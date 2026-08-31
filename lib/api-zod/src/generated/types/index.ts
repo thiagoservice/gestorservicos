@@ -37,6 +37,8 @@ export * from './orderInput';
 export * from './orderInputStatus';
 export * from './orderMaterialItem';
 export * from './orderMaterialItemInput';
+export * from './orderPhoto';
+export * from './orderPhotoInput';
 export * from './orderServiceItem';
 export * from './orderServiceItemInput';
 export * from './orderStatus';

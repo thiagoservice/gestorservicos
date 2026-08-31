@@ -2,6 +2,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   useListOrders,
   useGetOrder,
+  useListOrderPhotos,
+  useAddOrderPhoto,
+  useDeleteOrderPhoto,
   useCreateOrder,
   useUpdateOrder,
   useDeleteOrder,
@@ -11,6 +14,7 @@ import {
   useDeleteOrderMaterialItem,
   getListOrdersQueryKey,
   getGetOrderQueryKey,
+  getListOrderPhotosQueryKey,
   getGetSummaryQueryKey,
 } from '@workspace/api-client-react';
 import type {
@@ -18,6 +22,7 @@ import type {
   OrderUpdate,
   OrderServiceItemInput,
   OrderMaterialItemInput,
+  OrderPhotoInput,
 } from '@workspace/api-client-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -29,6 +34,38 @@ export function useOrder(id: number | undefined) {
   return useGetOrder(id as number, {
     query: { enabled: !!id, queryKey: getGetOrderQueryKey(id as number) },
   });
+}
+
+export function useOrderPhotos(id: number | undefined) {
+  return useListOrderPhotos(id as number, {
+    query: { enabled: !!id, queryKey: getListOrderPhotosQueryKey(id as number) },
+  });
+}
+
+export function useOrderPhotoMutations() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const add = useAddOrderPhoto();
+  const remove = useDeleteOrderPhoto();
+  const refresh = (orderId: number) => queryClient.invalidateQueries({ queryKey: getListOrderPhotosQueryKey(orderId) });
+
+  return {
+    addPhoto: (orderId: number, data: OrderPhotoInput, onSuccess?: () => void) => add.mutate(
+      { id: orderId, data },
+      {
+        onSuccess: () => { refresh(orderId); toast({ title: 'Foto adicionada à ordem' }); onSuccess?.(); },
+        onError: (error: any) => toast({ title: 'Erro ao adicionar foto', description: error?.message ?? 'Informe uma URL pública válida.', variant: 'destructive' }),
+      },
+    ),
+    deletePhoto: (orderId: number, photoId: number) => remove.mutate(
+      { id: orderId, photoId },
+      {
+        onSuccess: () => { refresh(orderId); toast({ title: 'Foto removida da ordem' }); },
+        onError: (error: any) => toast({ title: 'Erro ao remover foto', description: error?.message ?? 'Tente novamente.', variant: 'destructive' }),
+      },
+    ),
+    isPending: add.isPending || remove.isPending,
+  };
 }
 
 export function useCreateOrderMutation() {
