@@ -1443,7 +1443,6 @@ export default function OrderDetailPage() {
                 onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)}
                 type="file"
                 accept="image/*"
-                capture="environment"
                 disabled={isPhotoUploading}
                 data-testid="input-order-photo-url"
               />
