@@ -133,6 +133,10 @@ export default function OrderDetailPage() {
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [titleDraft, setTitleDraft] = useState('');
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [descriptionDraft, setDescriptionDraft] = useState('');
   const [serviceDateDraft, setServiceDateDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
   const [draftChecklistId, setDraftChecklistId] = useState('');
@@ -189,6 +193,8 @@ export default function OrderDetailPage() {
     if (order) {
       setAddressDraft(order.address ?? '');
       setServiceDateDraft(order.serviceDate ?? '');
+      setTitleDraft(order.title ?? '');
+      setDescriptionDraft(order.description ?? '');
       setSelectedChecklistId(order.checklistId ? String(order.checklistId) : '');
       form.reset({
         clientId: String(order.clientId),
@@ -866,9 +872,45 @@ export default function OrderDetailPage() {
               <span className="font-mono text-sm text-muted-foreground bg-muted px-2 py-0.5 rounded">
                 #{order!.number}
               </span>
-              <h1 className="font-display text-2xl font-semibold tracking-tight" data-testid="text-order-title">
-                {order!.title}
-              </h1>
+              {isEditingTitle ? (
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <Input
+                    value={titleDraft}
+                    onChange={(e) => setTitleDraft(e.target.value)}
+                    className="text-xl font-semibold h-9 max-w-sm"
+                    autoFocus
+                    data-testid="input-edit-order-title"
+                  />
+                  <Button
+                    type="button" size="sm"
+                    disabled={isStatusUpdating || !titleDraft.trim()}
+                    onClick={() => updateOrder(order!.id, { title: titleDraft.trim() }, () => setIsEditingTitle(false))}
+                    data-testid="button-save-order-title"
+                  >
+                    {isStatusUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    Salvar
+                  </Button>
+                  <Button
+                    type="button" variant="outline" size="sm"
+                    onClick={() => { setTitleDraft(order!.title); setIsEditingTitle(false); }}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <h1 className="font-display text-2xl font-semibold tracking-tight" data-testid="text-order-title">
+                    {order!.title}
+                  </h1>
+                  <Button
+                    type="button" variant="ghost" size="sm" className="h-7 px-2 text-muted-foreground"
+                    onClick={() => { setTitleDraft(order!.title); setIsEditingTitle(true); }}
+                    data-testid="button-edit-order-title"
+                  >
+                    Editar
+                  </Button>
+                </div>
+              )}
               <StatusBadge status={order!.status} />
             </div>
             <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
@@ -917,10 +959,50 @@ export default function OrderDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <Card className="lg:col-span-2 animate-fade-up" style={{ animationDelay: '60ms' }}>
           <CardContent className="p-5">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Descrição</h2>
-            <p className="text-sm leading-relaxed" data-testid="text-order-description">
-              {order!.description || 'Nenhuma descrição informada para esta ordem.'}
-            </p>
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Descrição</h2>
+              {!isEditingDescription && (
+                <Button
+                  type="button" variant="ghost" size="sm" className="h-7 px-2"
+                  onClick={() => { setDescriptionDraft(order!.description ?? ''); setIsEditingDescription(true); }}
+                  data-testid="button-edit-order-description"
+                >
+                  Editar
+                </Button>
+              )}
+            </div>
+            {isEditingDescription ? (
+              <div className="space-y-2">
+                <Textarea
+                  value={descriptionDraft}
+                  onChange={(e) => setDescriptionDraft(e.target.value)}
+                  rows={4}
+                  placeholder="Descreva o serviço, observações importantes..."
+                  data-testid="textarea-edit-order-description"
+                />
+                <div className="flex justify-end gap-2">
+                  <Button
+                    type="button" variant="outline" size="sm"
+                    onClick={() => { setDescriptionDraft(order!.description ?? ''); setIsEditingDescription(false); }}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="button" size="sm"
+                    disabled={isStatusUpdating}
+                    onClick={() => updateOrder(order!.id, { description: descriptionDraft }, () => setIsEditingDescription(false))}
+                    data-testid="button-save-order-description"
+                  >
+                    {isStatusUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    Salvar descrição
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm leading-relaxed" data-testid="text-order-description">
+                {order!.description || 'Nenhuma descrição informada para esta ordem.'}
+              </p>
+            )}
             <div className="mt-5 pt-4 border-t">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Data do serviço realizado</h2>
               <div className="flex items-center gap-2">
