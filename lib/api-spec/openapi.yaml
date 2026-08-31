@@ -14,6 +14,8 @@ tags:
   - name: services
   - name: materials
   - name: orders
+  - name: company
+  - name: checklist
   - name: summary
 paths:
   /healthz:
@@ -515,6 +517,212 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  # Company profile
+  /company:
+    get:
+      operationId: getCompany
+      tags: [company]
+      summary: Get the company profile
+      responses:
+        "200":
+          description: Company profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+    put:
+      operationId: updateCompany
+      tags: [company]
+      summary: Update the company profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+
+  # Checklist templates
+  /checklist-templates:
+    get:
+      operationId: listChecklistTemplates
+      tags: [checklist]
+      summary: List checklist templates
+      responses:
+        "200":
+          description: Checklist templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChecklistTemplate"
+    post:
+      operationId: createChecklistTemplate
+      tags: [checklist]
+      summary: Create a checklist template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChecklistTemplateInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChecklistTemplate"
+
+  /checklist-templates/{id}:
+    patch:
+      operationId: updateChecklistTemplate
+      tags: [checklist]
+      summary: Update a checklist template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChecklistTemplateInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChecklistTemplate"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteChecklistTemplate
+      tags: [checklist]
+      summary: Delete a checklist template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /orders/{id}/checklist:
+    get:
+      operationId: listOrderChecklistItems
+      tags: [checklist]
+      summary: List checklist items for an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Order checklist items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderChecklistItem"
+    post:
+      operationId: createOrderChecklistItem
+      tags: [checklist]
+      summary: Apply a checklist template to an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderChecklistItemInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderChecklistItem"
+
+  /orders/{id}/checklist/{itemId}:
+    patch:
+      operationId: updateOrderChecklistItem
+      tags: [checklist]
+      summary: Update an order checklist item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderChecklistItemUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderChecklistItem"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteOrderChecklistItem
+      tags: [checklist]
+      summary: Remove an order checklist item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
   /orders/{id}:
     get:
       operationId: getOrder
@@ -718,6 +926,103 @@ paths:
 
 components:
   schemas:
+    Company:
+      type: object
+      required: [id, name, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          type: ["string", "null"]
+        cnpj:
+          type: ["string", "null"]
+        logoUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CompanyInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        address:
+          type: string
+        cnpj:
+          type: string
+        logoUrl:
+          type: string
+
+    ChecklistTemplate:
+      type: object
+      required: [id, name, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ChecklistTemplateInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+
+    OrderChecklistItem:
+      type: object
+      required: [id, orderId, name, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        orderId:
+          type: integer
+        templateId:
+          type: ["integer", "null"]
+        name:
+          type: string
+        status:
+          type: ["string", "null"]
+          enum: [conforme, nao_conforme, nao_se_aplica, null]
+        photoUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    OrderChecklistItemInput:
+      type: object
+      required: [templateId]
+      properties:
+        templateId:
+          type: integer
+
+    OrderChecklistItemUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [conforme, nao_conforme, nao_se_aplica]
+        photoUrl:
+          type: string
     HealthStatus:
       type: object
       required: [status]

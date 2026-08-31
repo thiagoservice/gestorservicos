@@ -49,6 +49,12 @@ import {
 import { useClients } from '@/hooks/use-clients';
 import { useServices } from '@/hooks/use-services';
 import { useMaterials } from '@/hooks/use-materials';
+import { useCompany } from '@/hooks/use-company';
+import {
+  useChecklistTemplates,
+  useOrderChecklist,
+  useOrderChecklistMutations,
+} from '@/hooks/use-checklists';
 import { formatCurrencyBRL, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
 import {
   ArrowLeft,
@@ -63,6 +69,9 @@ import {
   Wallet,
   Save,
   Loader2,
+  Building2,
+  Camera,
+  ClipboardCheck,
 } from 'lucide-react';
 
 /* ─── form schema ─── */
@@ -89,6 +98,9 @@ export default function OrderDetailPage() {
   const { data: clients, isLoading: clientsLoading } = useClients();
   const { data: services } = useServices();
   const { data: materials } = useMaterials();
+  const { data: company } = useCompany();
+  const { data: checklistTemplates } = useChecklistTemplates();
+  const { data: checklistItems } = useOrderChecklist(orderId);
 
   /* ─── mutations ─── */
   const { createOrder, isPending: isCreating } = useCreateOrderMutation();
@@ -98,12 +110,15 @@ export default function OrderDetailPage() {
   const { deleteServiceItem } = useDeleteOrderServiceItemMutation();
   const { addMaterialItem, isPending: isAddingMaterial } = useAddOrderMaterialItemMutation();
   const { deleteMaterialItem } = useDeleteOrderMaterialItemMutation();
+  const { addItem: addChecklistItem, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
 
   /* ─── dialogs ─── */
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
+  const [selectedTemplateId, setSelectedTemplateId] = useState('');
+  const [photoDrafts, setPhotoDrafts] = useState<Record<number, string>>({});
 
   /* ─── draft items (novo mode only) ─── */
   const [draftServices, setDraftServices] = useState<DraftServiceItem[]>([]);
@@ -127,6 +142,12 @@ export default function OrderDetailPage() {
       });
     }
   }, [order, form]);
+
+  useEffect(() => {
+    if (checklistItems) {
+      setPhotoDrafts(Object.fromEntries(checklistItems.map((item) => [item.id, item.photoUrl ?? ''])));
+    }
+  }, [checklistItems]);
 
   /* ─── create handler ─── */
   const handleCreate = async (values: OrderFormValues) => {
@@ -452,6 +473,24 @@ export default function OrderDetailPage() {
   ══════════════════════════════════════════════════════ */
   return (
     <AppShell>
+      {(company?.name || company?.address || company?.cnpj || company?.logoUrl) && (
+        <Card className="mb-5 overflow-hidden" data-testid="card-company-header">
+          <CardContent className="p-4 flex items-center gap-4">
+            {company.logoUrl ? (
+              <img src={company.logoUrl} alt={`Logo ${company.name}`} className="h-16 w-20 rounded-md border bg-white object-contain p-1 shrink-0" />
+            ) : (
+              <div className="h-16 w-16 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <Building2 className="h-7 w-7" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="font-display text-lg font-semibold">{company.name || 'Empresa'}</p>
+              {company.cnpj && <p className="text-xs text-muted-foreground">CNPJ {company.cnpj}</p>}
+              {company.address && <p className="text-sm text-muted-foreground mt-1">{company.address}</p>}
+            </div>
+          </CardContent>
+        </Card>
+      )}
       <div className="mb-5 animate-fade-up">
         <Link
           href="/ordens"
@@ -591,6 +630,110 @@ export default function OrderDetailPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Checklist / laudo */}
+      <Card className="mb-6 animate-fade-up" style={{ animationDelay: '120ms' }}>
+        <CardContent className="p-5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+            <div>
+              <h2 className="font-display font-semibold flex items-center gap-2">
+                <ClipboardCheck className="h-4 w-4 text-primary" />
+                Checklist do laudo
+                <Badge variant="secondary" className="font-mono text-[10px]">{checklistItems?.length ?? 0}</Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">Registre a situação e uma foto pública para cada verificação.</p>
+            </div>
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <select
+                value={selectedTemplateId}
+                onChange={(event) => setSelectedTemplateId(event.target.value)}
+                className="flex h-9 min-w-0 md:w-72 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                data-testid="select-checklist-template"
+              >
+                <option value="">Selecione um item do catálogo</option>
+                {(checklistTemplates ?? []).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+              </select>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!selectedTemplateId || isChecklistPending}
+                onClick={() => addChecklistItem(order!.id, Number(selectedTemplateId), () => setSelectedTemplateId(''))}
+                data-testid="button-add-checklist-item"
+              >
+                <Plus className="h-3.5 w-3.5" /> Adicionar
+              </Button>
+            </div>
+          </div>
+
+          {!checklistItems?.length ? (
+            <div className="py-8 text-center border border-dashed rounded-lg">
+              <ClipboardCheck className="h-7 w-7 text-muted-foreground/40 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Nenhum item de checklist aplicado a esta ordem.</p>
+              {!checklistTemplates?.length && <Link href="/checklist" className="text-sm text-primary hover:underline mt-2 inline-block">Cadastrar modelos de checklist</Link>}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {checklistItems.map((item, index) => (
+                <div key={item.id} className="rounded-lg border p-4" data-testid={`checklist-item-${item.id}`}>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex gap-3 min-w-0">
+                      <span className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs font-mono shrink-0">{index + 1}</span>
+                      <p className="font-medium text-sm pt-0.5">{item.name}</p>
+                    </div>
+                    <ConfirmDeleteDialog
+                      trigger={<Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></Button>}
+                      title="Remover item do laudo"
+                      description={`Remover "${item.name}" desta ordem?`}
+                      onConfirm={() => deleteChecklistItem(order!.id, item.id)}
+                      isPending={isChecklistPending}
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-[220px_1fr_auto] gap-2 items-end">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground">Situação</label>
+                      <Select
+                        value={item.status ?? ''}
+                        onValueChange={(status) => updateChecklistItem(order!.id, item.id, { status: status as any })}
+                        disabled={isChecklistPending}
+                      >
+                        <SelectTrigger className="mt-1" data-testid={`select-checklist-status-${item.id}`}><SelectValue placeholder="Selecionar" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="conforme">Conforme</SelectItem>
+                          <SelectItem value="nao_conforme">Não conforme</SelectItem>
+                          <SelectItem value="nao_se_aplica">Não se aplica</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground">URL pública da foto</label>
+                      <Input
+                        className="mt-1"
+                        value={photoDrafts[item.id] ?? ''}
+                        onChange={(event) => setPhotoDrafts((current) => ({ ...current, [item.id]: event.target.value }))}
+                        placeholder="https://exemplo.com/foto.jpg"
+                        data-testid={`input-checklist-photo-${item.id}`}
+                      />
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={isChecklistPending || (photoDrafts[item.id] ?? '') === (item.photoUrl ?? '')}
+                      onClick={() => updateChecklistItem(order!.id, item.id, { photoUrl: photoDrafts[item.id] ?? '' })}
+                    >
+                      <Save className="h-3.5 w-3.5" /> Salvar foto
+                    </Button>
+                  </div>
+                  {item.photoUrl && (
+                    <a href={item.photoUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+                      <Camera className="h-4 w-4" /> Visualizar foto
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Items */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

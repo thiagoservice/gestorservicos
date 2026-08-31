@@ -11,6 +11,8 @@ import MaterialsPage from '@/pages/materials';
 import MaterialFormPage from '@/pages/material-form';
 import OrdersPage from '@/pages/orders';
 import OrderDetailPage from '@/pages/order-detail';
+import CompanyPage from '@/pages/company';
+import ChecklistsPage from '@/pages/checklists';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
 
 const queryClient = new QueryClient();
@@ -34,6 +36,8 @@ function Router() {
 
       <Route path="/ordens" component={OrdersPage} />
       <Route path="/ordens/:id" component={OrderDetailPage} />
+      <Route path="/empresa" component={CompanyPage} />
+      <Route path="/checklist" component={ChecklistsPage} />
 
       <Route component={NotFound} />
     </Switch>

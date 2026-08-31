@@ -7,6 +7,8 @@ import {
   Package,
   ClipboardList,
   Hammer,
+  Building2,
+  ClipboardCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +18,8 @@ const NAV_ITEMS = [
   { href: '/servicos', label: 'Serviços', icon: Wrench },
   { href: '/materiais', label: 'Materiais', icon: Package },
   { href: '/ordens', label: 'Ordens de Serviço', icon: ClipboardList },
+  { href: '/checklist', label: 'Checklist', icon: ClipboardCheck },
+  { href: '/empresa', label: 'Empresa', icon: Building2 },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {

@@ -5,6 +5,83 @@
  * API para sistema de gestão de serviços
  * OpenAPI spec version: 0.1.0
  */
+export interface Company {
+  id: number;
+  name: string;
+  /** @nullable */
+  address?: string | null;
+  /** @nullable */
+  cnpj?: string | null;
+  /** @nullable */
+  logoUrl?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CompanyInput {
+  /** @minLength 1 */
+  name: string;
+  address?: string;
+  cnpj?: string;
+  logoUrl?: string;
+}
+
+export interface ChecklistTemplate {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChecklistTemplateInput {
+  /** @minLength 1 */
+  name: string;
+}
+
+/**
+ * @nullable
+ */
+export type OrderChecklistItemStatus = typeof OrderChecklistItemStatus[keyof typeof OrderChecklistItemStatus] | null;
+
+
+export const OrderChecklistItemStatus = {
+  conforme: 'conforme',
+  nao_conforme: 'nao_conforme',
+  nao_se_aplica: 'nao_se_aplica',
+} as const;
+
+export interface OrderChecklistItem {
+  id: number;
+  orderId: number;
+  /** @nullable */
+  templateId?: number | null;
+  name: string;
+  /** @nullable */
+  status?: OrderChecklistItemStatus;
+  /** @nullable */
+  photoUrl?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderChecklistItemInput {
+  templateId: number;
+}
+
+export type OrderChecklistItemUpdateStatus = typeof OrderChecklistItemUpdateStatus[keyof typeof OrderChecklistItemUpdateStatus];
+
+
+export const OrderChecklistItemUpdateStatus = {
+  conforme: 'conforme',
+  nao_conforme: 'nao_conforme',
+  nao_se_aplica: 'nao_se_aplica',
+} as const;
+
+export interface OrderChecklistItemUpdate {
+  status?: OrderChecklistItemUpdateStatus;
+  photoUrl?: string;
+}
+
 export interface HealthStatus {
   status: string;
 }
