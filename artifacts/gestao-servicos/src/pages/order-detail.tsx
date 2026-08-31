@@ -59,6 +59,7 @@ import {
   useOrderChecklist,
   useOrderChecklistMutations,
 } from '@/hooks/use-checklists';
+import { listOrderChecklistItems, updateOrderChecklistItem } from '@workspace/api-client-react';
 import { formatCurrencyBRL, formatDateBR, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
 import {
   ArrowLeft,
@@ -140,6 +141,7 @@ export default function OrderDetailPage() {
   const [serviceDateDraft, setServiceDateDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
   const [draftChecklistId, setDraftChecklistId] = useState('');
+  const [draftChecklistStatuses, setDraftChecklistStatuses] = useState<Record<number, string>>({});
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
@@ -233,6 +235,20 @@ export default function OrderDetailPage() {
           await new Promise<void>((resolve) => {
             applyChecklist(created.id, Number(draftChecklistId), resolve);
           });
+          // apply any draft statuses filled during creation
+          const hasDraftStatuses = Object.keys(draftChecklistStatuses).length > 0;
+          if (hasDraftStatuses) {
+            const createdItems = await listOrderChecklistItems(created.id);
+            await Promise.all(
+              createdItems
+                .filter((item) => item.templateId != null && draftChecklistStatuses[item.templateId])
+                .map((item) =>
+                  updateOrderChecklistItem(created.id, item.id, {
+                    status: draftChecklistStatuses[item.templateId!] as any,
+                  }),
+                ),
+            );
+          }
         }
         setLocation(`/ordens/${created.id}`);
       },
@@ -415,17 +431,73 @@ export default function OrderDetailPage() {
                   <Link href="/checklist" className="text-sm text-primary hover:underline mt-1 inline-block">Cadastrar checklist</Link>
                 </div>
               ) : (
-                <select
-                  value={draftChecklistId}
-                  onChange={(e) => setDraftChecklistId(e.target.value)}
-                  className="flex h-9 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                  data-testid="select-draft-checklist"
-                >
-                  <option value="">Nenhum checklist</option>
-                  {(checklists ?? []).map((c) => (
-                    <option key={c.id} value={c.id}>{c.name} ({c.items.length} itens)</option>
-                  ))}
-                </select>
+                <div className="space-y-4">
+                  <select
+                    value={draftChecklistId}
+                    onChange={(e) => { setDraftChecklistId(e.target.value); setDraftChecklistStatuses({}); }}
+                    className="flex h-9 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    data-testid="select-draft-checklist"
+                  >
+                    <option value="">Nenhum checklist</option>
+                    {(checklists ?? []).map((c) => (
+                      <option key={c.id} value={c.id}>{c.name} ({c.items.length} itens)</option>
+                    ))}
+                  </select>
+
+                  {/* Mostrar itens do checklist selecionado para preenchimento antecipado */}
+                  {draftChecklistId && (() => {
+                    const selectedChecklist = checklists?.find((c) => String(c.id) === draftChecklistId);
+                    if (!selectedChecklist?.items.length) return null;
+                    return (
+                      <div className="border rounded-lg overflow-hidden">
+                        <div className="bg-muted/40 px-4 py-2 border-b">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            Preencher itens agora (opcional)
+                          </p>
+                        </div>
+                        <div className="divide-y">
+                          {selectedChecklist.items
+                            .slice()
+                            .sort((a, b) => a.sortOrder - b.sortOrder)
+                            .map((item) => {
+                              const currentStatus = draftChecklistStatuses[item.id];
+                              return (
+                                <div key={item.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                                  <span className="text-sm">{item.name}</span>
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    {(['conforme', 'nao_conforme', 'nao_se_aplica'] as const).map((s) => (
+                                      <button
+                                        key={s}
+                                        type="button"
+                                        onClick={() =>
+                                          setDraftChecklistStatuses((prev) => ({
+                                            ...prev,
+                                            [item.id]: prev[item.id] === s ? '' : s,
+                                          }))
+                                        }
+                                        className={[
+                                          'h-7 min-w-[2.5rem] rounded px-2 text-xs font-semibold border transition-colors',
+                                          currentStatus === s
+                                            ? s === 'conforme'
+                                              ? 'bg-green-600 text-white border-green-600'
+                                              : s === 'nao_conforme'
+                                                ? 'bg-red-600 text-white border-red-600'
+                                                : 'bg-gray-500 text-white border-gray-500'
+                                            : 'bg-background text-muted-foreground border-input hover:bg-muted',
+                                        ].join(' ')}
+                                      >
+                                        {s === 'conforme' ? 'C' : s === 'nao_conforme' ? 'NC' : 'N/A'}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
               )}
             </div>
 
