@@ -7,11 +7,12 @@ WORKDIR /app
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 
 # Copy all package manifests so pnpm can resolve the workspace graph
-COPY lib/db/package.json               lib/db/package.json
-COPY lib/api-spec/package.json         lib/api-spec/package.json
-COPY lib/api-zod/package.json          lib/api-zod/package.json
-COPY lib/api-client-react/package.json lib/api-client-react/package.json
-COPY artifacts/api-server/package.json artifacts/api-server/package.json
+COPY lib/db/package.json                  lib/db/package.json
+COPY lib/api-spec/package.json            lib/api-spec/package.json
+COPY lib/api-zod/package.json             lib/api-zod/package.json
+COPY lib/api-client-react/package.json    lib/api-client-react/package.json
+COPY lib/replit-auth-web/package.json     lib/replit-auth-web/package.json
+COPY artifacts/api-server/package.json    artifacts/api-server/package.json
 COPY artifacts/gestao-servicos/package.json artifacts/gestao-servicos/package.json
 
 RUN pnpm install --frozen-lockfile
@@ -45,11 +46,12 @@ WORKDIR /app
 
 # Copy pnpm workspace files
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY lib/db/package.json               lib/db/package.json
-COPY lib/api-spec/package.json         lib/api-spec/package.json
-COPY lib/api-zod/package.json          lib/api-zod/package.json
-COPY lib/api-client-react/package.json lib/api-client-react/package.json
-COPY artifacts/api-server/package.json artifacts/api-server/package.json
+COPY lib/db/package.json                  lib/db/package.json
+COPY lib/api-spec/package.json            lib/api-spec/package.json
+COPY lib/api-zod/package.json             lib/api-zod/package.json
+COPY lib/api-client-react/package.json    lib/api-client-react/package.json
+COPY lib/replit-auth-web/package.json     lib/replit-auth-web/package.json
+COPY artifacts/api-server/package.json    artifacts/api-server/package.json
 COPY artifacts/gestao-servicos/package.json artifacts/gestao-servicos/package.json
 
 # Install production deps only

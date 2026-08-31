@@ -1,0 +1,485 @@
+2026-08-31T22:45:04.679486105Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:05.589672722Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:05.589677704Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:05.589681273Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:05.589685157Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:05.589689366Z [inf]  
+2026-08-31T22:45:05.589693320Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:05.589697004Z [inf]  
+2026-08-31T22:45:05.589701824Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:05.693134855Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:05.693146562Z [inf]  
+2026-08-31T22:45:05.693152507Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:05.693157426Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:05.693162673Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:05.693167325Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:05.693171488Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:05.693175831Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:05.693180152Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:05.693185964Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:05.693189958Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:05.693193537Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:05.693197530Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:06.600094626Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:06.650741323Z [inf]  Starting Container
+2026-08-31T22:45:07.650596125Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:07.650601956Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:07.747275227Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:07.747281059Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:07.747285022Z [inf]  
+2026-08-31T22:45:07.747288797Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:07.747293628Z [inf]  
+2026-08-31T22:45:07.747297421Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:07.872498259Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:07.872507370Z [inf]  
+2026-08-31T22:45:07.872520209Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:07.872526674Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:07.872533116Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:07.872539414Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:07.872545467Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:07.872552695Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:07.872558413Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:07.872563882Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:07.872570132Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:07.872575704Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:07.872581470Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:08.758266943Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:09.827003263Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:09.903313387Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:09.994513786Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:09.994521672Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:09.994527111Z [inf]  
+2026-08-31T22:45:09.994532611Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:09.994537831Z [inf]  
+2026-08-31T22:45:09.994542394Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:10.094053952Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:10.094064181Z [inf]  
+2026-08-31T22:45:10.094070954Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:10.094077996Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:10.094084100Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:10.094089865Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:10.094097466Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:10.094103459Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:10.094109051Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:10.094113890Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:10.094119780Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:10.094124658Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:10.094129520Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:10.976496473Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:12.094176166Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:12.127239705Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:12.214647671Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:12.214654420Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:12.214659419Z [inf]  
+2026-08-31T22:45:12.214663019Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:12.214666727Z [inf]  
+2026-08-31T22:45:12.214670394Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:12.715629171Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:12.715633357Z [inf]  
+2026-08-31T22:45:12.715637113Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:12.715640575Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:12.715643811Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:12.715647551Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:12.715651544Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:12.715655618Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:12.715660209Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:12.715664652Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:12.715668761Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:12.715672496Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:12.715676531Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:13.720235601Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:14.397769994Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:14.796338558Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:14.796351446Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:14.796354760Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:14.796368890Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:14.796379681Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:14.796389991Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:14.796390505Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:14.796402130Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:14.796402730Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:14.796412419Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:14.796416087Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:14.796421421Z [inf]  
+2026-08-31T22:45:14.796426311Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:14.796431453Z [inf]  
+2026-08-31T22:45:14.796436094Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:14.796441568Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:14.796446145Z [inf]  
+2026-08-31T22:45:14.798217469Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:14.798225853Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:14.798232582Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:15.794108259Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:16.827646258Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:16.909978826Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:16.992835398Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:16.992841915Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:16.992846667Z [inf]  
+2026-08-31T22:45:16.992855054Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:16.992858550Z [inf]  
+2026-08-31T22:45:16.992862963Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:17.114451524Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:17.114461038Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:17.114467134Z [inf]  
+2026-08-31T22:45:17.114473014Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:17.114478623Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:17.114483125Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:17.114488294Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:17.114494493Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:17.114499719Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:17.114504903Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:17.114509656Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:17.114515107Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:17.114519576Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:18.011924218Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:19.142408308Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:19.142413983Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:19.151826946Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:19.151833196Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:19.151838083Z [inf]  
+2026-08-31T22:45:19.151842227Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:19.151846198Z [inf]  
+2026-08-31T22:45:19.151849911Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:19.268991025Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:19.268998466Z [inf]  
+2026-08-31T22:45:19.269004036Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:19.269008775Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:19.269013394Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:19.269018261Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:19.269024037Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:19.269029854Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:19.269035431Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:19.269040686Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:19.269045510Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:19.269049795Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:19.269054507Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:20.161397912Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:21.170821255Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:21.212822362Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:21.296181937Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:21.296190000Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:21.296194211Z [inf]  
+2026-08-31T22:45:21.296198246Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:21.296201746Z [inf]  
+2026-08-31T22:45:21.296206013Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:21.412189107Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:21.412195304Z [inf]  
+2026-08-31T22:45:21.412199676Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:21.412203595Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:21.412207604Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:21.412211464Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:21.412215023Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:21.412218495Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:21.412222052Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:21.412225391Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:21.412228867Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:21.412232080Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:21.412235415Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:22.265464873Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:23.320550341Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:23.322916296Z [inf]  ✓ Lockfile passes supply-chain policies (verified 53m ago)
+2026-08-31T22:45:23.414059142Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:23.414071607Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:23.414076437Z [inf]  
+2026-08-31T22:45:23.414080056Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:23.414084310Z [inf]  
+2026-08-31T22:45:23.414088686Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:23.465900487Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:23.465908200Z [inf]  
+2026-08-31T22:45:23.465915953Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:23.465920505Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:23.465925028Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:23.465929945Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:23.465934825Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:23.465938948Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:23.465942894Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:23.465950950Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:23.465958107Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:23.465961825Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:23.465966174Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:24.377921042Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:25.325009087Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:25.375449692Z [inf]  ✓ Lockfile passes supply-chain policies (verified 54m ago)
+2026-08-31T22:45:25.474054250Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:25.474062013Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:25.474067811Z [inf]  
+2026-08-31T22:45:25.474073084Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:25.474078674Z [inf]  
+2026-08-31T22:45:25.474083983Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:25.581426747Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:25.581440886Z [inf]  
+2026-08-31T22:45:25.581450095Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:25.581457055Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:25.581464312Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:25.581471289Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:25.581476731Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:25.581481636Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:25.581486388Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:25.581491640Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:25.581499731Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:25.581505297Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:25.581510627Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:45:26.427368251Z [inf]  ▶ Running database migrations...
+2026-08-31T22:45:27.565517284Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:45:27.598209191Z [inf]  ✓ Lockfile passes supply-chain policies (verified 54m ago)
+2026-08-31T22:45:27.937159008Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:45:27.937163618Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:45:27.937168976Z [inf]  
+2026-08-31T22:45:27.937174109Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:45:27.937178714Z [inf]  
+2026-08-31T22:45:27.937183296Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:45:27.937187349Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:27.937192222Z [inf]  
+2026-08-31T22:45:27.937196245Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:45:27.937201259Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:45:27.937205872Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:45:27.937210354Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:45:27.937214502Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:45:27.937219236Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:45:27.937223837Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:45:27.937228361Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:45:27.937233894Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:45:27.938760127Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:45:27.938764962Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:30.794559946Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:30.794563999Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:30.794568457Z [inf]  ✓ Lockfile passes supply-chain policies (verified 57m ago)
+2026-08-31T22:49:30.794572547Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:30.794575912Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:30.794579482Z [inf]  
+2026-08-31T22:49:30.794584149Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:30.794587928Z [inf]  
+2026-08-31T22:49:30.794591516Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:30.794595175Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.794599089Z [inf]  
+2026-08-31T22:49:30.794602861Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.794606450Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:30.794610288Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:30.794613555Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:30.794616960Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:30.794620506Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:30.794624103Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:30.796519450Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:30.796525891Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:30.796529614Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:30.796533138Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:30.796536861Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:30.796540899Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:30.796544601Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:30.796547728Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:30.796552921Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:30.796556934Z [inf]  
+2026-08-31T22:49:30.796560292Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:30.796564857Z [inf]  
+2026-08-31T22:49:30.796570091Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:30.796573727Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.796577301Z [inf]  
+2026-08-31T22:49:30.796580536Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.796584245Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:30.796588354Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:30.798458548Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:30.798465260Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:30.798471732Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:30.798477169Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:30.798482463Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:30.798487876Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:30.798492605Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:30.798498331Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:30.798503267Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:30.798508078Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:30.798511965Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:30.798516048Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:30.798520562Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:30.798524639Z [inf]  
+2026-08-31T22:49:30.798528670Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:30.798532157Z [inf]  
+2026-08-31T22:49:30.798535371Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:30.800939712Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.800946126Z [inf]  
+2026-08-31T22:49:30.800951352Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.800955681Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:30.800960031Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:30.800964281Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:30.800968772Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:30.800972628Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:30.800976337Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:30.800980421Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:30.800984192Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:30.800987649Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:30.800993760Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:30.800997776Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:30.801001829Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:30.801005786Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:30.801010087Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:30.801015148Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:30.803164547Z [inf]  
+2026-08-31T22:49:30.803178957Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:30.803186056Z [inf]  
+2026-08-31T22:49:30.803192643Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:30.803199608Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.803204360Z [inf]  
+2026-08-31T22:49:30.803208840Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:30.803213127Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:30.803217787Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:30.803222281Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:30.803226974Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:30.803231762Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:30.803236196Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:30.803243058Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:30.803247616Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:30.803252432Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:30.803256716Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:31.434269475Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:32.428178068Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:32.428181809Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:32.807118261Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:32.807130801Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:32.807138349Z [inf]  
+2026-08-31T22:49:32.807143068Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:32.807147836Z [inf]  
+2026-08-31T22:49:32.807152811Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:32.807158392Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:32.807163507Z [inf]  
+2026-08-31T22:49:32.807168477Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:32.807174126Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:32.807178544Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:32.807183076Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:32.807187918Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:32.807193089Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:32.807198305Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:32.807202782Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:32.807208701Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:32.808715008Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:32.808721432Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:33.447362703Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:34.446444424Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:34.817349997Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:34.817355147Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:34.817358809Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:34.817362948Z [inf]  
+2026-08-31T22:49:34.817366544Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:34.817370247Z [inf]  
+2026-08-31T22:49:34.817374094Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:34.817377533Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:34.817381053Z [inf]  
+2026-08-31T22:49:34.817384893Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:34.817388502Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:34.817392437Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:34.817395851Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:34.817399558Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:34.817403184Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:34.817406804Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:34.817410201Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:34.818340328Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:34.818347747Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:34.818352330Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:35.906988120Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:36.907220652Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:36.907230731Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:36.907231835Z [inf]  
+2026-08-31T22:49:36.907241788Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:36.907244774Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:36.907264463Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:36.907272434Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:36.907274860Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:36.907285991Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:36.907286715Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:36.907287398Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:36.907300616Z [inf]  
+2026-08-31T22:49:36.907307833Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:36.907314236Z [inf]  
+2026-08-31T22:49:36.907321569Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:36.907355343Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:36.907361666Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:36.907367131Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:36.908164227Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:36.908170338Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:36.908173871Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:37.934608886Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:39.036814082Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:39.036819686Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:39.036824477Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:39.036829051Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:39.036834940Z [inf]  
+2026-08-31T22:49:39.036839840Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:39.036844837Z [inf]  
+2026-08-31T22:49:39.036849947Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:39.079246788Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:39.079255294Z [inf]  
+2026-08-31T22:49:39.079260866Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:39.079266825Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:39.079273454Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:39.079278588Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:39.079283658Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:39.079288234Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:39.079292984Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:39.079297368Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:39.079301392Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:39.079305494Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:39.079310148Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:39.961901439Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:40.987098692Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:40.987102904Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:41.134034636Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:41.134043694Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:41.134049161Z [inf]  
+2026-08-31T22:49:41.134053698Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:41.134057588Z [inf]  
+2026-08-31T22:49:41.134062268Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:41.180226524Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:41.180242270Z [inf]  
+2026-08-31T22:49:41.180248320Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:41.180254815Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:41.180260602Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:41.180265447Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:41.180270878Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:41.180275844Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:41.180279952Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:41.180284478Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:41.180288409Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:41.180292279Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:41.180296202Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:42.067602504Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:43.126317867Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:43.139667841Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:43.219265559Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:43.219272939Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:43.219277784Z [inf]  
+2026-08-31T22:49:43.219282120Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:43.219286470Z [inf]  
+2026-08-31T22:49:43.219291249Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:43.372037188Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:43.372049019Z [inf]  
+2026-08-31T22:49:43.372054698Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:43.372060307Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:43.372065813Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:43.372070839Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:43.372075479Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:43.372080368Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:43.372085159Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:43.372091759Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:43.372096347Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:43.372110668Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:43.372115687Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
+2026-08-31T22:49:44.224297051Z [inf]  ▶ Running database migrations...
+2026-08-31T22:49:45.259658961Z [inf]  Scope: all 7 workspace projects
+2026-08-31T22:49:45.259664011Z [inf]  ✓ Lockfile passes supply-chain policies (verified 58m ago)
+2026-08-31T22:49:45.305210072Z [inf]  /app/artifacts/gestao-servicos:
+2026-08-31T22:49:45.305219285Z [inf]  [ERR_PNPM_WORKSPACE_PKG_NOT_FOUND] In artifacts/gestao-servicos: "@workspace/replit-auth-web@workspace:*" is in the dependencies but no package named "@workspace/replit-auth-web" is present in the workspace
+2026-08-31T22:49:45.305226142Z [inf]  
+2026-08-31T22:49:45.305232019Z [inf]  This error happened while installing a direct dependency of /app/artifacts/gestao-servicos
+2026-08-31T22:49:45.305237476Z [inf]  
+2026-08-31T22:49:45.305242378Z [inf]  Packages found in the workspace: workspace, @workspace/api-server, @workspace/gestao-servicos, @workspace/api-client-react, @workspace/api-spec, @workspace/api-zod, @workspace/db
+2026-08-31T22:49:45.395181094Z [inf]  [ERROR] Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:45.395187234Z [inf]  
+2026-08-31T22:49:45.395191230Z [inf]  pnpm: Command failed with exit code 1: pnpm install --production
+2026-08-31T22:49:45.395194957Z [inf]      at getFinalError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:89319:14)
+2026-08-31T22:49:45.395198926Z [inf]      at makeError (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:91626:21)
+2026-08-31T22:49:45.395203688Z [inf]      at getSyncResult (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93470:10)
+2026-08-31T22:49:45.395207453Z [inf]      at spawnSubprocessSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93430:14)
+2026-08-31T22:49:45.395211737Z [inf]      at execaCoreSync (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:93360:23)
+2026-08-31T22:49:45.395215640Z [inf]      at callBoundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95888:23)
+2026-08-31T22:49:45.395219339Z [inf]      at boundExeca (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:95865:49)
+2026-08-31T22:49:45.395222997Z [inf]      at sync2 (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:96020:14)
+2026-08-31T22:49:45.395228517Z [inf]      at runPnpmCli (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:273515:5)
+2026-08-31T22:49:45.395233483Z [inf]      at runDepsStatusCheck (file:///usr/local/lib/node_modules/pnpm/dist/pnpm.mjs:274731:7)
