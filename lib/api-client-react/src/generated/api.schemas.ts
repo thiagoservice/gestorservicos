@@ -137,6 +137,8 @@ export interface OrderChecklistItem {
   orderId: number;
   /** @nullable */
   templateId?: number | null;
+  /** @nullable */
+  checklistId?: number | null;
   name: string;
   /** @nullable */
   status?: OrderChecklistItemStatus;

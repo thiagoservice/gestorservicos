@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { and, eq, inArray, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNull, ne } from "drizzle-orm";
 import {
   checklistsTable,
   checklistTemplatesTable,
@@ -34,6 +34,7 @@ import {
   ApplyChecklistToOrderParams,
   ApplyChecklistToOrderBody,
   ApplyChecklistToOrderResponse,
+  RemoveChecklistFromOrderParams,
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
@@ -247,17 +248,50 @@ router.put("/orders/:id/checklist/apply", async (req, res): Promise<void> => {
     res.status(404).json({ error: !order ? "Ordem não encontrada" : "Checklist não encontrado" });
     return;
   }
-  const appliedItems = await db.transaction(async (tx) => {
-    await tx.delete(orderChecklistItemsTable).where(eq(orderChecklistItemsTable.orderId, params.data.id));
-    await tx.update(ordersTable).set({ checklistId: checklist.id }).where(eq(ordersTable.id, params.data.id));
-    if (checklist.items.length === 0) return [];
-    return tx.insert(orderChecklistItemsTable).values(checklist.items.map((item) => ({
+  // Check if this checklist was already applied to avoid duplicates
+  const existing = await db.select({ id: orderChecklistItemsTable.id })
+    .from(orderChecklistItemsTable)
+    .where(and(
+      eq(orderChecklistItemsTable.orderId, params.data.id),
+      eq(orderChecklistItemsTable.checklistId, parsed.data.checklistId),
+    ))
+    .limit(1);
+  if (existing.length > 0) {
+    res.status(409).json({ error: "Este checklist já foi aplicado a esta ordem" });
+    return;
+  }
+  if (checklist.items.length === 0) {
+    res.json([]);
+    return;
+  }
+  const appliedItems = await db.insert(orderChecklistItemsTable).values(
+    checklist.items.map((item) => ({
       orderId: params.data.id,
       templateId: item.id,
+      checklistId: checklist.id,
       name: item.name,
-    }))).returning();
-  });
+    })),
+  ).returning();
   res.json(ApplyChecklistToOrderResponse.parse(appliedItems));
+});
+
+router.delete("/orders/:id/checklist/apply/:checklistId", async (req, res): Promise<void> => {
+  const params = RemoveChecklistFromOrderParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const deleted = await db.delete(orderChecklistItemsTable)
+    .where(and(
+      eq(orderChecklistItemsTable.orderId, params.data.id),
+      eq(orderChecklistItemsTable.checklistId, params.data.checklistId),
+    ))
+    .returning({ id: orderChecklistItemsTable.id });
+  if (deleted.length === 0) {
+    res.status(404).json({ error: "Checklist não encontrado nesta ordem" });
+    return;
+  }
+  res.sendStatus(204);
 });
 
 router.patch("/orders/:id/checklist/:itemId", async (req, res): Promise<void> => {

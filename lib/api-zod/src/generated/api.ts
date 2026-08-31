@@ -753,6 +753,7 @@ export const ListOrderChecklistItemsResponseItem = zod.object({
   "id": zod.number().int(),
   "orderId": zod.number().int(),
   "templateId": zod.number().int().nullish(),
+  "checklistId": zod.number().int().nullish(),
   "name": zod.string(),
   "status": zod.union([zod.literal('conforme'),zod.literal('nao_conforme'),zod.literal('nao_se_aplica'),zod.literal(null)]).nullish(),
   "photoUrl": zod.string().nullish(),
@@ -777,6 +778,7 @@ export const CreateOrderChecklistItemResponse = zod.object({
   "id": zod.number().int(),
   "orderId": zod.number().int(),
   "templateId": zod.number().int().nullish(),
+  "checklistId": zod.number().int().nullish(),
   "name": zod.string(),
   "status": zod.union([zod.literal('conforme'),zod.literal('nao_conforme'),zod.literal('nao_se_aplica'),zod.literal(null)]).nullish(),
   "photoUrl": zod.string().nullish(),
@@ -802,6 +804,7 @@ export const ApplyChecklistToOrderResponseItem = zod.object({
   "id": zod.number().int(),
   "orderId": zod.number().int(),
   "templateId": zod.number().int().nullish(),
+  "checklistId": zod.number().int().nullish(),
   "name": zod.string(),
   "status": zod.union([zod.literal('conforme'),zod.literal('nao_conforme'),zod.literal('nao_se_aplica'),zod.literal(null)]).nullish(),
   "photoUrl": zod.string().nullish(),
@@ -809,6 +812,17 @@ export const ApplyChecklistToOrderResponseItem = zod.object({
   "updatedAt": zod.coerce.date()
 })
 export const ApplyChecklistToOrderResponse = zod.array(ApplyChecklistToOrderResponseItem)
+
+
+/**
+ * @summary Remove all items of a named checklist from an order
+ */
+export const RemoveChecklistFromOrderParams = zod.object({
+  "id": zod.coerce.number().int(),
+  "checklistId": zod.coerce.number().int()
+})
+
+export const RemoveChecklistFromOrderResponse = zod.void()
 
 
 /**
@@ -828,6 +842,7 @@ export const UpdateOrderChecklistItemResponse = zod.object({
   "id": zod.number().int(),
   "orderId": zod.number().int(),
   "templateId": zod.number().int().nullish(),
+  "checklistId": zod.number().int().nullish(),
   "name": zod.string(),
   "status": zod.union([zod.literal('conforme'),zod.literal('nao_conforme'),zod.literal('nao_se_aplica'),zod.literal(null)]).nullish(),
   "photoUrl": zod.string().nullish(),

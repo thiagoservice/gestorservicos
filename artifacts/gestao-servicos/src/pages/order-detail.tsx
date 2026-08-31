@@ -125,7 +125,7 @@ export default function OrderDetailPage() {
   const { addMaterialItem, isPending: isAddingMaterial } = useAddOrderMaterialItemMutation();
   const { deleteMaterialItem } = useDeleteOrderMaterialItemMutation();
   const { addPhoto, deletePhoto, isPending: isPhotoPending } = useOrderPhotoMutations();
-  const { applyChecklist, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
+  const { applyChecklist, removeChecklist, updateItem: updateChecklistItem, deleteItem: deleteChecklistItem, isPending: isChecklistPending } = useOrderChecklistMutations();
 
   /* ─── dialogs ─── */
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
@@ -692,75 +692,137 @@ export default function OrderDetailPage() {
                 Checklist do laudo
                 <Badge variant="secondary" className="font-mono text-[10px]">{checklistItems?.length ?? 0}</Badge>
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">Registre a situação de cada verificação.</p>
+              <p className="text-sm text-muted-foreground mt-1">Adicione um ou mais checklists e registre a situação de cada item.</p>
             </div>
             <div className="print-hide flex items-center gap-2 w-full md:w-auto">
-              <select
-                value={selectedChecklistId}
-                onChange={(event) => setSelectedChecklistId(event.target.value)}
-                className="flex h-9 min-w-0 md:w-72 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                data-testid="select-checklist-template"
-              >
-                <option value="">Selecione o checklist a realizar</option>
-                {(checklists ?? []).map((checklist) => <option key={checklist.id} value={checklist.id}>{checklist.name} ({checklist.items.length} itens)</option>)}
-              </select>
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={!selectedChecklistId || isChecklistPending}
-                onClick={() => applyChecklist(order!.id, Number(selectedChecklistId))}
-                data-testid="button-add-checklist-item"
-              >
-                <ClipboardCheck className="h-3.5 w-3.5" /> Aplicar checklist
-              </Button>
+              {(() => {
+                const appliedIds = new Set((checklistItems ?? []).map((i) => i.checklistId).filter(Boolean));
+                const available = (checklists ?? []).filter((c) => !appliedIds.has(c.id));
+                return (
+                  <>
+                    <select
+                      value={selectedChecklistId}
+                      onChange={(event) => setSelectedChecklistId(event.target.value)}
+                      className="flex h-9 min-w-0 md:w-72 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                      data-testid="select-checklist-template"
+                    >
+                      <option value="">Selecione o checklist a adicionar</option>
+                      {available.map((checklist) => (
+                        <option key={checklist.id} value={checklist.id}>
+                          {checklist.name} ({checklist.items.length} itens)
+                        </option>
+                      ))}
+                    </select>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={!selectedChecklistId || isChecklistPending}
+                      onClick={() => applyChecklist(order!.id, Number(selectedChecklistId), () => setSelectedChecklistId(''))}
+                      data-testid="button-add-checklist-item"
+                    >
+                      <ClipboardCheck className="h-3.5 w-3.5" /> Aplicar checklist
+                    </Button>
+                  </>
+                );
+              })()}
             </div>
           </div>
 
           {!checklistItems?.length ? (
             <div className="py-8 text-center border border-dashed rounded-lg">
               <ClipboardCheck className="h-7 w-7 text-muted-foreground/40 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Nenhum item de checklist aplicado a esta ordem.</p>
+              <p className="text-sm text-muted-foreground">Nenhum checklist aplicado a esta ordem.</p>
               {!checklists?.length && <Link href="/checklist" className="text-sm text-primary hover:underline mt-2 inline-block">Cadastrar um checklist</Link>}
             </div>
-          ) : (
-            <div className="space-y-3">
-              {checklistItems.map((item, index) => (
-                <div key={item.id} className="rounded-lg border p-4" data-testid={`checklist-item-${item.id}`}>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="flex gap-3 min-w-0">
-                      <span className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs font-mono shrink-0">{index + 1}</span>
-                      <p className="font-medium text-sm pt-0.5">{item.name}</p>
+          ) : (() => {
+            // Group items by checklistId; null/undefined items go to key 0 (avulsos)
+            const checklistMap = new Map((checklists ?? []).map((c) => [c.id, c.name]));
+            const groups = new Map<number, typeof checklistItems>();
+            for (const item of checklistItems) {
+              const key = item.checklistId ?? 0;
+              if (!groups.has(key)) groups.set(key, []);
+              groups.get(key)!.push(item);
+            }
+            return (
+              <div className="space-y-5">
+                {Array.from(groups.entries()).map(([gid, items]) => (
+                  <div key={gid} className="rounded-lg border overflow-hidden">
+                    {/* Group header */}
+                    <div className="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b">
+                      <span className="text-sm font-semibold">
+                        {gid ? (checklistMap.get(gid) ?? 'Checklist') : 'Itens avulsos'}
+                        <span className="ml-2 font-mono text-[10px] text-muted-foreground font-normal">({items.length})</span>
+                      </span>
+                      {gid !== 0 && (
+                        <ConfirmDeleteDialog
+                          trigger={
+                            <Button variant="ghost" size="sm" className="print-hide h-7 text-destructive hover:text-destructive px-2 text-xs">
+                              <Trash2 className="h-3 w-3 mr-1" /> Remover checklist
+                            </Button>
+                          }
+                          title="Remover checklist da ordem"
+                          description={`Remover todos os itens de "${checklistMap.get(gid) ?? 'checklist'}" desta ordem?`}
+                          onConfirm={() => removeChecklist(order!.id, gid)}
+                          isPending={isChecklistPending}
+                        />
+                      )}
                     </div>
-                    <ConfirmDeleteDialog
-                      trigger={<Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></Button>}
-                      title="Remover item do laudo"
-                      description={`Remover "${item.name}" desta ordem?`}
-                      onConfirm={() => deleteChecklistItem(order!.id, item.id)}
-                      isPending={isChecklistPending}
-                    />
+                    {/* Compact table */}
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {items.map((item, index) => (
+                          <tr key={item.id} className="border-b last:border-b-0 hover:bg-muted/20" data-testid={`checklist-item-${item.id}`}>
+                            <td className="w-8 px-3 py-2 text-xs font-mono text-muted-foreground text-right select-none">{index + 1}</td>
+                            <td className="px-2 py-2 font-medium">{item.name}</td>
+                            <td className="px-2 py-2">
+                              {/* print view */}
+                              <span className="print-only checklist-print-status">{CHECKLIST_STATUS_LABELS[item.status ?? ''] ?? '—'}</span>
+                              {/* interactive buttons */}
+                              <div className="print-hide flex gap-1">
+                                {(['conforme', 'nao_conforme', 'nao_se_aplica'] as const).map((s) => (
+                                  <button
+                                    key={s}
+                                    type="button"
+                                    disabled={isChecklistPending}
+                                    data-testid={`select-checklist-status-${item.id}-${s}`}
+                                    onClick={() => updateChecklistItem(order!.id, item.id, { status: item.status === s ? undefined : s })}
+                                    className={[
+                                      'rounded px-2 py-0.5 text-xs font-medium border transition-colors',
+                                      item.status === s
+                                        ? s === 'conforme'
+                                          ? 'bg-green-100 border-green-400 text-green-800 dark:bg-green-900/40 dark:border-green-600 dark:text-green-300'
+                                          : s === 'nao_conforme'
+                                          ? 'bg-red-100 border-red-400 text-red-800 dark:bg-red-900/40 dark:border-red-600 dark:text-red-300'
+                                          : 'bg-muted border-border text-muted-foreground'
+                                        : 'border-border text-muted-foreground hover:bg-muted/60',
+                                    ].join(' ')}
+                                  >
+                                    {s === 'conforme' ? 'C' : s === 'nao_conforme' ? 'NC' : 'N/A'}
+                                  </button>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="w-8 px-2 py-2 print-hide">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 text-muted-foreground/60 hover:text-destructive"
+                                onClick={() => deleteChecklistItem(order!.id, item.id)}
+                                disabled={isChecklistPending}
+                                data-testid={`button-delete-checklist-item-${item.id}`}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                  <div className="grid md:grid-cols-[220px_1fr_auto] gap-2 items-end">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Situação</label>
-                      <span className="print-only checklist-print-status">{CHECKLIST_STATUS_LABELS[item.status ?? ''] ?? 'Não informado'}</span>
-                      <Select
-                        value={item.status ?? ''}
-                        onValueChange={(status) => updateChecklistItem(order!.id, item.id, { status: status as any })}
-                        disabled={isChecklistPending}
-                      >
-                        <SelectTrigger className="mt-1" data-testid={`select-checklist-status-${item.id}`}><SelectValue placeholder="Selecionar" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="conforme">Conforme</SelectItem>
-                          <SelectItem value="nao_conforme">Não conforme</SelectItem>
-                          <SelectItem value="nao_se_aplica">Não se aplica</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 

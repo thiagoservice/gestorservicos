@@ -9,6 +9,7 @@ import {
   useDeleteOrderChecklistItem,
   useListChecklists,
   useListOrderChecklistItems,
+  useRemoveChecklistFromOrder,
   useUpdateChecklist,
   useUpdateOrderChecklistItem,
 } from '@workspace/api-client-react';
@@ -67,6 +68,7 @@ export function useOrderChecklistMutations() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const apply = useApplyChecklistToOrder();
+  const removeGroup = useRemoveChecklistFromOrder();
   const update = useUpdateOrderChecklistItem();
   const remove = useDeleteOrderChecklistItem();
   const refresh = (orderId: number) => queryClient.invalidateQueries({ queryKey: getListOrderChecklistItemsQueryKey(orderId) });
@@ -81,14 +83,33 @@ export function useOrderChecklistMutations() {
           toast({ title: 'Checklist aplicado à ordem' });
           onSuccess?.();
         },
-        onError: (error: any) => toast({ title: 'Erro ao aplicar checklist', description: errorMessage(error), variant: 'destructive' }),
+        onError: (error: any) => {
+          const msg = errorMessage(error);
+          const isDuplicate = msg.toLowerCase().includes('já foi aplicado') || (error?.status === 409);
+          toast({
+            title: isDuplicate ? 'Checklist já aplicado' : 'Erro ao aplicar checklist',
+            description: isDuplicate ? 'Este checklist já foi adicionado a esta ordem.' : msg,
+            variant: 'destructive',
+          });
+        },
+      },
+    ),
+    removeChecklist: (orderId: number, checklistId: number, onSuccess?: () => void) => removeGroup.mutate(
+      { id: orderId, checklistId },
+      {
+        onSuccess: () => {
+          refresh(orderId);
+          toast({ title: 'Checklist removido da ordem' });
+          onSuccess?.();
+        },
+        onError: (error: any) => toast({ title: 'Erro ao remover checklist', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
     updateItem: (orderId: number, itemId: number, data: OrderChecklistItemUpdate) => update.mutate(
       { id: orderId, itemId, data },
       {
-        onSuccess: () => { refresh(orderId); toast({ title: 'Checklist atualizado' }); },
-        onError: (error: any) => toast({ title: 'Erro ao atualizar checklist', description: errorMessage(error), variant: 'destructive' }),
+        onSuccess: () => { refresh(orderId); },
+        onError: (error: any) => toast({ title: 'Erro ao atualizar item', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
     deleteItem: (orderId: number, itemId: number) => remove.mutate(
@@ -98,6 +119,6 @@ export function useOrderChecklistMutations() {
         onError: (error: any) => toast({ title: 'Erro ao remover item', description: errorMessage(error), variant: 'destructive' }),
       },
     ),
-    isPending: apply.isPending || update.isPending || remove.isPending,
+    isPending: apply.isPending || removeGroup.isPending || update.isPending || remove.isPending,
   };
 }

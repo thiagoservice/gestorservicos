@@ -3358,6 +3358,79 @@ export const useApplyChecklistToOrder = <TError = ErrorType<ErrorResponse>,
       return useMutation(getApplyChecklistToOrderMutationOptions(options));
     }
 
+export const getRemoveChecklistFromOrderUrl = (id: number,
+    checklistId: number,) => {
+
+
+
+
+  return `/api/orders/${id}/checklist/apply/${checklistId}`
+}
+
+/**
+ * @summary Remove all items of a named checklist from an order
+ */
+export const removeChecklistFromOrder = async (id: number,
+    checklistId: number, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getRemoveChecklistFromOrderUrl(id,checklistId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getRemoveChecklistFromOrderMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeChecklistFromOrder>>, TError,{id: number;checklistId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeChecklistFromOrder>>, TError,{id: number;checklistId: number}, TContext> => {
+
+const mutationKey = ['removeChecklistFromOrder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeChecklistFromOrder>>, {id: number;checklistId: number}> = (props) => {
+          const {id,checklistId} = props ?? {};
+
+          return  removeChecklistFromOrder(id,checklistId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveChecklistFromOrderMutationResult = NonNullable<Awaited<ReturnType<typeof removeChecklistFromOrder>>>
+
+    export type RemoveChecklistFromOrderMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Remove all items of a named checklist from an order
+ */
+export const useRemoveChecklistFromOrder = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeChecklistFromOrder>>, TError,{id: number;checklistId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof removeChecklistFromOrder>>,
+        TError,
+        {id: number;checklistId: number},
+        TContext
+      > => {
+      return useMutation(getRemoveChecklistFromOrderMutationOptions(options));
+    }
+
 export const getUpdateOrderChecklistItemUrl = (id: number,
     itemId: number,) => {
 

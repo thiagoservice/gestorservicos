@@ -931,6 +931,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /orders/{id}/checklist/apply/{checklistId}:
+    delete:
+      operationId: removeChecklistFromOrder
+      tags: [checklist]
+      summary: Remove all items of a named checklist from an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: checklistId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /orders/{id}/checklist/{itemId}:
     patch:
       operationId: updateOrderChecklistItem
@@ -1476,6 +1502,8 @@ components:
         orderId:
           type: integer
         templateId:
+          type: ["integer", "null"]
+        checklistId:
           type: ["integer", "null"]
         name:
           type: string
