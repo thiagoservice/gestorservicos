@@ -689,7 +689,7 @@ export default function OrderDetailPage() {
             <div>
               <h2 className="font-display font-semibold flex items-center gap-2">
                 <ClipboardCheck className="h-4 w-4 text-primary" />
-                Checklist do laudo
+                Checklist
                 <Badge variant="secondary" className="font-mono text-[10px]">{checklistItems?.length ?? 0}</Badge>
               </h2>
               <p className="text-sm text-muted-foreground mt-1">Adicione um ou mais checklists e registre a situação de cada item.</p>
