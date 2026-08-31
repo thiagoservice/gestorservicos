@@ -136,6 +136,40 @@ export default function OrderDetailPage() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  /* ─── print helper: embeds authenticated images as base64 before printing ─── */
+  const handlePrint = async () => {
+    setIsPrinting(true);
+    const imgs = Array.from(
+      document.querySelectorAll<HTMLImageElement>(
+        '.order-print-page img[src^="/api/storage/objects/"], .order-print-page img[src^="/api/storage/public-objects/"]',
+      ),
+    );
+    const originals = new Map<HTMLImageElement, string>();
+    await Promise.all(
+      imgs.map(async (img) => {
+        try {
+          const res = await fetch(img.src, { credentials: 'include' });
+          if (!res.ok) return;
+          const blob = await res.blob();
+          const dataUrl = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+          });
+          originals.set(img, img.src);
+          img.src = dataUrl;
+        } catch {
+          /* ignore single-image errors; others will still print */
+        }
+      }),
+    );
+    window.print();
+    // restore originals so the page stays interactive after printing
+    originals.forEach((src, img) => { img.src = src; });
+    setIsPrinting(false);
+  };
 
   /* ─── draft items (novo mode only) ─── */
   const [draftServices, setDraftServices] = useState<DraftServiceItem[]>([]);
@@ -531,9 +565,9 @@ export default function OrderDetailPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Button variant="outline" onClick={() => window.print()} data-testid="button-export-pdf">
-              <FileDown className="h-4 w-4" />
-              Exportar PDF
+            <Button variant="outline" onClick={handlePrint} disabled={isPrinting} data-testid="button-export-pdf">
+              {isPrinting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+              {isPrinting ? 'Preparando…' : 'Exportar PDF'}
             </Button>
             <Select
               value={order!.status}
