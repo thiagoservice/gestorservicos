@@ -577,19 +577,20 @@ export default function OrderDetailPage() {
     return (
       <div className="print-document" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '9.5pt', color: labelColor, lineHeight: 1.45 }}>
 
-        {/* ── TOPO: logo + empresa (se existir) ── */}
-        {(company?.name || company?.logoUrl) && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            {company?.logoUrl && (
-              <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '48px', maxWidth: '80px', objectFit: 'contain' }} />
-            )}
+        {/* ── TOPO: logo + empresa ── */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1.5px solid ${border}`, paddingBottom: '10px', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {company?.logoUrl
+              ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '52px', maxWidth: '88px', objectFit: 'contain' }} />
+              : <div style={{ width: '52px', height: '52px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt', color: '#999', textAlign: 'center' }}>LOGO</div>
+            }
             <div>
-              {company?.name && <div style={{ fontWeight: 700, fontSize: '11pt' }}>{company.name}</div>}
-              {company?.cnpj && <div style={{ fontSize: '8pt', color: mutedColor }}>CNPJ: {company.cnpj}</div>}
-              {company?.address && <div style={{ fontSize: '8pt', color: mutedColor }}>{company.address}</div>}
+              <div style={{ fontWeight: 700, fontSize: '12pt' }}>{company?.name || 'Nome da empresa'}</div>
+              {company?.cnpj && <div style={{ fontSize: '8.5pt', color: mutedColor }}>CNPJ: {company.cnpj}</div>}
+              {company?.address && <div style={{ fontSize: '8.5pt', color: mutedColor }}>{company.address}</div>}
             </div>
           </div>
-        )}
+        </div>
 
         {/* ── TÍTULO CENTRALIZADO ── */}
         <div style={{ textAlign: 'center', marginBottom: '6px' }}>
