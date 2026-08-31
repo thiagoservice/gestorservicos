@@ -12,7 +12,8 @@ import {
 
 const router: IRouter = Router();
 
-function isPublicUrl(value: string): boolean {
+function isStoredImageOrPublicUrl(value: string): boolean {
+  if (value.startsWith("/objects/")) return true;
   try {
     const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:";
@@ -41,8 +42,8 @@ router.post("/orders/:id/photos", async (req, res): Promise<void> => {
     return;
   }
   const photoUrl = parsed.data.photoUrl.trim();
-  if (!isPublicUrl(photoUrl)) {
-    res.status(400).json({ error: "Informe uma URL pública válida para a foto" });
+  if (!isStoredImageOrPublicUrl(photoUrl)) {
+    res.status(400).json({ error: "Anexo de foto inválido" });
     return;
   }
   const [order] = await db.select({ id: ordersTable.id }).from(ordersTable).where(eq(ordersTable.id, params.data.id));

@@ -52,6 +52,8 @@ import { useClients } from '@/hooks/use-clients';
 import { useServices } from '@/hooks/use-services';
 import { useMaterials } from '@/hooks/use-materials';
 import { useCompany } from '@/hooks/use-company';
+import { getStoredImageUrl, useImageUpload } from '@/hooks/use-image-upload';
+import { useToast } from '@/hooks/use-toast';
 import {
   useChecklists,
   useOrderChecklist,
@@ -111,6 +113,8 @@ export default function OrderDetailPage() {
   const { data: checklists } = useChecklists();
   const { data: checklistItems } = useOrderChecklist(orderId);
   const { data: orderPhotos } = useOrderPhotos(orderId);
+  const { uploadImage, isUploading: isPhotoUploading } = useImageUpload();
+  const { toast } = useToast();
 
   /* ─── mutations ─── */
   const { createOrder, isPending: isCreating } = useCreateOrderMutation();
@@ -129,7 +133,8 @@ export default function OrderDetailPage() {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [addressDraft, setAddressDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
-  const [photoUrlDraft, setPhotoUrlDraft] = useState('');
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
 
   /* ─── draft items (novo mode only) ─── */
@@ -485,7 +490,7 @@ export default function OrderDetailPage() {
         <Card className="mb-5 overflow-hidden print-company-header" data-testid="card-company-header">
           <CardContent className="p-4 flex items-center gap-4">
             {company.logoUrl ? (
-              <img src={company.logoUrl} alt={`Logo ${company.name}`} className="h-16 w-20 rounded-md border bg-white object-contain p-1 shrink-0" />
+              <img src={getStoredImageUrl(company.logoUrl)} alt={`Logo ${company.name}`} className="h-16 w-20 rounded-md border bg-white object-contain p-1 shrink-0" />
             ) : (
               <div className="h-16 w-16 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
                 <Building2 className="h-7 w-7" />
@@ -832,19 +837,21 @@ export default function OrderDetailPage() {
                 Fotos do serviço
                 <Badge variant="secondary" className="font-mono text-[10px]">{orderPhotos?.length ?? 0}</Badge>
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">Adicione fotos gerais da execução. Elas aparecerão no final do laudo.</p>
+              <p className="text-sm text-muted-foreground mt-1">Anexe fotos gerais da execução. Elas aparecerão no final do laudo.</p>
             </div>
           </div>
 
           <div className="print-hide grid md:grid-cols-[1fr_1fr_auto] gap-2 items-end mb-5">
             <div>
-              <label className="text-xs font-medium text-muted-foreground">URL pública da foto</label>
+              <label className="text-xs font-medium text-muted-foreground">Foto</label>
               <Input
+                key={photoInputKey}
                 className="mt-1"
-                value={photoUrlDraft}
-                onChange={(event) => setPhotoUrlDraft(event.target.value)}
-                placeholder="https://exemplo.com/foto.jpg"
-                type="url"
+                onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                disabled={isPhotoUploading}
                 data-testid="input-order-photo-url"
               />
             </div>
@@ -860,14 +867,23 @@ export default function OrderDetailPage() {
             </div>
             <Button
               variant="outline"
-              disabled={!photoUrlDraft.trim() || isPhotoPending}
-              onClick={() => addPhoto(order!.id, { photoUrl: photoUrlDraft.trim(), caption: photoCaptionDraft.trim() || undefined }, () => {
-                setPhotoUrlDraft('');
-                setPhotoCaptionDraft('');
-              })}
+              disabled={!photoFile || isPhotoPending || isPhotoUploading}
+              onClick={async () => {
+                if (!photoFile) return;
+                try {
+                  const objectPath = await uploadImage(photoFile);
+                  addPhoto(order!.id, { photoUrl: objectPath, caption: photoCaptionDraft.trim() || undefined }, () => {
+                    setPhotoFile(null);
+                    setPhotoInputKey((current) => current + 1);
+                    setPhotoCaptionDraft('');
+                  });
+                } catch (error) {
+                  toast({ title: 'Erro ao anexar foto', description: error instanceof Error ? error.message : 'Tente novamente.', variant: 'destructive' });
+                }
+              }}
               data-testid="button-add-order-photo"
             >
-              <Plus className="h-3.5 w-3.5" /> Adicionar foto
+              {isPhotoUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />} Anexar foto
             </Button>
           </div>
 
@@ -880,8 +896,8 @@ export default function OrderDetailPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 order-photos-grid">
               {orderPhotos.map((photo) => (
                 <div key={photo.id} className="relative rounded-lg border overflow-hidden bg-muted/20 group order-photo-card" data-testid={`order-photo-${photo.id}`}>
-                  <a href={photo.photoUrl} target="_blank" rel="noreferrer">
-                    <img src={photo.photoUrl} alt={photo.caption || 'Foto do serviço'} className="w-full aspect-[4/3] object-cover order-photo-image" />
+                  <a href={getStoredImageUrl(photo.photoUrl)} target="_blank" rel="noreferrer">
+                    <img src={getStoredImageUrl(photo.photoUrl)} alt={photo.caption || 'Foto do serviço'} className="w-full aspect-[4/3] object-cover order-photo-image" />
                   </a>
                   <div className="p-2 flex items-start justify-between gap-2">
                     <p className="text-xs text-muted-foreground truncate">{photo.caption || 'Foto do serviço'}</p>

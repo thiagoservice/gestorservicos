@@ -14,6 +14,9 @@ import OrderDetailPage from '@/pages/order-detail';
 import CompanyPage from '@/pages/company';
 import ChecklistsPage from '@/pages/checklists';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { useAuth } from '@workspace/replit-auth-web';
+import { Button } from '@/components/ui/button';
+import { Hammer, Loader2, LogIn } from 'lucide-react';
 
 const queryClient = new QueryClient();
 
@@ -45,6 +48,27 @@ function Router() {
 }
 
 function App() {
+  const { isLoading, isAuthenticated, login } = useAuth();
+
+  if (isLoading) {
+    return <div className="min-h-screen grid place-items-center bg-background"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background bg-noise p-4">
+        <div className="w-full max-w-sm rounded-2xl border bg-card p-8 text-center shadow-sm">
+          <div className="mx-auto h-12 w-12 rounded-xl bg-primary text-primary-foreground grid place-items-center mb-5"><Hammer className="h-6 w-6" /></div>
+          <h1 className="font-display text-2xl font-semibold">Gestão de Serviços</h1>
+          <p className="text-sm text-muted-foreground mt-2 mb-6">Entre para acessar clientes, ordens de serviço e anexos.</p>
+          <Button className="w-full" onClick={login} data-testid="button-login">
+            <LogIn className="h-4 w-4" /> Entrar com Replit
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

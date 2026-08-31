@@ -9,8 +9,11 @@ import {
   Hammer,
   Building2,
   ClipboardCheck,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@workspace/replit-auth-web';
+import { Button } from '@/components/ui/button';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Painel', icon: LayoutDashboard },
@@ -24,6 +27,7 @@ const NAV_ITEMS = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
+  const { user, logout } = useAuth();
 
   const isActive = (href: string) => {
     if (href === '/') return location === '/';
@@ -70,9 +74,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="px-6 py-4 border-t border-sidebar-border">
-          <p className="text-[11px] uppercase tracking-wider text-sidebar-foreground/40 font-mono">
-            Oficina digital
-          </p>
+          <p className="text-xs text-sidebar-foreground/70 truncate mb-2">{user?.firstName || user?.email || 'Usuário'}</p>
+          <Button variant="ghost" size="sm" onClick={logout} className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent px-2" data-testid="button-logout">
+            <LogOut className="h-3.5 w-3.5" /> Sair
+          </Button>
         </div>
       </aside>
 

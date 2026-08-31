@@ -9,8 +9,9 @@ import {
 
 const router: IRouter = Router();
 
-function isPublicUrl(value: string | null | undefined): boolean {
+function isStoredImageOrPublicUrl(value: string | null | undefined): boolean {
   if (!value) return true;
+  if (value.startsWith("/objects/")) return true;
   try {
     const url = new URL(value);
     return url.protocol === "http:" || url.protocol === "https:";
@@ -37,8 +38,8 @@ router.put("/company", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  if (!isPublicUrl(parsed.data.logoUrl)) {
-    res.status(400).json({ error: "Informe uma URL pública válida para o logo" });
+  if (!isStoredImageOrPublicUrl(parsed.data.logoUrl)) {
+    res.status(400).json({ error: "Anexo de logo inválido" });
     return;
   }
 

@@ -17,6 +17,120 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Get the authenticated user
+ */
+export const GetCurrentAuthUserResponse = zod.object({
+  "user": zod.union([zod.object({
+  "id": zod.string(),
+  "email": zod.string().email().nullable(),
+  "firstName": zod.string().nullable(),
+  "lastName": zod.string().nullable(),
+  "profileImageUrl": zod.string().nullable()
+}),zod.null()])
+})
+
+
+/**
+ * @summary Start browser login
+ */
+export const BeginBrowserLoginQueryParams = zod.object({
+  "returnTo": zod.coerce.string().optional()
+})
+
+export const BeginBrowserLoginResponse = zod.void()
+
+
+/**
+ * @summary Complete browser login
+ */
+export const HandleBrowserLoginCallbackResponse = zod.void()
+
+
+/**
+ * @summary Logout
+ */
+export const LogoutBrowserSessionQueryParams = zod.object({
+  "returnTo": zod.coerce.string().optional()
+})
+
+export const LogoutBrowserSessionResponse = zod.void()
+
+
+/**
+ * @summary Exchange a mobile authorization code
+ */
+export const ExchangeMobileAuthorizationCodeBody = zod.object({
+  "code": zod.string(),
+  "code_verifier": zod.string(),
+  "redirect_uri": zod.string().url(),
+  "state": zod.string(),
+  "nonce": zod.string().optional()
+})
+
+export const ExchangeMobileAuthorizationCodeResponse = zod.object({
+  "token": zod.string()
+})
+
+
+/**
+ * @summary Logout mobile session
+ */
+export const LogoutMobileSessionResponse = zod.object({
+  "success": zod.literal(true)
+})
+
+
+/**
+ * @summary Request a presigned image upload URL
+ */
+
+
+
+
+
+export const RequestUploadUrlBody = zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().int().min(1),
+  "contentType": zod.string().min(1)
+})
+
+
+
+
+
+
+export const RequestUploadUrlResponse = zod.object({
+  "uploadURL": zod.string().url(),
+  "objectPath": zod.string(),
+  "metadata": zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().int().min(1),
+  "contentType": zod.string().min(1)
+})
+})
+
+
+/**
+ * @summary Serve a public stored object
+ */
+export const GetPublicObjectParams = zod.object({
+  "filePath": zod.coerce.string()
+})
+
+export const GetPublicObjectResponse = zod.unknown()
+
+
+/**
+ * @summary Serve an authenticated stored object
+ */
+export const GetStorageObjectParams = zod.object({
+  "objectPath": zod.coerce.string()
+})
+
+export const GetStorageObjectResponse = zod.unknown()
+
+
+/**
  * @summary List all clients
  */
 export const ListClientsResponseItem = zod.object({

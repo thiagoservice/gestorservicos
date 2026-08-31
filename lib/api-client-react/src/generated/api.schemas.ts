@@ -5,6 +5,58 @@
  * API para sistema de gestão de serviços
  * OpenAPI spec version: 0.1.0
  */
+export interface AuthUser {
+  id: string;
+  /** @nullable */
+  email: string | null;
+  /** @nullable */
+  firstName: string | null;
+  /** @nullable */
+  lastName: string | null;
+  /** @nullable */
+  profileImageUrl: string | null;
+}
+
+export interface AuthUserEnvelope {
+  user: AuthUser | null;
+}
+
+export interface MobileTokenExchangeRequest {
+  code: string;
+  code_verifier: string;
+  redirect_uri: string;
+  state: string;
+  nonce?: string;
+}
+
+export interface MobileTokenExchangeSuccess {
+  token: string;
+}
+
+export const LogoutSuccessValue = {
+  success: true,
+} as const;
+export type LogoutSuccess = typeof LogoutSuccessValue;
+
+export interface UploadUrlRequest {
+  /** @minLength 1 */
+  name: string;
+  /** @minimum 1 */
+  size: number;
+  /** @minLength 1 */
+  contentType: string;
+}
+
+export interface UploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+  metadata: UploadUrlRequest;
+}
+
+export interface ErrorEnvelope {
+  error: string;
+}
+
 export interface Company {
   id: number;
   name: string;
@@ -401,4 +453,12 @@ export interface Summary {
   cancelledOrders: number;
   totalRevenue: number;
 }
+
+export type BeginBrowserLoginParams = {
+returnTo?: string;
+};
+
+export type LogoutBrowserSessionParams = {
+returnTo?: string;
+};
 
