@@ -89,6 +89,7 @@ const CHECKLIST_STATUS_LABELS: Record<string, string> = {
 const orderSchema = z.object({
   clientId: z.string().min(1, 'Selecione um cliente'),
   address: z.string().optional(),
+  serviceDate: z.string().optional(),
   title: z.string().min(1, 'Informe o título da ordem'),
   description: z.string().optional(),
 });
@@ -134,6 +135,7 @@ export default function OrderDetailPage() {
   const [addressDraft, setAddressDraft] = useState('');
   const [serviceDateDraft, setServiceDateDraft] = useState('');
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
+  const [draftChecklistId, setDraftChecklistId] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
@@ -180,7 +182,7 @@ export default function OrderDetailPage() {
   /* ─── form ─── */
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { clientId: '', address: '', title: '', description: '' },
+    defaultValues: { clientId: '', address: '', serviceDate: '', title: '', description: '' },
   });
 
   useEffect(() => {
@@ -203,6 +205,8 @@ export default function OrderDetailPage() {
       {
         clientId: Number(values.clientId),
         address: values.address || undefined,
+        serviceDate: values.serviceDate || undefined,
+        checklistId: draftChecklistId ? Number(draftChecklistId) : undefined,
         title: values.title,
         description: values.description || undefined,
       },
@@ -216,6 +220,12 @@ export default function OrderDetailPage() {
         for (const m of draftMaterials) {
           await new Promise<void>((resolve) => {
             addMaterialItem(created.id, { materialId: m.materialId, quantity: m.quantity, unitPrice: m.unitPrice }, resolve);
+          });
+        }
+        // apply checklist if selected
+        if (draftChecklistId) {
+          await new Promise<void>((resolve) => {
+            applyChecklist(created.id, Number(draftChecklistId), resolve);
           });
         }
         setLocation(`/ordens/${created.id}`);
@@ -351,6 +361,15 @@ export default function OrderDetailPage() {
                     <FormMessage />
                   </FormItem>
                 )} />
+                <FormField control={form.control} name="serviceDate" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data do serviço realizado</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} className="w-44" data-testid="input-order-service-date" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
                 <FormField control={form.control} name="title" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Título *</FormLabel>
@@ -375,6 +394,33 @@ export default function OrderDetailPage() {
                   </FormItem>
                 )} />
               </div>
+            </div>
+
+            {/* Checklist */}
+            <div className="rounded-xl border bg-card p-5">
+              <h2 className="text-base font-semibold text-primary mb-1 flex items-center gap-2">
+                <ClipboardCheck className="h-4 w-4" />
+                Checklist
+              </h2>
+              <p className="text-sm text-muted-foreground mb-4">Associe um checklist a esta ordem (opcional).</p>
+              {!checklists?.length ? (
+                <div className="py-6 text-center border border-dashed rounded-lg">
+                  <p className="text-sm text-muted-foreground">Nenhum checklist cadastrado.</p>
+                  <Link href="/checklist" className="text-sm text-primary hover:underline mt-1 inline-block">Cadastrar checklist</Link>
+                </div>
+              ) : (
+                <select
+                  value={draftChecklistId}
+                  onChange={(e) => setDraftChecklistId(e.target.value)}
+                  className="flex h-9 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  data-testid="select-draft-checklist"
+                >
+                  <option value="">Nenhum checklist</option>
+                  {(checklists ?? []).map((c) => (
+                    <option key={c.id} value={c.id}>{c.name} ({c.items.length} itens)</option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* Total preview */}

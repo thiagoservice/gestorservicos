@@ -411,6 +411,8 @@ export interface OrderInput {
   /** @minLength 1 */
   title: string;
   description?: string;
+  serviceDate?: string;
+  checklistId?: number;
   status?: OrderInputStatus;
 }
 

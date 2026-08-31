@@ -89,6 +89,8 @@ router.post("/orders", async (req, res): Promise<void> => {
     address: parsed.data.address ?? null,
     title: parsed.data.title,
     description: parsed.data.description ?? null,
+    serviceDate: parsed.data.serviceDate ?? null,
+    checklistId: parsed.data.checklistId ?? null,
     status: parsed.data.status ?? "pending",
   }).returning();
   res.status(201).json(CreateOrderResponse.parse({ ...order, clientName: client.name, totalPrice: Number(order.totalPrice) }));

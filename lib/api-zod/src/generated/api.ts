@@ -541,6 +541,8 @@ export const CreateOrderBody = zod.object({
   "address": zod.string().optional(),
   "title": zod.string().min(1),
   "description": zod.string().optional(),
+  "serviceDate": zod.string().optional(),
+  "checklistId": zod.number().int().optional(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']).optional()
 })
 
