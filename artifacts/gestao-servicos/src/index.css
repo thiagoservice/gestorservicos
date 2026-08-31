@@ -9,6 +9,23 @@
   display: none;
 }
 
+.order-print-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-line-items-section {
+  order: 4;
+}
+
+.order-checklist-section {
+  order: 5;
+}
+
+.order-photos-section {
+  order: 6;
+}
+
 @media print {
   @page {
     size: A4;

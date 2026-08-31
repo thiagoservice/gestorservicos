@@ -644,7 +644,7 @@ export default function OrderDetailPage() {
       </div>
 
       {/* Checklist / laudo */}
-      <Card className="mb-6 animate-fade-up" style={{ animationDelay: '120ms' }}>
+      <Card className="mb-6 animate-fade-up order-checklist-section" style={{ animationDelay: '120ms' }}>
         <CardContent className="p-5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
             <div>
@@ -653,7 +653,7 @@ export default function OrderDetailPage() {
                 Checklist do laudo
                 <Badge variant="secondary" className="font-mono text-[10px]">{checklistItems?.length ?? 0}</Badge>
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">Registre a situação e uma foto pública para cada verificação.</p>
+              <p className="text-sm text-muted-foreground mt-1">Registre a situação de cada verificação.</p>
             </div>
             <div className="print-hide flex items-center gap-2 w-full md:w-auto">
               <select
@@ -726,7 +726,7 @@ export default function OrderDetailPage() {
       </Card>
 
       {/* Items */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 order-line-items-section">
         {/* Services */}
         <Card className="animate-fade-up" style={{ animationDelay: '140ms' }}>
           <CardContent className="p-5">
