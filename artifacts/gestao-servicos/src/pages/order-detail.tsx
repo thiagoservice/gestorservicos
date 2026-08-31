@@ -577,18 +577,16 @@ export default function OrderDetailPage() {
     return (
       <div className="print-document" style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '9.5pt', color: labelColor, lineHeight: 1.45 }}>
 
-        {/* ── TOPO: logo + empresa ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1.5px solid ${border}`, paddingBottom: '10px', marginBottom: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {company?.logoUrl
-              ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '52px', maxWidth: '88px', objectFit: 'contain' }} />
-              : <div style={{ width: '52px', height: '52px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt', color: '#999', textAlign: 'center' }}>LOGO</div>
-            }
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '12pt' }}>{company?.name || 'Nome da empresa'}</div>
-              {company?.cnpj && <div style={{ fontSize: '8.5pt', color: mutedColor }}>CNPJ: {company.cnpj}</div>}
-              {company?.address && <div style={{ fontSize: '8.5pt', color: mutedColor }}>{company.address}</div>}
-            </div>
+        {/* ── CABEÇALHO: logo + dados da empresa ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', borderBottom: `1.5px solid ${border}`, paddingBottom: '10px', marginBottom: '14px' }}>
+          {company?.logoUrl
+            ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '48px', maxWidth: '80px', objectFit: 'contain', flexShrink: 0 }} />
+            : <div style={{ width: '48px', height: '48px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt', color: '#aaa' }}>LOGO</div>
+          }
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '13pt' }}>{company?.name || 'Nome da empresa'}</div>
+            {company?.cnpj && <div style={{ fontSize: '8.5pt', color: mutedColor }}>CNPJ: {company.cnpj}</div>}
+            {company?.address && <div style={{ fontSize: '8.5pt', color: mutedColor }}>{company.address}</div>}
           </div>
         </div>
 
@@ -755,9 +753,25 @@ export default function OrderDetailPage() {
         </div>
 
         {/* ── RODAPÉ ── */}
-        <div style={{ marginTop: '12px', paddingTop: '6px', borderTop: `1px solid ${border}`, display: 'flex', justifyContent: 'space-between', fontSize: '7.5pt', color: '#999' }}>
-          <span>{company?.name || ''}</span>
-          <span>Ordem Nº {numPadded} · Emitido em {formatDateLong(order!.createdAt)}</span>
+        <div style={{ marginTop: '16px', paddingTop: '10px', borderTop: `1.5px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+          {/* logo + empresa */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {company?.logoUrl
+              ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '32px', maxWidth: '56px', objectFit: 'contain' }} />
+              : <div style={{ width: '32px', height: '32px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '6pt', color: '#aaa' }}>LOGO</div>
+            }
+            <div style={{ fontSize: '7.5pt', color: mutedColor }}>
+              <div style={{ fontWeight: 700, color: labelColor }}>{company?.name || 'Empresa'}</div>
+              {company?.cnpj && <div>CNPJ: {company.cnpj}</div>}
+              {company?.address && <div>{company.address}</div>}
+            </div>
+          </div>
+          {/* número da ordem */}
+          <div style={{ textAlign: 'right', fontSize: '7.5pt', color: mutedColor }}>
+            <div style={{ fontWeight: 700, color: labelColor }}>Ordem de Serviço</div>
+            <div>Nº {numPadded}</div>
+            <div>Emitido em {formatDateLong(order!.createdAt)}</div>
+          </div>
         </div>
 
       </div>
