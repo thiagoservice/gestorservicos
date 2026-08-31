@@ -57,6 +57,7 @@ import {
   Wrench,
   Package,
   User,
+  MapPin,
   Calendar,
   AlertTriangle,
   Wallet,
@@ -67,6 +68,7 @@ import {
 /* ─── form schema ─── */
 const orderSchema = z.object({
   clientId: z.string().min(1, 'Selecione um cliente'),
+  address: z.string().optional(),
   title: z.string().min(1, 'Informe o título da ordem'),
   description: z.string().optional(),
 });
@@ -100,6 +102,8 @@ export default function OrderDetailPage() {
   /* ─── dialogs ─── */
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [addressDraft, setAddressDraft] = useState('');
 
   /* ─── draft items (novo mode only) ─── */
   const [draftServices, setDraftServices] = useState<DraftServiceItem[]>([]);
@@ -109,13 +113,15 @@ export default function OrderDetailPage() {
   /* ─── form ─── */
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { clientId: '', title: '', description: '' },
+    defaultValues: { clientId: '', address: '', title: '', description: '' },
   });
 
   useEffect(() => {
     if (order) {
+      setAddressDraft(order.address ?? '');
       form.reset({
         clientId: String(order.clientId),
+        address: order.address ?? '',
         title: order.title,
         description: order.description ?? '',
       });
@@ -125,7 +131,12 @@ export default function OrderDetailPage() {
   /* ─── create handler ─── */
   const handleCreate = async (values: OrderFormValues) => {
     createOrder(
-      { clientId: Number(values.clientId), title: values.title, description: values.description || undefined },
+      {
+        clientId: Number(values.clientId),
+        address: values.address || undefined,
+        title: values.title,
+        description: values.description || undefined,
+      },
       async (created) => {
         // post all draft items sequentially
         for (const s of draftServices) {
@@ -254,6 +265,19 @@ export default function OrderDetailPage() {
                           ))}
                         </select>
                       )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="address" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Endereço do atendimento</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ex: Rua das Flores, 123 — Bairro"
+                        {...field}
+                        data-testid="input-order-address"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -494,6 +518,63 @@ export default function OrderDetailPage() {
             <p className="text-sm leading-relaxed" data-testid="text-order-description">
               {order!.description || 'Nenhuma descrição informada para esta ordem.'}
             </p>
+            <div className="mt-5 pt-4 border-t">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Endereço do atendimento</h2>
+                {!isEditingAddress && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2"
+                    onClick={() => setIsEditingAddress(true)}
+                    data-testid="button-edit-order-address"
+                  >
+                    Editar
+                  </Button>
+                )}
+              </div>
+              {isEditingAddress ? (
+                <div className="space-y-2">
+                  <Input
+                    value={addressDraft}
+                    onChange={(event) => setAddressDraft(event.target.value)}
+                    placeholder="Ex: Rua das Flores, 123 — Bairro"
+                    data-testid="input-edit-order-address"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setAddressDraft(order!.address ?? '');
+                        setIsEditingAddress(false);
+                      }}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={isStatusUpdating}
+                      onClick={() =>
+                        updateOrder(order!.id, { address: addressDraft }, () => setIsEditingAddress(false))
+                      }
+                      data-testid="button-save-order-address"
+                    >
+                      {isStatusUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                      Salvar endereço
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm leading-relaxed flex items-start gap-2" data-testid="text-order-address">
+                  <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
+                  <span>{order!.address || 'Nenhum endereço informado para esta ordem.'}</span>
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
         <Card className="animate-fade-up" style={{ animationDelay: '100ms' }}>

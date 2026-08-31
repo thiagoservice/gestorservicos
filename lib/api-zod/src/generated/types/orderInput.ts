@@ -9,6 +9,7 @@ import type { OrderInputStatus } from './orderInputStatus';
 
 export interface OrderInput {
   clientId: number;
+  address?: string;
   /** @minLength 1 */
   title: string;
   description?: string;

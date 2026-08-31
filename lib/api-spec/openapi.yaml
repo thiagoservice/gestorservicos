@@ -947,6 +947,8 @@ components:
           type: string
         clientId:
           type: integer
+        address:
+          type: ["string", "null"]
         clientName:
           type: string
         title:
@@ -975,6 +977,8 @@ components:
           type: string
         clientId:
           type: integer
+        address:
+          type: ["string", "null"]
         clientName:
           type: string
         title:
@@ -1007,6 +1011,8 @@ components:
       properties:
         clientId:
           type: integer
+        address:
+          type: string
         title:
           type: string
           minLength: 1
@@ -1019,6 +1025,8 @@ components:
     OrderUpdate:
       type: object
       properties:
+        address:
+          type: string
         title:
           type: string
           minLength: 1

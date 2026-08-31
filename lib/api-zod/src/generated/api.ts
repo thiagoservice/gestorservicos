@@ -402,6 +402,7 @@ export const ListOrdersResponseItem = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
@@ -421,6 +422,7 @@ export const ListOrdersResponse = zod.array(ListOrdersResponseItem)
 
 export const CreateOrderBody = zod.object({
   "clientId": zod.number().int(),
+  "address": zod.string().optional(),
   "title": zod.string().min(1),
   "description": zod.string().optional(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']).optional()
@@ -430,6 +432,7 @@ export const CreateOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
@@ -451,6 +454,7 @@ export const GetOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),
@@ -490,6 +494,7 @@ export const UpdateOrderParams = zod.object({
 
 
 export const UpdateOrderBody = zod.object({
+  "address": zod.string().optional(),
   "title": zod.string().min(1).optional(),
   "description": zod.string().optional(),
   "status": zod.enum(['pending', 'in_progress', 'completed', 'cancelled']).optional()
@@ -499,6 +504,7 @@ export const UpdateOrderResponse = zod.object({
   "id": zod.number().int(),
   "number": zod.string(),
   "clientId": zod.number().int(),
+  "address": zod.string().nullish(),
   "clientName": zod.string(),
   "title": zod.string(),
   "description": zod.string().nullish(),

@@ -54,6 +54,7 @@ router.get("/orders", async (_req, res): Promise<void> => {
       id: ordersTable.id,
       number: ordersTable.number,
       clientId: ordersTable.clientId,
+      address: ordersTable.address,
       clientName: clientsTable.name,
       title: ordersTable.title,
       description: ordersTable.description,
@@ -83,6 +84,7 @@ router.post("/orders", async (req, res): Promise<void> => {
   const [order] = await db.insert(ordersTable).values({
     number,
     clientId: parsed.data.clientId,
+    address: parsed.data.address ?? null,
     title: parsed.data.title,
     description: parsed.data.description ?? null,
     status: parsed.data.status ?? "pending",
@@ -101,6 +103,7 @@ router.get("/orders/:id", async (req, res): Promise<void> => {
       id: ordersTable.id,
       number: ordersTable.number,
       clientId: ordersTable.clientId,
+      address: ordersTable.address,
       clientName: clientsTable.name,
       title: ordersTable.title,
       description: ordersTable.description,
@@ -176,6 +179,7 @@ router.patch("/orders/:id", async (req, res): Promise<void> => {
     return;
   }
   const updateData: Record<string, unknown> = {};
+  if (parsed.data.address !== undefined) updateData.address = parsed.data.address || null;
   if (parsed.data.title !== undefined) updateData.title = parsed.data.title;
   if (parsed.data.description !== undefined) updateData.description = parsed.data.description;
   if (parsed.data.status !== undefined) updateData.status = parsed.data.status;

@@ -60,7 +60,8 @@ export default function OrdersPage() {
       list = list.filter(
         (o) =>
           o.title.toLowerCase().includes(q) ||
-          o.clientName.toLowerCase().includes(q),
+          o.clientName.toLowerCase().includes(q) ||
+          o.address?.toLowerCase().includes(q),
       );
     }
     return list;
@@ -85,7 +86,7 @@ export default function OrdersPage() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por título ou cliente..."
+            placeholder="Buscar por título, cliente ou endereço..."
             className="pl-9"
             data-testid="input-search-orders"
           />
@@ -154,6 +155,7 @@ export default function OrdersPage() {
                 <TableHead className="w-[80px]">Nº</TableHead>
                 <TableHead>Título</TableHead>
                 <TableHead>Cliente</TableHead>
+                <TableHead className="hidden lg:table-cell">Endereço</TableHead>
                 <TableHead className="hidden md:table-cell">Criada em</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Valor total</TableHead>
@@ -176,6 +178,9 @@ export default function OrdersPage() {
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {order.clientName}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell text-muted-foreground max-w-[220px] truncate">
+                    {order.address || '—'}
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
                     {formatDateBR(order.createdAt)}

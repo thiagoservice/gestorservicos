@@ -7,6 +7,7 @@ export const ordersTable = pgTable("orders", {
   id: serial("id").primaryKey(),
   number: text("number").notNull().unique(),
   clientId: integer("client_id").notNull().references(() => clientsTable.id),
+  address: text("address"),
   title: text("title").notNull(),
   description: text("description"),
   status: text("status").notNull().default("pending"),

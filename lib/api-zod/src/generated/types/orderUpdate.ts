@@ -8,6 +8,7 @@
 import type { OrderUpdateStatus } from './orderUpdateStatus';
 
 export interface OrderUpdate {
+  address?: string;
   /** @minLength 1 */
   title?: string;
   description?: string;

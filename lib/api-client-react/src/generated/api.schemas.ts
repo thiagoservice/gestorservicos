@@ -151,6 +151,8 @@ export interface Order {
   id: number;
   number: string;
   clientId: number;
+  /** @nullable */
+  address?: string | null;
   clientName: string;
   title: string;
   /** @nullable */
@@ -195,6 +197,8 @@ export interface OrderDetail {
   id: number;
   number: string;
   clientId: number;
+  /** @nullable */
+  address?: string | null;
   clientName: string;
   title: string;
   /** @nullable */
@@ -219,6 +223,7 @@ export const OrderInputStatus = {
 
 export interface OrderInput {
   clientId: number;
+  address?: string;
   /** @minLength 1 */
   title: string;
   description?: string;
@@ -236,6 +241,7 @@ export const OrderUpdateStatus = {
 } as const;
 
 export interface OrderUpdate {
+  address?: string;
   /** @minLength 1 */
   title?: string;
   description?: string;
