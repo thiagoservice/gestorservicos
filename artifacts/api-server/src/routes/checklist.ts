@@ -42,6 +42,7 @@ const VALID_STATUSES = new Set(["conforme", "nao_conforme", "nao_se_aplica"]);
 
 function isPublicUrl(value: string | null | undefined): boolean {
   if (!value) return true;
+  if (value.startsWith("data:image/")) return true;
   try {
     const url = new URL(value);
     return url.protocol === "http:" || url.protocol === "https:";

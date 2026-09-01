@@ -12,6 +12,7 @@ const router: IRouter = Router();
 function isStoredImageOrPublicUrl(value: string | null | undefined): boolean {
   if (!value) return true;
   if (value.startsWith("/objects/")) return true;
+  if (value.startsWith("data:image/")) return true;
   try {
     const url = new URL(value);
     return url.protocol === "http:" || url.protocol === "https:";
