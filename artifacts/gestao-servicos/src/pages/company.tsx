@@ -26,7 +26,7 @@ type Values = z.infer<typeof schema>;
 export default function CompanyPage() {
   const { data: company, isLoading, isError, refetch } = useCompany();
   const { updateCompany, isPending } = useUpdateCompanyMutation();
-  const { uploadImage, isUploading } = useImageUpload();
+  const { uploadImage, isUploading } = useImageUpload({ maxDimension: 500, quality: 0.82 });
   const { toast } = useToast();
   const [logoFailed, setLogoFailed] = useState(false);
   const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { name: '', address: '', cnpj: '', logoUrl: '' } });
