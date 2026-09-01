@@ -144,6 +144,7 @@ export default function OrderDetailPage() {
   const [draftChecklistStatuses, setDraftChecklistStatuses] = useState<Record<number, string>>({});
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoUploadProgress, setPhotoUploadProgress] = useState('');
+  const [isBatchUploading, setIsBatchUploading] = useState(false);
   const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
   const [isPrinting, setIsPrinting] = useState(false);
@@ -1465,29 +1466,31 @@ export default function OrderDetailPage() {
               </div>
               <Button
                 variant="outline"
-                disabled={photoFiles.length === 0 || isPhotoPending || isPhotoUploading}
+                disabled={photoFiles.length === 0 || isBatchUploading}
                 onClick={async () => {
                   if (photoFiles.length === 0) return;
                   const files = [...photoFiles];
+                  const caption = photoCaptionDraft.trim() || undefined;
                   setPhotoFiles([]);
                   setPhotoInputKey((k) => k + 1);
+                  setPhotoCaptionDraft('');
+                  setIsBatchUploading(true);
                   for (let i = 0; i < files.length; i++) {
-                    setPhotoUploadProgress(files.length > 1 ? `Enviando ${i + 1} de ${files.length}…` : '');
+                    if (files.length > 1) setPhotoUploadProgress(`Enviando ${i + 1} de ${files.length}…`);
                     try {
                       const objectPath = await uploadImage(files[i]);
-                      await new Promise<void>((resolve) => {
-                        addPhoto(order!.id, { photoUrl: objectPath, caption: photoCaptionDraft.trim() || undefined }, resolve);
-                      });
+                      addPhoto(order!.id, { photoUrl: objectPath, caption });
+                      if (i < files.length - 1) await new Promise(r => setTimeout(r, 400));
                     } catch (error) {
                       toast({ title: `Erro na foto ${i + 1}`, description: error instanceof Error ? error.message : 'Tente novamente.', variant: 'destructive' });
                     }
                   }
                   setPhotoUploadProgress('');
-                  setPhotoCaptionDraft('');
+                  setIsBatchUploading(false);
                 }}
                 data-testid="button-add-order-photo"
               >
-                {isPhotoUploading
+                {isBatchUploading
                   ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> {photoUploadProgress || 'Enviando…'}</>
                   : <><Plus className="h-3.5 w-3.5" /> {photoFiles.length > 1 ? `Anexar ${photoFiles.length} fotos` : 'Anexar foto'}</>
                 }
