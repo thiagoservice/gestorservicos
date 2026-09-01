@@ -41,6 +41,15 @@
     print-color-adjust: exact !important;
   }
 
+  /* iOS Safari fix: root containers must not clip content */
+  html,
+  body,
+  #root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
   html,
   body,
   main,

@@ -152,6 +152,10 @@ export default function OrderDetailPage() {
   /* ─── print helper: embeds authenticated images as base64 before printing ─── */
   const handlePrint = async () => {
     setIsPrinting(true);
+
+    // Let React flush the state change before touching the DOM
+    await new Promise(r => setTimeout(r, 100));
+
     const imgs = Array.from(
       document.querySelectorAll<HTMLImageElement>(
         '.print-document img[src^="/api/storage/objects/"], .print-document img[src^="/api/storage/public-objects/"]',
@@ -176,10 +180,28 @@ export default function OrderDetailPage() {
         }
       }),
     );
+
+    // iOS Safari workaround: the @media print rule may not toggle display:none→block
+    // reliably. Force the print document visible via inline style before printing.
+    const printDoc = document.querySelector<HTMLElement>('.print-document');
+    if (printDoc) printDoc.style.display = 'block';
+    await new Promise(r => setTimeout(r, 50));
+
+    const restore = () => {
+      if (printDoc) printDoc.style.display = '';
+      originals.forEach((src, img) => { img.src = src; });
+      setIsPrinting(false);
+      // Refetch order data — on mobile, window.print() is async and the component
+      // may lose its cached data while the print dialog is open.
+      if (orderId) refetch();
+    };
+
+    // afterprint fires when the dialog closes (both confirm and cancel), on all
+    // modern browsers including iOS Safari 13+. Fallback timeout covers edge cases.
+    const fallback = setTimeout(restore, 30_000);
+    window.addEventListener('afterprint', () => { clearTimeout(fallback); restore(); }, { once: true });
+
     window.print();
-    // restore originals so the page stays interactive after printing
-    originals.forEach((src, img) => { img.src = src; });
-    setIsPrinting(false);
   };
 
   /* ─── draft items (novo mode only) ─── */
