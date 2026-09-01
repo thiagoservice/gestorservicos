@@ -142,7 +142,8 @@ export default function OrderDetailPage() {
   const [selectedChecklistId, setSelectedChecklistId] = useState('');
   const [draftChecklistId, setDraftChecklistId] = useState('');
   const [draftChecklistStatuses, setDraftChecklistStatuses] = useState<Record<number, string>>({});
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [photoUploadProgress, setPhotoUploadProgress] = useState('');
   const [photoInputKey, setPhotoInputKey] = useState(0);
   const [photoCaptionDraft, setPhotoCaptionDraft] = useState('');
   const [isPrinting, setIsPrinting] = useState(false);
@@ -1435,49 +1436,63 @@ export default function OrderDetailPage() {
             </div>
           </div>
 
-          <div className="print-hide grid md:grid-cols-[1fr_1fr_auto] gap-2 items-end mb-5">
-            <div>
-              <label className="text-xs font-medium text-muted-foreground">Foto</label>
-              <Input
-                key={photoInputKey}
-                className="mt-1"
-                onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)}
-                type="file"
-                accept="image/*"
-                disabled={isPhotoUploading}
-                data-testid="input-order-photo-url"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground">Legenda (opcional)</label>
-              <Input
-                className="mt-1"
-                value={photoCaptionDraft}
-                onChange={(event) => setPhotoCaptionDraft(event.target.value)}
-                placeholder="Ex: Equipamento após a manutenção"
-                data-testid="input-order-photo-caption"
-              />
-            </div>
-            <Button
-              variant="outline"
-              disabled={!photoFile || isPhotoPending || isPhotoUploading}
-              onClick={async () => {
-                if (!photoFile) return;
-                try {
-                  const objectPath = await uploadImage(photoFile);
-                  addPhoto(order!.id, { photoUrl: objectPath, caption: photoCaptionDraft.trim() || undefined }, () => {
-                    setPhotoFile(null);
-                    setPhotoInputKey((current) => current + 1);
-                    setPhotoCaptionDraft('');
-                  });
-                } catch (error) {
-                  toast({ title: 'Erro ao anexar foto', description: error instanceof Error ? error.message : 'Tente novamente.', variant: 'destructive' });
+          <div className="print-hide space-y-2 mb-5">
+            <div className="grid md:grid-cols-[1fr_1fr_auto] gap-2 items-end">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">
+                  Fotos {photoFiles.length > 0 && <span className="text-primary font-semibold">({photoFiles.length} selecionada{photoFiles.length > 1 ? 's' : ''})</span>}
+                </label>
+                <Input
+                  key={photoInputKey}
+                  className="mt-1"
+                  onChange={(event) => setPhotoFiles(Array.from(event.target.files ?? []))}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  disabled={isPhotoUploading}
+                  data-testid="input-order-photo-url"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Legenda (opcional)</label>
+                <Input
+                  className="mt-1"
+                  value={photoCaptionDraft}
+                  onChange={(event) => setPhotoCaptionDraft(event.target.value)}
+                  placeholder="Ex: Equipamento após a manutenção"
+                  data-testid="input-order-photo-caption"
+                />
+              </div>
+              <Button
+                variant="outline"
+                disabled={photoFiles.length === 0 || isPhotoPending || isPhotoUploading}
+                onClick={async () => {
+                  if (photoFiles.length === 0) return;
+                  const files = [...photoFiles];
+                  setPhotoFiles([]);
+                  setPhotoInputKey((k) => k + 1);
+                  for (let i = 0; i < files.length; i++) {
+                    setPhotoUploadProgress(files.length > 1 ? `Enviando ${i + 1} de ${files.length}…` : '');
+                    try {
+                      const objectPath = await uploadImage(files[i]);
+                      await new Promise<void>((resolve) => {
+                        addPhoto(order!.id, { photoUrl: objectPath, caption: photoCaptionDraft.trim() || undefined }, resolve);
+                      });
+                    } catch (error) {
+                      toast({ title: `Erro na foto ${i + 1}`, description: error instanceof Error ? error.message : 'Tente novamente.', variant: 'destructive' });
+                    }
+                  }
+                  setPhotoUploadProgress('');
+                  setPhotoCaptionDraft('');
+                }}
+                data-testid="button-add-order-photo"
+              >
+                {isPhotoUploading
+                  ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> {photoUploadProgress || 'Enviando…'}</>
+                  : <><Plus className="h-3.5 w-3.5" /> {photoFiles.length > 1 ? `Anexar ${photoFiles.length} fotos` : 'Anexar foto'}</>
                 }
-              }}
-              data-testid="button-add-order-photo"
-            >
-              {isPhotoUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />} Anexar foto
-            </Button>
+              </Button>
+            </div>
           </div>
 
           {!orderPhotos?.length ? (
