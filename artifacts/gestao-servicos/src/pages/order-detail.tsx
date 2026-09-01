@@ -708,8 +708,8 @@ export default function OrderDetailPage() {
           {/* Logo canto superior esquerdo */}
           <div style={{ flexShrink: 0 }}>
             {company?.logoUrl
-              ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '56px', maxWidth: '90px', objectFit: 'contain' }} />
-              : <div style={{ width: '56px', height: '56px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt', color: '#aaa' }}>LOGO</div>
+              ? <img src={getStoredImageUrl(company.logoUrl)} alt="Logo" style={{ height: '90px', maxWidth: '140px', objectFit: 'contain' }} />
+              : <div style={{ width: '90px', height: '90px', backgroundColor: '#f2f2f2', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt', color: '#aaa' }}>LOGO</div>
             }
           </div>
           {/* Título centralizado no espaço restante */}
