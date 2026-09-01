@@ -194,6 +194,8 @@ export interface Client {
   code: string;
   name: string;
   /** @nullable */
+  cpf?: string | null;
+  /** @nullable */
   email?: string | null;
   /** @nullable */
   phone?: string | null;
@@ -211,6 +213,7 @@ export interface Client {
 export interface ClientInput {
   /** @minLength 1 */
   name: string;
+  cpf?: string;
   email?: string;
   phone?: string;
   city?: string;
@@ -222,6 +225,7 @@ export interface ClientInput {
 export interface ClientUpdate {
   /** @minLength 1 */
   name?: string;
+  cpf?: string;
   email?: string;
   phone?: string;
   city?: string;
@@ -332,6 +336,8 @@ export interface Order {
   /** @nullable */
   address?: string | null;
   clientName: string;
+  /** @nullable */
+  clientCpf?: string | null;
   title: string;
   /** @nullable */
   description?: string | null;
@@ -382,6 +388,8 @@ export interface OrderDetail {
   /** @nullable */
   address?: string | null;
   clientName: string;
+  /** @nullable */
+  clientCpf?: string | null;
   title: string;
   /** @nullable */
   description?: string | null;

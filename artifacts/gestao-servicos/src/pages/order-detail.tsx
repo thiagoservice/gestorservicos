@@ -737,6 +737,7 @@ export default function OrderDetailPage() {
           <Field label="Status" value={orderStatusLabel} />
           <Field label="Data de criação" value={formatDateTimeBR(order!.createdAt)} />
           <Field label="Cliente" value={order!.clientName} />
+          {order!.clientCpf && <Field label="CPF" value={order!.clientCpf} />}
           <Field label="Local do atendimento" value={order!.address} />
           {order!.serviceDate && <Field label="Data do serviço realizado" value={formatDateBR(order!.serviceDate)} />}
         </div>

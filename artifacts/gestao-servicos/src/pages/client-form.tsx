@@ -46,6 +46,7 @@ const BR_STATES = [
 
 const clientSchema = z.object({
   name: z.string().min(1, 'Informe o nome do cliente'),
+  cpf: z.string().optional(),
   email: z.string().email('E-mail inválido').or(z.literal('')).optional(),
   phone: z.string().optional(),
   city: z.string().optional(),
@@ -258,13 +259,14 @@ export default function ClientFormPage() {
 
   const form = useForm<ClientFormValues>({
     resolver: zodResolver(clientSchema),
-    defaultValues: { name: '', email: '', phone: '', city: '', state: '', address: '', notes: '' },
+    defaultValues: { name: '', cpf: '', email: '', phone: '', city: '', state: '', address: '', notes: '' },
   });
 
   useEffect(() => {
     if (client) {
       form.reset({
         name: client.name,
+        cpf: client.cpf ?? '',
         email: client.email ?? '',
         phone: client.phone ?? '',
         city: client.city ?? '',
@@ -278,6 +280,7 @@ export default function ClientFormPage() {
   const handleSubmit = (values: ClientFormValues) => {
     const payload = {
       name: values.name,
+      cpf: values.cpf || undefined,
       email: values.email || undefined,
       phone: values.phone || undefined,
       city: values.city || undefined,
@@ -359,6 +362,15 @@ export default function ClientFormPage() {
                   <FormLabel>Nome do Cliente *</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: João Silva" {...field} data-testid="input-client-name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="cpf" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPF</FormLabel>
+                  <FormControl>
+                    <Input placeholder="000.000.000-00" {...field} data-testid="input-client-cpf" className="max-w-xs" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

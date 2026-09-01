@@ -44,7 +44,7 @@ async function recalcOrderTotal(orderId: number): Promise<void> {
   await db.update(ordersTable).set({ totalPrice: String(total) }).where(eq(ordersTable.id, orderId));
 }
 
-function parseOrder(o: typeof ordersTable.$inferSelect & { clientName: string }) {
+function parseOrder(o: typeof ordersTable.$inferSelect & { clientName: string; clientCpf?: string | null }) {
   return { ...o, totalPrice: Number(o.totalPrice) };
 }
 
@@ -57,6 +57,7 @@ router.get("/orders", async (_req, res): Promise<void> => {
       checklistId: ordersTable.checklistId,
       address: ordersTable.address,
       clientName: clientsTable.name,
+      clientCpf: clientsTable.cpf,
       title: ordersTable.title,
       description: ordersTable.description,
       serviceDate: ordersTable.serviceDate,
@@ -93,7 +94,7 @@ router.post("/orders", async (req, res): Promise<void> => {
     checklistId: parsed.data.checklistId ?? null,
     status: parsed.data.status ?? "pending",
   }).returning();
-  res.status(201).json(CreateOrderResponse.parse({ ...order, clientName: client.name, totalPrice: Number(order.totalPrice) }));
+  res.status(201).json(CreateOrderResponse.parse({ ...order, clientName: client.name, clientCpf: client.cpf, totalPrice: Number(order.totalPrice) }));
 });
 
 router.get("/orders/:id", async (req, res): Promise<void> => {
@@ -110,6 +111,7 @@ router.get("/orders/:id", async (req, res): Promise<void> => {
       checklistId: ordersTable.checklistId,
       address: ordersTable.address,
       clientName: clientsTable.name,
+      clientCpf: clientsTable.cpf,
       title: ordersTable.title,
       description: ordersTable.description,
       serviceDate: ordersTable.serviceDate,
@@ -197,7 +199,7 @@ router.patch("/orders/:id", async (req, res): Promise<void> => {
     return;
   }
   const [client] = await db.select().from(clientsTable).where(eq(clientsTable.id, order.clientId));
-  res.json(UpdateOrderResponse.parse({ ...order, clientName: client?.name ?? "", totalPrice: Number(order.totalPrice) }));
+  res.json(UpdateOrderResponse.parse({ ...order, clientName: client?.name ?? "", clientCpf: client?.cpf ?? null, totalPrice: Number(order.totalPrice) }));
 });
 
 router.delete("/orders/:id", async (req, res): Promise<void> => {
