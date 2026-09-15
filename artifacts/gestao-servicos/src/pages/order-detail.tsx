@@ -60,7 +60,7 @@ import {
   useOrderChecklistMutations,
 } from '@/hooks/use-checklists';
 import { listOrderChecklistItems, updateOrderChecklistItem } from '@workspace/api-client-react';
-import { formatCurrencyBRL, formatDateBR, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
+import { formatCurrencyBRL, formatDateOnlyBR, formatDateTimeBR, ORDER_STATUS_OPTIONS } from '@/lib/format';
 import {
   ArrowLeft,
   Trash2,
@@ -763,7 +763,7 @@ export default function OrderDetailPage() {
           <Field label="Cliente" value={order!.clientName} />
           {order!.clientCpf && <Field label="CPF" value={order!.clientCpf} />}
           <Field label="Local do atendimento" value={order!.address} />
-          {order!.serviceDate && <Field label="Data do serviço realizado" value={formatDateBR(order!.serviceDate)} />}
+          {order!.serviceDate && <Field label="Data do serviço realizado" value={formatDateOnlyBR(order!.serviceDate)} />}
         </div>
 
         {/* ─────────────────────────────────────

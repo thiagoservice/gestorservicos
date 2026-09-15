@@ -18,6 +18,13 @@ export function formatDateBR(value: string | undefined | null): string {
   }).format(date);
 }
 
+export function formatDateOnlyBR(value: string | undefined | null): string {
+  if (!value) return '—';
+  const dateParts = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!dateParts) return '—';
+  return `${dateParts[3]}/${dateParts[2]}/${dateParts[1]}`;
+}
+
 export function formatDateTimeBR(value: string | undefined | null): string {
   if (!value) return '—';
   const date = new Date(value);
