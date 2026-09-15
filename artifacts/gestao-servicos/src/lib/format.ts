@@ -7,6 +7,8 @@ export function formatCurrencyBRL(value: number): string {
 
 export function formatDateBR(value: string | undefined | null): string {
   if (!value) return '—';
+  const dateOnly = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (dateOnly) return `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}`;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return '—';
   return new Intl.DateTimeFormat('pt-BR', {
