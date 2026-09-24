@@ -10,14 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { formatCurrencyBRL } from '@/lib/format';
 
 type CatalogItem = {
@@ -46,18 +39,24 @@ export function AddOrderItemDialog({
   isPending?: boolean;
 }) {
   const [selectedId, setSelectedId] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [quantity, setQuantity] = useState('1');
   const [unitPrice, setUnitPrice] = useState('');
 
   useEffect(() => {
     if (open) {
       setSelectedId('');
+      setSearchTerm('');
       setQuantity('1');
       setUnitPrice('');
     }
   }, [open]);
 
   const selected = items.find((i) => String(i.id) === selectedId);
+  const normalizedSearch = searchTerm.trim().toLocaleLowerCase('pt-BR');
+  const filteredItems = normalizedSearch
+    ? items.filter((item) => item.name.toLocaleLowerCase('pt-BR').includes(normalizedSearch))
+    : items;
   const qtyNum = Number(quantity) || 0;
   const priceNum = Number(unitPrice) || 0;
   const total = priceNum * qtyNum;
@@ -78,28 +77,43 @@ export function AddOrderItemDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Item do catálogo</Label>
-            <Select value={selectedId} onValueChange={setSelectedId}>
-              <SelectTrigger data-testid="select-order-item">
-                <SelectValue placeholder="Selecione um item" />
-              </SelectTrigger>
-              <SelectContent>
-                {items.length === 0 ? (
-                  <div className="px-2 py-4 text-sm text-muted-foreground text-center">
-                    {emptyLabel}
-                  </div>
-                ) : (
-                  items.map((item) => (
-                    <SelectItem
-                      key={item.id}
-                      value={String(item.id)}
-                      data-testid={`option-order-item-${item.id}`}
-                    >
-                      {item.name} — {item.unit}
-                    </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Pesquisar por nome..."
+                className="pl-9"
+                autoComplete="off"
+                data-testid="input-search-order-item"
+              />
+            </div>
+            <div
+              className="max-h-48 overflow-y-scroll overscroll-contain rounded-md border bg-background sm:max-h-56"
+              role="group"
+              aria-label="Itens do catálogo"
+              data-testid="list-order-items"
+            >
+              {filteredItems.length === 0 ? (
+                <p className="px-3 py-4 text-center text-sm text-muted-foreground">
+                  {items.length === 0 ? emptyLabel : 'Nenhum item encontrado.'}
+                </p>
+              ) : filteredItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedId(String(item.id))}
+                  aria-pressed={selectedId === String(item.id)}
+                  className={`block w-full border-b px-3 py-2 text-left text-sm last:border-b-0 hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary ${
+                    selectedId === String(item.id) ? 'bg-primary/10 font-medium text-primary' : ''
+                  }`}
+                  data-testid={`option-order-item-${item.id}`}
+                >
+                  {item.name} — {item.unit}
+                </button>
+              ))}
+            </div>
+            {selected && <p className="text-xs text-muted-foreground">Selecionado: {selected.name}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
